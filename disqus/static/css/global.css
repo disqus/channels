@@ -158,6 +158,10 @@ footer {
   margin-top: 50px;
   text-align: center;
 }
+.thread-list {
+  margin-left: 0;
+  list-style: none;
+}
 .thread {
   margin-bottom: 15px;
 }

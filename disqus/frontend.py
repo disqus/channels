@@ -61,7 +61,7 @@ def new_thread():
     return render_template('threads/new.html', form=form)
 
 
-@app.route('/threads/updated', methods=['GET'])
+@app.route('/threads/by/date', methods=['GET'])
 def threads_by_date():
     thread_list = api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET')
 
@@ -71,14 +71,14 @@ def threads_by_date():
     return render_template('threads/by_date.html', thread_list=thread_list)
 
 
-@app.route('/threads/liked', methods=['GET'])
-def threads_by_likes():
-    thread_list = api_call(disqusapi.threads.listMostLiked, forum=app.config['DISQUS_FORUM'], method='GET')
+@app.route('/threads/by/activity', methods=['GET'])
+def threads_by_activity():
+    thread_list = api_call(disqusapi.threads.listHot, forum=app.config['DISQUS_FORUM'], method='GET')
 
     for thread in thread_list:
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
-    return render_template('threads/by_likes.html', thread_list=thread_list)
+    return render_template('threads/by_activity.html', thread_list=thread_list)
 
 
 @app.route('/threads/mine', methods=['GET'])

@@ -8,7 +8,7 @@
       <div class="page-header">
         <h2>Active Conversations</h2>
       </div>
-      <ul class="unstyled thread-list">
+      <ul class="thread-list">
         {% for thread in active_thread_list %}
           {% include "includes/thread.html" %}
         {% endfor %}
@@ -21,7 +21,7 @@
         <h2>Converations</h2>
       </div>
     {% endif %}
-    <ul class="unstyled thread-list">
+    <ul class="thread-list">
       {% for thread in thread_list %}
         {% include "includes/thread.html" %}
       {% endfor %}
