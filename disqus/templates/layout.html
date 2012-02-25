@@ -13,98 +13,10 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
-    <link href="https://fonts.googleapis.com/css?family=Droid+Sans+Mono" rel="stylesheet" type="text/css">
 
     <!-- Le styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="https://us.pycon.org/2012/site_media/static/css/pycon.css?10">
-    <style type="text/css">
-      body {
-        background: #eae7df url('https://us.pycon.org/2012/site_media/static/img/bg.png');
-      }
-      header {
-        position: relative;
-        height: 130px;
-      }
-
-      header .container {
-        background: url('https://us.pycon.org/2012/site_media/static/img/blue_stripe.png') repeat-x 0 0;
-        height: 130px;
-      }
-
-      header h1#logo {
-        margin: 0;
-        position: absolute;
-        top: 24px;
-        left: 0;
-      }
-      header h1#logo a {
-        display: block;
-        width: 276px;
-        height: 90px;
-        background: url('https://us.pycon.org/2012/site_media/static/img/pycon_2012_sm.png') no-repeat 0 0;
-        float: left;
-        padding-bottom: 12px;
-        color:#fff;
-        text-decoration:none;
-        font-size:123.1%;
-        text-indent:-9999px;
-      }
-      header h2#slogan {
-        position: absolute;
-        top: 43px;
-        left: 140px;
-        color: #568aa0;
-        font-size: 85%;
-        font-family: Georgia, "Times New Roman", Times, serif;
-        font-style: italic;
-        padding-left: 10px;
-        font-weight: normal;
-        line-height: 1.2em;
-        text-shadow: 0 -1px 0 #033d56;
-      }
-      header .login {
-        float: right;
-        color: #7caec3;
-        font-size: 77%;
-        margin: 18px 0 0 0;
-        text-shadow: 0 1px 0 #f9f2e6;
-        line-height: 1.4em;
-      }
-      header .login a, header .login a:visited {
-        color: #649fae;
-        text-decoration: none;
-        font-weight: bold;
-        text-transform:uppercase;
-      }
-      header .login a:hover {
-        color: #006e91;
-        text-decoration: none;
-      }
-
-      .navbar {
-        margin-bottom: 0;
-      }
-      .navbar-inner {
-        background: none;
-         border-radius: 0;
-        -moz-border-radius: 0;
-        -webkit-border-radius: 0;
-      }
-      section#main .container {
-        background: url('https://us.pycon.org/2012/site_media/static/img/blue_stripe.png') repeat-x 0 0;
-      }
-      section#main .container .content {
-          padding: 25px 25px 15px;
-
-      }
-      footer {
-        margin-top: 50px;
-        text-align: center;
-      }
-      .thread-list li, .thread-unit {
-        position: relative;
-      }
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     </style>
   </head>
 
