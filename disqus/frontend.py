@@ -43,7 +43,6 @@ def landing_page():
 
 class NewThreadForm(Form):
     subject = TextField('Subject', [Required()])
-    description = TextAreaField('Description')
 
 
 @app.route('/threads/show/<id>', methods=['GET', 'POST'])
@@ -60,7 +59,7 @@ def thread_details(id):
 def new_thread():
     form = NewThreadForm()
     if form.validate_on_submit():
-        thread = api_call(disqusapi.threads.create, title=form.subject.data, message=form.description.data, forum=app.config['DISQUS_FORUM'])
+        thread = api_call(disqusapi.threads.create, title=form.subject.data, forum=app.config['DISQUS_FORUM'])
         flash("Success")
         return redirect(url_for('thread_details', id=thread['id']))
 
