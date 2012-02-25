@@ -29,8 +29,8 @@ app = Flask(__name__)
 
 # Build configuration
 app.config.from_object('disqus.conf.DefaultConfig')
-app.config.from_object('local_settings')
-app.config.from_envvar('DISQUS_SETTINGS')
+app.config.from_pyfile('local_settings.py', silent=True)
+app.config.from_envvar('DISQUS_SETTINGS', silent=True)
 
 # Init database (Redis)
 db = init_database(app)
