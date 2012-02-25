@@ -1,4 +1,4 @@
 <li>
-  <h2><a href="{{ url_for('thread_details', thread_id=thread.id) }}">{{ thread.title }}</a>{% if thread.createdAt|is_new %} <span class="label success">New</span>{% endif %}</h2>
+  <h2><a href="{{ url_for('thread_details', thread_id=thread.id) }}">{{ thread.title }}</a></h2>
   <p>{{ thread.message }}</p>
 </li>
