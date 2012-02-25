@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block nav_my_threads_active %} class="active"{% endblock %}
+
+{% block content %}
+  <section>
+    <div class="page-header">
+      <h1>My Ideas <small>Ideas you've shared with the community</small></h1>
+    </div>
+    <div class="row">
+      <div class="span16">
+        {% if thread_list %}
+          <ul class="unstyled thread-list">
+            {% for thread in thread_list %}
+              {% include "includes/thread.html" %}
+            {% endfor %}
+          </ul>
+        {% else %}
+          <div class="alert-message block-message info">
+            <p>You haven't shared any threads yet.</p>
+          </div>
+        {% endif %}
+        </div>
+    </div>
+  </section>
+{% endblock %}
