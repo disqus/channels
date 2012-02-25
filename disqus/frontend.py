@@ -32,13 +32,20 @@ def is_new_filter(date):
 def landing_page():
     active_thread_list = list(api_call(disqusapi.threads.listHot, forum=app.config['DISQUS_FORUM'], method='GET', limit=5))
     active_thread_ids = set(t['id'] for t in active_thread_list)
+
     thread_list = list(api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET', limit=10))
     thread_list = [t for t in thread_list if t['id'] not in active_thread_ids]
+
+    category_list = api_call(disqusapi.categories.list, forum=app.config['DISQUS_FORUM'], method='GET')
 
     for thread in thread_list:
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
-    return render_template('landing.html', thread_list=thread_list, active_thread_list=active_thread_list)
+    return render_template('landing.html', **{
+        'thread_list': thread_list,
+        'active_thread_list': active_thread_list,
+        'category_list': category_list
+    })
 
 
 class NewThreadForm(Form):

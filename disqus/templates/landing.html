@@ -29,4 +29,14 @@
   {% else %}
     <p>There are no conversations happening yet. Be the first to <a href="{{ url_for('new_thread') }}">start a conversation</a>.</p>
   {% endif %}
+
+  <div class="page-header">
+    <h2>Categories</h2>
+  </div>
+
+  <ul>
+    {% for category in category_list %}
+      <li>{{ category.title }}</li>
+    {% endfor %}
+  </ul>
 {% endblock %}
