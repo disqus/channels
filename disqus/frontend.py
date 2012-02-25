@@ -90,7 +90,7 @@ def threads_by_likes():
 @app.route('/threads/mine', methods=['GET'])
 @login_required
 def my_threads():
-    thread_list = api_call(disqusapi.threads.list, author=session['auth']['user_id'], forum=app.config['DISQUS_FORUM'], method='GET')
+    thread_list = api_call(disqusapi.users.listActiveThreads, forum=app.config['DISQUS_FORUM'], method='GET')
 
     for thread in thread_list:
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
