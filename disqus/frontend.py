@@ -45,13 +45,8 @@ class NewThreadForm(Form):
     subject = TextField('Subject', [Required()])
 
 
-@app.route('/threads/show/<id>', methods=['GET', 'POST'])
-def thread_details(id):
-    thread = api_call(disqusapi.threads.details, thread=id, forum=app.config['DISQUS_FORUM'])
-
-    thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
-
-    return render_template('threads/details.html', thread=thread)
+class NewPostForm(Form):
+    message = TextAreaField('Message', [Required()])
 
 
 @app.route('/threads/new', methods=['GET', 'POST'])
@@ -61,7 +56,7 @@ def new_thread():
     if form.validate_on_submit():
         thread = api_call(disqusapi.threads.create, title=form.subject.data, forum=app.config['DISQUS_FORUM'])
         flash("Success")
-        return redirect(url_for('thread_details', id=thread['id']))
+        return redirect(url_for('thread_details', thread_id=thread['id']))
 
     return render_template('threads/new.html', form=form)
 
@@ -95,3 +90,28 @@ def my_threads():
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
     return render_template('threads/mine.html', thread_list=thread_list)
+
+
+@app.route('/threads/<thread_id>', methods=['GET', 'POST'])
+def thread_details(thread_id):
+    form = NewPostForm()
+
+    thread = api_call(disqusapi.threads.details, thread=thread_id)
+
+    thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
+
+    post_list = api_call(disqusapi.threads.listPosts, thread=thread_id)[::-1]
+    for post in post_list:
+        post['createdAt'] = datetime.strptime(post['createdAt'], '%Y-%m-%dT%H:%M:%S')
+
+    return render_template('threads/details.html', thread=thread, post_list=post_list, form=form)
+
+
+@app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])
+@login_required
+def new_post(thread_id):
+    form = NewPostForm()
+    if form.validate_on_submit():
+        post = api_call(disqusapi.posts.create, thread=thread_id, message=form.message.data)
+
+    return redirect(url_for('thread_details', thread_id=thread_id))
