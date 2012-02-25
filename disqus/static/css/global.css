@@ -102,7 +102,7 @@ header h2#slogan {
   line-height: 1.2em;
   text-shadow: 0 -1px 0 #033d56;
 }
-header .login {
+header .nav {
   float: right;
   color: #7caec3;
   font-size: 77%;
@@ -110,13 +110,13 @@ header .login {
   text-shadow: 0 1px 0 #f9f2e6;
   line-height: 1.4em;
 }
-header .login a, header .login a:visited {
+header .nav a, header .nav a:visited {
   color: #649fae;
   text-decoration: none;
   font-weight: bold;
   text-transform:uppercase;
 }
-header .login a:hover {
+header .nav a:hover {
   color: #006e91;
   text-decoration: none;
 }
@@ -133,6 +133,10 @@ header .login a:hover {
 section#main .container {
   padding-top: 30px;
   background: url('https://us.pycon.org/2012/site_media/static/img/blue_stripe.png') repeat-x 0 0;
+}
+.page-header {
+  padding-bottom: 0;
+  border-bottom: 0;
 }
 .page-header h1, .page-header h2 {
   font-family: LeagueGothicRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;

@@ -3,16 +3,15 @@
 {% block nav_home_active %} class="active"{% endblock %}
 
 {% block content %}
+  <div class="page-header">
+    <h2>Active <span>Conversations</span></h2>
+  </div>
   {% if thread_list %}
-    <div class="row">
-      <div class="span16">
-        <ul class="unstyled thread-list">
-          {% for thread in thread_list %}
-            {% include "includes/thread.html" %}
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
+    <ul class="unstyled thread-list">
+      {% for thread in thread_list %}
+        {% include "includes/thread.html" %}
+      {% endfor %}
+    </ul>
   {% else %}
     <p>There are no conversations happening yet. Be the first to <a href="{{ url_for('new_thread') }}">start a conversation</a>.</p>
   {% endif %}

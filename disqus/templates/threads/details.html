@@ -1,20 +1,12 @@
 {% extends "layout.html" %}
 
 {% block content %}
-  <section>
     <div class="page-header">
-      <h1>{{ thread.title }}{% if thread.createdAt|is_new %} <span class="label success">New</span>{% endif %}</h1>
+      <h2>{{ thread.title }}</h2>
     </div>
-    <div class="row">
-      <div class="span16">
-        <div class="thread-unit">
-          <p>{{ thread.message }}</p>
-          <div class="vote-unit">
-            <div>{{ thread.likes }}</div>
-            <a href="#">Like</a>
-          </div>
-        </div>
-      </div>
+    <div class="thread-unit">
+      <p>{{ thread.message }}</p>
     </div>
-  </section>
+
+    <p>Comments should show here</p>
 {% endblock %}

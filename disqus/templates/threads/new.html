@@ -7,6 +7,9 @@
     <h2>Start a new conversation</h2>
   </div>
 
+  <p>What is your conversation about? This will be used as the topic name, and will help others discover your
+    conversation.</p>
+
   <form method="POST" class="form-stack" action="{{ url_for('new_thread') }}">
     {{ form.csrf }}
     <fieldset>
