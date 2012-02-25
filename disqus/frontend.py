@@ -62,7 +62,7 @@ def new_thread():
     if form.validate_on_submit():
         thread = api_call(disqusapi.threads.create, title=form.subject.data, message=form.description.data, forum=app.config['DISQUS_FORUM'])
         flash("Success")
-        return redirect(url_for('threads_details', id=thread['id']))
+        return redirect(url_for('thread_details', id=thread['id']))
 
     return render_template('threads/new.html', form=form)
 
