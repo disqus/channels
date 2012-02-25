@@ -1,35 +1,46 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    <div class="page-header">
-      <h2>{{ thread.title }}</h2>
-    </div>
+  <div class="page-header">
+    <h2>{{ thread.title }}</h2>
+  </div>
 
-    <div class="thread-unit">
+  <div class="thread">
+    <div class="thread-count">
+      {{ thread.posts }}
+    </div>
+    <div class="thread-title">
+      <h3><a href="{{ url_for('thread_details', thread_id=thread.id) }}">{{ thread.title }}</a></h3>
+    </div>
+    <div class="thread-message">
       <p>{{ thread.message }}</p>
     </div>
+  </div>
 
-    {% if post_list %}
-      <ul class="post-list">
-        {% for post in post_list %}
-          <li class="post">
-            <div class="post-author">
-              {{ post.author.name }}
-            </div>
-            <div class="post-message">
-              <p>{{ post.message|safe }}</p>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>It seems no one is participating in this conversation yet.</p>
-    {% endif %}
+  {% if post_list %}
+    <ul class="post-list">
+      {% for post in post_list %}
+        <li class="post">
+          <img src="{{ post.author.avatar.cache }}" class="post-avatar">
+          <div class="post-author">
+            {{ post.author.name }}
+          </div>
+          <div class="post-message">
+            <p>{{ post.message|safe }}</p>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>It seems no one is participating in this conversation yet.</p>
+  {% endif %}
 
-  <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
-    {{ form.csrf }}
-    <fieldset>
-      {{ form.message(class="span6", rows=2) }} <input type="submit" class="btn btn-large btn-primary" value="Send Reply">
-    </fieldset>
-  </form>
+  <div class="new-reply">
+    <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
+      {{ form.csrf }}
+      <fieldset>
+        {{ form.message(class="span6", rows=2) }} <input type="submit" class="btn btn-large btn-primary" value="Send Reply">
+      </fieldset>
+    </form>
+  </div>
 {% endblock %}

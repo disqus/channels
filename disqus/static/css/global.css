@@ -158,6 +158,52 @@ footer {
   margin-top: 50px;
   text-align: center;
 }
-.thread-list li, .thread-unit {
+.thread {
+  margin-bottom: 15px;
+}
+.thread .thread-title h3 {
+  margin-bottom: 5px;
+  height: 25px;
+  line-height: 25px;
+}
+.thread .thread-count {
+  display: block;
+  float: left;
+  width: 25px;
+  height: 25px;
+  background: #409cc1;
+  color: #fff;
+  line-height: 25px;
+  font-size: 12px;
+  text-align: center;
+  margin-right: 10px;
+}
+.thread .thread-message {
+}
+
+.post-list {
+  list-style: none;
+  margin-left: 0;
+  margin-bottom: 15px;
+}
+.post {
   position: relative;
+  padding-left: 42px;
+}
+.post .post-avatar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+}
+.post .post-author {
+  font-weight: bold;
+}
+
+.new-reply {
+  background: url('https://us.pycon.org/2012/site_media/static/img/blue_stripe.png') repeat-x 0 0;
+  margin-top: 25px;
+  padding-top: 25px;
 }
