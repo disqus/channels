@@ -13,11 +13,17 @@ class Details
 
         $('#message').keydown (e) =>
             if e.which == 13 and not e.shiftKey
-                this.submit()
+                $('.new-reply form').submit()
                 false
 
-    submit: ->
-        $('form')[0].submit()
+        $('.new-reply form').submit () ->
+            button = $('button[type=submit]', this)
+            setTimeout () =>
+                button.attr 'disabled', 'disabled'
+            , 50
+
+            if button.attr 'disabled'
+                false
 
     scrollBottom: ->
         $('body').animate scrollTop: $(document).height(), 0
