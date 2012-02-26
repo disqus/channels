@@ -22,7 +22,7 @@ class Logout(Exception):
 
 
 def get_access_token():
-    if 'access_token' in session:
+    if 'auth' in session:
         return session['auth']['access_token']
     return None
 
@@ -83,7 +83,7 @@ def oauth_callback():
     error = request.args.get('error')
     if error or not code:
         # TODO: show error
-        return redirect('/')
+        return redirect('/?oauth_error=' + error)
 
     req = urllib2.Request('https://disqus.com/api/oauth/2.0/access_token/', urllib.urlencode({
         'grant_type': 'authorization_code',
@@ -102,6 +102,7 @@ def oauth_callback():
 
     if 'postauth' in session:
         url = session['postauth']['url']
+        del session['postauth']
     else:
         url = '/'
     return redirect(url)
