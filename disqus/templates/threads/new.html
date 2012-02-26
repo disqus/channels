@@ -15,7 +15,7 @@
     <fieldset>
       <div class="control-group{% if form.subject.errors %} error{% endif %}">
         <div class="controls">
-          {{ form.subject(class="span6") }}
+          {{ form.subject(class="span6", placeholder="e.g. I heard Node.JS is faster than Python") }}
           {% if form.subject.help_text %}
             <span class="help-inline">{{ form.subject.help_text }}</span>
           {% endif %}
@@ -28,7 +28,7 @@
       </div>
 
       <div class="actions">
-        <input type="submit" class="btn btn-primary" value="Save changes">&nbsp;<button type="reset" class="btn">Cancel</button>
+        <input type="submit" class="btn btn-primary" value="Start conversation">
       </div>
     </fieldset>
   </form>
