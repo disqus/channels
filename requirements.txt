@@ -12,3 +12,4 @@ redis==2.4.10
 hiredis==0.1.0
 simplejson==2.2.1
 wsgiref==0.1.2
+pytz==2011n
