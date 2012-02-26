@@ -5,9 +5,9 @@ Jinja2==2.6
 WTForms==0.6.3
 Werkzeug==0.8.1
 disqus-python==0.4.1
-disqus-threads==0.1
 distribute==0.6.19
-nydus==0.1.2
+nydus==0.6.2
 redis==2.4.10
+hiredis==0.1.0
 simplejson==2.2.1
 wsgiref==0.1.2
