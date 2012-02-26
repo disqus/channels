@@ -69,7 +69,7 @@ def landing_page():
     active_thread_ids = set(t['id'] for t in active_thread_list)
 
     thread_list = list(api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET', limit=10))
-    thread_list = [t for t in thread_list if t['id'] not in active_thread_ids]
+    thread_list = [t for t in thread_list if t['id'] not in active_thread_ids][:5]
 
     category_list = from_cache(get_categories)
 

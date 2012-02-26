@@ -11,6 +11,7 @@
     </div>
   </div>
 
+  <div class="conversation-stream">
   {% if post_list %}
     <ul class="post-list">
       {% for post in post_list %}
@@ -28,6 +29,7 @@
   {% else %}
     <p>It seems no one is participating in this conversation yet.</p>
   {% endif %}
+</div>
 
   <div class="new-reply">
     <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
