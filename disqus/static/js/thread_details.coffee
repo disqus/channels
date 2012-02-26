@@ -19,12 +19,17 @@ class ListView extends Backbone.View
         @$el.append post_view.render().el
 
     addPost: ->
+        scrolled = @isAtBottom()
         post = new Post
         @collection.add post
-        @scrollBottom()
+        if scrolled
+            @scrollBottom()
 
     scrollBottom: ->
         $('body').animate scrollTop: $(document).height(), 0
+
+    isAtBottom: ->
+        $(window).scrollTop() + $(window).height() == $(document).height()
 
 
 class PostView extends Backbone.View
