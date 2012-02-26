@@ -15,7 +15,7 @@ from disqusapi import Paginator
 from disqus import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
 from disqus.oauth import login_required, api_call
-from disqus.utils import from_cache, timesince, datestr_to_datetime
+from disqus.utils import from_cache, timesince, format_datetime, datestr_to_datetime
 from disqus.views import posts
 
 
@@ -40,7 +40,7 @@ category_map = dict((c['title'], c) for c in from_cache(get_categories))
 
 
 def get_active_talks():
-    start = datetime.now() - timedelta(minutes=10)
+    start = datetime.utcnow() - timedelta(minutes=10)
     end = start + timedelta(minutes=20)
     talk_urls = []
     for talk in sorted(schedule.itervalues(), key=lambda x: x['start']):
@@ -54,7 +54,7 @@ def get_active_talks():
 
 
 def get_upcoming_talks():
-    start = datetime.now() + timedelta(minutes=15)
+    start = datetime.utcnow() + timedelta(minutes=15)
     # end = start + timedelta(minutes=30)
     talk_urls = []
     for talk in schedule.itervalues():
@@ -97,9 +97,10 @@ def inject_config():
 
 @app.template_filter('is_new')
 def is_new_filter(date):
-    return date > datetime.now() - timedelta(days=1)
+    return date > datetime.utcnow() - timedelta(days=1)
 
 app.template_filter('timesince')(timesince)
+app.template_filter('format_datetime')(format_datetime)
 
 
 @app.route('/', methods=['GET'])

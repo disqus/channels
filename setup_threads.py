@@ -1,7 +1,8 @@
 import cPickle as pickle
-import urllib
-import simplejson as json
 import datetime
+import pytz
+import simplejson as json
+import urllib
 from disqus import app, disqusapi
 from disqusapi import Paginator
 
@@ -53,7 +54,7 @@ for talk in schedule:
             forum=app.config['DISQUS_FORUM'],
             title=talk['title'].encode('utf-8'),
             url=talk['url'],
-            date=talk['start'],
+            date=talk['start'].isoformat(),
             category=talk_category_id,
             message=talk['description'].encode('utf-8')
         )
