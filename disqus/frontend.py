@@ -9,7 +9,8 @@ import itertools
 import logging
 
 from datetime import datetime, timedelta
-from flask import session, render_template, flash, redirect, url_for
+from flask import session, render_template, flash, redirect, url_for, jsonify
+import json
 
 from disqusapi import Paginator
 from disqus import app, disqusapi, schedule
@@ -27,6 +28,15 @@ def get_form_from_session():
         postauth = session['postauth']
         del session['postauth']
         return postauth['form']
+
+def format_post(post):
+    return {
+        'avatar': post['author']['avatar']['cache'],
+        'name': post['author']['username'],
+        'createdAtISO': post['createdAt'].isoformat(),
+#        'createdAt': post['createdAt'],
+        'message': post['message']
+    }
 
 
 def get_active_threads():
@@ -178,22 +188,27 @@ def thread_details(thread_id):
 
     thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
-    post_list = get_thread_posts(thread_id)[::-1]
 
     if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
         pycon_session = schedule[thread['link']]
     else:
         pycon_session = False
 
+
     return render_template('threads/details.html', **{
         'thread': thread,
-        'post_list': post_list,
         'form': form,
         'pycon_session': pycon_session,
         'active_talk_list': from_cache(get_active_talks)[:5],
         'active_thread_list': from_cache(get_active_threads)[:5],
     })
 
+@app.route('/posts/<thread_id>.json', methods=['GET'])
+def get_posts(thread_id):
+    post_list = get_thread_posts(thread_id)[::-1]
+    return jsonify({
+        'post_list': [format_post(post) for post in post_list]
+    })
 
 @app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])
 @login_required

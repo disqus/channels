@@ -18,9 +18,8 @@ class ListView extends Backbone.View
 
         @$el.append post_view.render().el
 
-    addPost: ->
+    addPost: (post) ->
         scrolled = @isAtBottom()
-        post = new Post
         @collection.add post
         if scrolled
             @scrollBottom()
@@ -44,13 +43,18 @@ class PostView extends Backbone.View
         @$el.html @template @model.toJSON()
         @
 
-class Post extends Backbone.Model
+window.Post = class Post extends Backbone.Model
 
     defaults:
         message: 'omg'
-        createdAt: "shrug"
+        createdAtISO: "shrug"
         name: "matt"
         avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+
+    initialize: ->
+        @set 'createdAtSince', Disqus.prettyDate(@get 'createdAtISO' )
+
+
 
 
 class PostList extends Backbone.Collection
@@ -81,4 +85,11 @@ $(document).ready () ->
 
         if button.attr 'disabled'
             false
+
+    $.ajax
+        url: "/posts/" + threadId + ".json"
+        success: (data) ->
+            for post in data.post_list
+                p = new Post(post)
+                list_view.addPost(p)
 

@@ -6,7 +6,11 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.autoresize.js') }}"></script>
+<script type="text/javascript">
+    var threadId = "{{ thread.id }}";
+</script>
 {% endblock %}
+
 {% block foot %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/thread_details.js') }}"></script>
 {% endblock %}
@@ -58,8 +62,8 @@
         <%= name %>
       </span>
       &middot;
-      <span class="post-datetime pretty-date" title="<%= createdAt %>Z">
-        <%= createdAt %>
+      <span class="post-datetime pretty-date" title="<%= createdAtISO %>Z">
+        <%= createdAtSince %>
       </span>
     </div>
     <div class="post-message">
@@ -68,12 +72,9 @@
   </script>
 
   <div class="conversation-stream">
-  {% if post_list %}
     <ul class="post-list">
     </ul>
-  {% else %}
-    <p>It seems no one is participating in this conversation yet.</p>
-  {% endif %}
+  {#    <p>It seems no one is participating in this conversation yet.</p>#}
 </div>
 
 <div class="row-fluid">
