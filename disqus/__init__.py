@@ -29,12 +29,13 @@ def init_disqus(app):
 # Init Flask app
 app = Flask(__name__)
 
-coffee(app) 
-
 # Build configuration
 app.config.from_object('disqus.conf.DefaultConfig')
 app.config.from_pyfile('local_settings.py', silent=True)
 app.config.from_envvar('DISQUS_SETTINGS', silent=True)
+
+if app.config.get('USE_NODE'):
+    coffee(app) 
 
 # Init database (Redis)
 db = init_database(app)
