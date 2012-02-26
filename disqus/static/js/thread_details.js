@@ -34,16 +34,21 @@
     };
 
     ListView.prototype.addPost = function() {
-      var post;
+      var post, scrolled;
+      scrolled = this.isAtBottom();
       post = new Post;
       this.collection.add(post);
-      return this.scrollBottom();
+      if (scrolled) return this.scrollBottom();
     };
 
     ListView.prototype.scrollBottom = function() {
       return $('body').animate({
         scrollTop: $(document).height()
       }, 0);
+    };
+
+    ListView.prototype.isAtBottom = function() {
+      return $(window).scrollTop() + $(window).height() === $(document).height();
     };
 
     return ListView;
