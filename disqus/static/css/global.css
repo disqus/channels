@@ -219,7 +219,6 @@ header .nav a:hover {
 
 .conversation-stream {
   padding-top: 20px;
-  padding-bottom: 65px;
 }
 
 .post-list {
@@ -256,7 +255,6 @@ header .nav a:hover {
   border-top: 1px solid #d5cebc;
   background: #eae7df;
   padding-top: 10px;
-  height: 50px;
   overflow: hidden;
 }
 .new-reply form {
