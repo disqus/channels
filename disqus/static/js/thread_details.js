@@ -5,39 +5,7 @@
 
   Details = (function() {
 
-    function Details() {
-      var _this = this;
-      this.scrollBottom();
-      $('.new-reply textarea').autoResize({
-        maxHeight: 84,
-        minHeight: 28,
-        onAfterResize: function() {
-          $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10);
-          return _this.scrollBottom();
-        }
-      }).focus();
-      $('#message').keydown(function(e) {
-        if (e.which === 13 && !e.shiftKey) {
-          $('.new-reply form').submit();
-          return false;
-        }
-      });
-      $('.new-reply form').submit(function() {
-        var button,
-          _this = this;
-        button = $('button[type=submit]', this);
-        setTimeout(function() {
-          return button.attr('disabled', 'disabled');
-        }, 50);
-        if (button.attr('disabled')) return false;
-      });
-    }
-
-    Details.prototype.scrollBottom = function() {
-      return $('body').animate({
-        scrollTop: $(document).height()
-      }, 0);
-    };
+    function Details() {}
 
     return Details;
 
@@ -57,7 +25,8 @@
       _.bindAll(this);
       this.collection = new PostList;
       this.collection.bind('add', this.appendPost);
-      return this.render();
+      this.render();
+      return this.scrollBottom();
     };
 
     ListView.prototype.render = function() {
@@ -75,7 +44,14 @@
     ListView.prototype.addPost = function() {
       var post;
       post = new Post;
-      return this.collection.add(post);
+      this.collection.add(post);
+      return this.scrollBottom();
+    };
+
+    ListView.prototype.scrollBottom = function() {
+      return $('body').animate({
+        scrollTop: $(document).height()
+      }, 0);
     };
 
     return ListView;
@@ -136,8 +112,31 @@
   })(Backbone.Collection);
 
   $(document).ready(function() {
+    var _this = this;
     window.list_view = new ListView;
-    return new Details();
+    $('.new-reply textarea').autoResize({
+      maxHeight: 84,
+      minHeight: 28,
+      onAfterResize: function() {
+        $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10);
+        return list_view.scrollBottom();
+      }
+    }).focus();
+    $('#message').keydown(function(e) {
+      if (e.which === 13 && !e.shiftKey) {
+        $('.new-reply form').submit();
+        return false;
+      }
+    });
+    return $('.new-reply form').submit(function() {
+      var button,
+        _this = this;
+      button = $('button[type=submit]', this);
+      setTimeout(function() {
+        return button.attr('disabled', 'disabled');
+      }, 50);
+      if (button.attr('disabled')) return false;
+    });
   });
 
 }).call(this);
