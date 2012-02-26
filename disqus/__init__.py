@@ -10,6 +10,7 @@ __all__ = ('app', 'db')
 
 from flask import Flask
 import cPickle as pickle
+from disqus.coffee import coffee
 
 
 def init_database(app):
@@ -32,6 +33,9 @@ app = Flask(__name__)
 app.config.from_object('disqus.conf.DefaultConfig')
 app.config.from_pyfile('local_settings.py', silent=True)
 app.config.from_envvar('DISQUS_SETTINGS', silent=True)
+
+if app.config.get('USE_NODE'):
+    coffee(app) 
 
 # Init database (Redis)
 db = init_database(app)
