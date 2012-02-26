@@ -125,7 +125,7 @@
       maxHeight: 84,
       minHeight: 28,
       onAfterResize: function() {
-        $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10);
+        $('.conversation').css('padding-bottom', $('.new-reply').height() + 10);
         return list_view.scrollBottom();
       }
     }).focus();

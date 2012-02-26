@@ -68,7 +68,7 @@ $(document).ready () ->
         maxHeight: 84
         minHeight: 28
         onAfterResize: () =>
-            $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10)
+            $('.conversation').css('padding-bottom', $('.new-reply').height() + 10)
             list_view.scrollBottom()
     ).focus()
 
