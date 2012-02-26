@@ -10,11 +10,11 @@ import logging
 
 from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for
-from flaskext.wtf import Form, Required, TextField, TextAreaField
 
 from disqus import app, disqusapi, schedule
 from disqus.oauth import login_required, api_call
 from disqus.utils import from_cache, timesince
+from disqus.forms import NewThreadForm, NewPostForm
 
 logger = logging.getLogger(__name__)
 
@@ -102,14 +102,6 @@ def landing_page():
         'active_talk_list': active_talk_list,
         'upcoming_talk_list': upcoming_talk_list,
     })
-
-
-class NewThreadForm(Form):
-    subject = TextField('Subject', [Required()])
-
-
-class NewPostForm(Form):
-    message = TextAreaField('Message', [Required()])
 
 
 @app.route('/threads/new', methods=['GET', 'POST'])
