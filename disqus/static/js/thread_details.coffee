@@ -1,9 +1,3 @@
-class Details
-
-    constructor: ->
-
-
-
 class ListView extends Backbone.View
     el: '.post-list'
 
@@ -35,18 +29,24 @@ class ListView extends Backbone.View
 
 class PostView extends Backbone.View
     tagName: 'li'
+    className: 'post'
+    template: _.template $('#post-template').html()
 
     initialize: ->
         _.bindAll @
 
     render: ->
-        @$el.html '<li>HI!</li>'
+        @$el.html @template @model.toJSON()
         @
 
 class Post extends Backbone.Model
 
     defaults:
         message: 'omg'
+        createdAt: "shrug"
+        name: "matt"
+        avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+
 
 class PostList extends Backbone.Collection
 
