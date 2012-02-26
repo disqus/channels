@@ -13,8 +13,12 @@ class View(object):
     def remove(self, data, **kwargs):
         self.redis.zrem(self.get_key(**kwargs), data['id'])
 
-    def list(self, offset=0, limit=-1, **kwargs):
-        id_list = self.redis.zrevrange(self.get_key(**kwargs), offset, limit)
+    def list(self, offset=0, limit=-1, desc=True, **kwargs):
+        if desc:
+            func = self.redis.zrevrange
+        else:
+            func = self.redis.zrange
+        id_list = func(self.get_key(**kwargs), offset, limit)
         obj_cache = {}
         with self.redis.map() as conn:
             for id in id_list:

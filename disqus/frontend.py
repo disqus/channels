@@ -177,7 +177,7 @@ def thread_details(thread_id):
 
     thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
-    post_list = get_thread_posts(thread_id)
+    post_list = get_thread_posts(thread_id)[::-1]
 
     if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
         pycon_session = schedule[thread['link']]
