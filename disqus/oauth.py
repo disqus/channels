@@ -51,6 +51,13 @@ def login_required(func):
     return wrapped
 
 
+@app.route('/logout', methods=['GET'])
+def logout():
+    if 'auth' in session:
+        del session['auth']
+    return redirect('/')
+
+
 @app.route('/oauth/authorize/')
 def oauth_authorize():
     return redirect('https://disqus.com/api/oauth/2.0/authorize/?%s' % (urllib.urlencode({
@@ -84,6 +91,9 @@ def oauth_callback():
     session['auth'] = data
     session.permanent = True
 
-    url = session['auth-redirect']
-    del session['auth-redirect']
+    url = session.get('auth-redirect')
+    if url:
+        del session['auth-redirect']
+    else:
+        url = '/'
     return redirect(url)
