@@ -10,6 +10,7 @@ __all__ = ('app', 'db')
 
 from flask import Flask
 import cPickle as pickle
+from disqus.coffee import coffee
 
 
 def init_database(app):
@@ -27,6 +28,8 @@ def init_disqus(app):
 
 # Init Flask app
 app = Flask(__name__)
+
+coffee(app) 
 
 # Build configuration
 app.config.from_object('disqus.conf.DefaultConfig')
