@@ -2,6 +2,8 @@ class Details
 
     constructor: ->
 
+        this.scrollBottom()
+
         $('#message').keydown (e) =>
             if e.which == 13 and not e.shiftKey
                 this.submit()
@@ -9,6 +11,9 @@ class Details
 
     submit: ->
         $('form')[0].submit()
+
+    scrollBottom: ->
+        $('body').animate scrollTop: $(document).height(), "slow"
 
 
 $(document).ready () ->
