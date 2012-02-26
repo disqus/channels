@@ -10,7 +10,7 @@
 }
 
 body {
-  background: #eae7df;
+  background: #f9f9f9;
   color:#222;
   font: normal 93% "Helvetica Neue", Helvetica, Arial, sans-serif;
   padding-top: 83px;
@@ -250,9 +250,10 @@ header .nav a:hover {
 }
 .new-reply {
   position: fixed;
-  left: 20px;
-  right: 20px;
+  left: 0;
+  right: 0;
   bottom: 0;
+  padding: 0 20px;
   border-top: 1px solid #d5cebc;
   background: #eae7df;
   padding-top: 10px;
