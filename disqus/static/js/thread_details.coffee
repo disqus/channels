@@ -6,6 +6,9 @@ class Details
         $('.new-reply textarea').autoResize(
             maxHeight: 84
             minHeight: 28
+            onAfterResize: () =>
+                $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10)
+                this.scrollBottom()
         ).focus()
 
         $('#message').keydown (e) =>

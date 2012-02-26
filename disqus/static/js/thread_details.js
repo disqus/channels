@@ -8,7 +8,11 @@
       this.scrollBottom();
       $('.new-reply textarea').autoResize({
         maxHeight: 84,
-        minHeight: 28
+        minHeight: 28,
+        onAfterResize: function() {
+          $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10);
+          return _this.scrollBottom();
+        }
       }).focus();
       $('#message').keydown(function(e) {
         if (e.which === 13 && !e.shiftKey) {
