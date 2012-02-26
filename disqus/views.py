@@ -1,3 +1,5 @@
+import simplejson
+
 from disqus import db
 
 
@@ -8,6 +10,7 @@ class View(object):
         self.datekey = datekey
 
     def add(self, data, score, **kwargs):
+        self.redis.set(self.get_obj_key(data['id']), simplejson.dumps(data))
         self.redis.zadd(self.get_key(**kwargs), data['id'], float(score))
 
     def remove(self, data, **kwargs):
@@ -25,7 +28,7 @@ class View(object):
                 key = self.get_obj_key(id)
                 obj_cache[id] = conn.get(key)
 
-        results = filter(None, [obj_cache.get(t) for t in id_list])
+        results = filter(bool, [simplejson.loads(unicode(obj_cache[t])) for t in id_list if obj_cache])
 
         return results
 
