@@ -4,6 +4,10 @@
   <h2>{{ thread.title }}</h2>
 {% endblock %}
 
+{% block head %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/thread_details.js') }}"></script>
+{% endblock %}
+
 {% block sidebar %}
   <div class="page-header">
     <h4>Sessions</h4>
