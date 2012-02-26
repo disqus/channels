@@ -1,10 +1,9 @@
+import cPickle as pickle
 import urllib
 import simplejson as json
 import datetime
 from disqus import app, disqusapi
 from disqusapi import Paginator
-import sys
-import pickle
 
 TALK_CATEGORY_NAME = 'Talk'
 talk_category_id = False
@@ -51,13 +50,14 @@ for talk in schedule:
     if not talk['url'] or talk['url'] in existing_urls:
         continue
 
-    datetime_args = map(int, talk['start'][0:6])
+    for key in ('start', 'end', 'last_updated'):
+        talk[key] = datetime.datetime(*map(int, talk['start'][0:6]))
 
     args = dict(
         forum=app.config['DISQUS_FORUM'],
         title=talk['title'].encode('utf-8'),
         url=talk['url'],
-        date=datetime.datetime(*datetime_args).isoformat(),
+        date=talk['start'],
         category=talk_category_id,
         message=talk['description'].encode('utf-8')
     )
