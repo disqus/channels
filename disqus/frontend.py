@@ -189,8 +189,8 @@ def thread_details(thread_id):
         'post_list': post_list,
         'form': form,
         'pycon_session': pycon_session,
-        # 'active_talk_list': from_cache(get_upcoming_talks)[:5],
-        # 'active_thread_list': from_cache(get_active_threads)[:5],
+        'active_talk_list': from_cache(get_active_talks)[:5],
+        'active_thread_list': from_cache(get_active_threads)[:5],
     })
 
 
