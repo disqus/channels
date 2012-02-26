@@ -10,6 +10,7 @@ import logging
 
 from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for
+import json
 
 from disqusapi import Paginator
 from disqus import app, disqusapi, schedule
@@ -27,6 +28,19 @@ def get_form_from_session():
         postauth = session['postauth']
         del session['postauth']
         return postauth['form']
+
+def format_post(post):
+    """
+{u'isJuliaFlagged': True, u'likes': 0, u'forum': u'pyconus2012test', u'parent': None, u'author': {u'username': u'mwhooker', u'about': u'', u'name': u'Matthew Hooker', u'url': u'', u'joinedAt': u'2011-03-25T21:41:10', u'isFollowing': False, u'isFollowedBy': False, u'profileUrl': u'http://disqus.com/mwhooker/', u'emailHash': u'f1695dcf6a21f90f5db84b2eee2cbdbe', u'avatar': {u'isCustom': True, u'permalink': u'http://disqus.com/api/users/avatars/mwhooker.jpg', u'cache': u'http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831'}, u'isAnonymous': False, u'id': u'8437354'}, u'media': [], u'isDeleted': False, u'isFlagged': False, u'dislikes': 0, u'raw_message': u'qwert', u'isApproved': True, u'isSpam': False, u'thread': u'589350639', u'points': 0, u'isHighlighted': False, u'isEdited': False, u'message': u'qwert', u'id': u'449159442', u'createdAt': datetime.datetime(2012, 2, 26, 8, 33, 50), u'userScore': 0}
+    """
+
+    return {
+        'avatar': post['author']['avatar']['cache'],
+        'name': post['author']['username'],
+        'createdAtISO': post['createdAt'].isoformat(),
+        'createdAt': post['createdAt'],
+        'message': post['message']
+    }
 
 
 def get_active_threads():
@@ -184,9 +198,10 @@ def thread_details(thread_id):
     else:
         pycon_session = False
 
+
     return render_template('threads/details.html', **{
         'thread': thread,
-        'post_list': post_list,
+        'post_list': [format_post(post) for post in post_list],
         'form': form,
         'pycon_session': pycon_session,
         'active_talk_list': from_cache(get_active_talks)[:5],
