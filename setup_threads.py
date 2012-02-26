@@ -3,11 +3,12 @@ import simplejson as json
 import datetime
 from disqus import app, disqusapi
 from disqusapi import Paginator
-from disqus.oauth import api_call
-import codecs
+import sys
+import pickle
 
 TALK_CATEGORY_NAME = 'Talk'
 talk_category_id = False
+
 
 def api_args(**kwargs):
     base = dict(
@@ -16,35 +17,37 @@ def api_args(**kwargs):
     )
     return dict(base.items() + kwargs.items())
 
+
 def api(method, *args, **kwargs):
     return method(*args, **api_args(**kwargs))
 
 
+print 'Trying to find %s category in existing categories...' % TALK_CATEGORY_NAME
 for existing_category in api(disqusapi.categories.list):
     if existing_category['title'] == TALK_CATEGORY_NAME:
         talk_category_id = existing_category['id']
 
 if not talk_category_id:
+    print "Couldn't find it, adding it..."
     new_category = api(disqusapi.categories.create, title=TALK_CATEGORY_NAME)
     talk_category_id = new_category['id']
 
 
+print "Downloading list of existing threads..."
 paginator = Paginator(disqusapi.threads.list, **api_args(category=talk_category_id))
 existing_urls = [thread['link'] for thread in paginator]
 
-try:
-    io = open('schedule.json')
-except IOError:
-    url = urllib.urlopen('https://us.pycon.org/2012/schedule/json/')
-    io = open('schedule.json', 'w')
-    io.write(url.read())
-    io.close()
-    io = open('schedule.json')
+print "%s existing threads found!" % len(existing_urls)
 
-
-schedule = json.loads(io.read())
+print 'Downloading and processing sessionlist...'
+schedule = json.loads(urllib.urlopen('https://us.pycon.org/2012/schedule/json/').read())
+f = open('sessions.pickle', 'w')
+pickle.dump(schedule, f, pickle.HIGHEST_PROTOCOL)
+f.close()
 
 for talk in schedule:
+    print ' - Processing session %s' % talk['title']
+
     if not talk['url'] or talk['url'] in existing_urls:
         continue
 
@@ -60,3 +63,5 @@ for talk in schedule:
     )
 
     api(disqusapi.threads.create, **args)
+
+print "ALL DONE!"
