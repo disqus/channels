@@ -7,6 +7,7 @@
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.autoresize.js') }}"></script>
 {% endblock %}
+
 {% block foot %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/thread_details.js') }}"></script>
 {% endblock %}
@@ -66,6 +67,24 @@
   <div class="conversation-stream">
   {% if post_list %}
     <ul class="post-list">
+     <ul class="post-list">
+      {% for post in post_list %}
+        <li class="post">
+          <img src="{{ post.avatar }}" class="post-avatar">
+          <div class="post-meta">
+            <span class="post-author">
+              {{ post.name }}
+            </span>
+            &middot;
+            <span class="post-datetime pretty-date" title="{{ post.createdAtISO }}Z">
+              {{ post.createdAt|timesince }}
+            </span>
+          </div>
+          <div class="post-message">
+            <p>{{ post.message|safe }}</p>
+          </div>
+        </li>
+      {% endfor %}
     </ul>
   {% else %}
     <p>It seems no one is participating in this conversation yet.</p>
