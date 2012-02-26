@@ -74,6 +74,8 @@ header #subhead {
   position: absolute;
   left: 235px;
   top: 20px;
+  white-space: nowrap;
+  overflow: hidden;
 }
 header #subhead h2 {
   font-family: LeagueGothicRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -109,7 +111,10 @@ header h1#logo a {
   text-indent:-9999px;
 }
 header .nav {
-  float: right;
+  background: #eae7df;
+  position: absolute;
+  right: 20px;
+  padding-left: 10px;
   color: #7caec3;
   font-size: 77%;
   margin: 18px 0 0 0;
