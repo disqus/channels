@@ -87,6 +87,7 @@ def get_thread_posts(thread_id, offset=0, limit=100):
         paginator = Paginator(disqusapi.threads.listPosts, thread=thread_id)
         for idx, post in enumerate(paginator):
             dt = datestr_to_datetime(post['createdAt'])
+            post['createdAt'] = dt
             data = format_post(post)
             posts.add(data, dt.strftime('%s.%m'), thread_id=thread_id)
             result.append(data)
