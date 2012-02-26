@@ -11,5 +11,6 @@ class DefaultConfig(object):
     DISQUS_PUBLIC = None
     DISQUS_SECRET = None
     DISQUS_FORUM = None
+    USE_NODE = False
     DEBUG = True
     TALK_CATEGORY_ID = 1330567

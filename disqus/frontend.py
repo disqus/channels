@@ -19,6 +19,13 @@ from disqus.utils import from_cache, timesince
 logger = logging.getLogger(__name__)
 
 
+def get_form_from_session():
+    if 'postauth' in session:
+        postauth = session['postauth']
+        del session['postauth']
+        return postauth['form']
+
+
 def get_active_threads():
     return list(disqusapi.threads.listHot(forum=app.config['DISQUS_FORUM'], category=category_map['General']['id'], method='GET', limit=10))
 
@@ -150,7 +157,7 @@ def my_threads():
 
 @app.route('/threads/<thread_id>', methods=['GET', 'POST'])
 def thread_details(thread_id):
-    form = NewPostForm()
+    form = NewPostForm(get_form_from_session())
 
     thread = api_call(disqusapi.threads.details, thread=thread_id)
 

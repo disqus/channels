@@ -45,7 +45,10 @@ def login_required(func):
     @functools.wraps(func)
     def wrapped(*args, **kwargs):
         if 'auth' not in session:
-            session['auth-redirect'] = request.url
+            session['postauth'] = {
+                'url': request.url,
+                'form': request.form
+            }
             return redirect(url_for('oauth_authorize'))
         return func(*args, **kwargs)
     return wrapped
@@ -91,9 +94,8 @@ def oauth_callback():
     session['auth'] = data
     session.permanent = True
 
-    url = session.get('auth-redirect')
-    if url:
-        del session['auth-redirect']
+    if 'postauth' in session:
+        url = session['postauth']['url']
     else:
         url = '/'
     return redirect(url)
