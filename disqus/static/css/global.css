@@ -174,9 +174,6 @@ section#main .container-fluid {
 .post-list {
   list-style: none;
   margin-left: 0;
-  margin-bottom: 15px;
-  border: 1px solid #dbd7c6;
-  padding: 5px;
 }
 .post {
   position: relative;
