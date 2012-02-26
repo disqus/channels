@@ -5,12 +5,47 @@ disqus.frontend
 :copyright: (c) 2012 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
+import itertools
+import logging
+import simplejson
+
 from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for
 from flaskext.wtf import Form, Required, TextField, TextAreaField
 
-from disqus import app, disqusapi
+from disqus import app, db, disqusapi
 from disqus.oauth import login_required, api_call
+
+logger = logging.getLogger(__name__)
+
+
+def from_cache(callback, cache_key=None, expires=60):
+    if cache_key is None:
+        cache_key = '%s.%s' % (callback.__module__, callback.__name__)
+    conn = db.get_conn(cache_key)
+    result = conn.get(cache_key)
+    if result:
+        try:
+            result = simplejson.loads(result)
+        except Exception, e:
+            logger.exception(e)
+            result = None
+
+    if result is None:
+        result = callback()
+        pipe = conn.pipeline()
+        pipe.set(cache_key, simplejson.dumps(result))
+        pipe.expire(cache_key, 60)
+        pipe.execute()
+    return result
+
+
+def get_active_threads():
+    return list(disqusapi.threads.listHot(forum=app.config['DISQUS_FORUM'], method='GET', limit=5))
+
+
+def get_categories():
+    return list(disqusapi.categories.list(forum=app.config['DISQUS_FORUM'], method='GET', limit=100))
 
 
 @app.context_processor
@@ -30,15 +65,15 @@ def is_new_filter(date):
 
 @app.route('/', methods=['GET'])
 def landing_page():
-    active_thread_list = list(api_call(disqusapi.threads.listHot, forum=app.config['DISQUS_FORUM'], method='GET', limit=5))
+    active_thread_list = from_cache(get_active_threads)
     active_thread_ids = set(t['id'] for t in active_thread_list)
 
     thread_list = list(api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET', limit=10))
     thread_list = [t for t in thread_list if t['id'] not in active_thread_ids]
 
-    category_list = api_call(disqusapi.categories.list, forum=app.config['DISQUS_FORUM'], method='GET')
+    category_list = from_cache(get_categories)
 
-    for thread in thread_list:
+    for thread in itertools.chain(active_thread_list, thread_list):
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
     return render_template('landing.html', **{
