@@ -36,6 +36,9 @@
           <div class="post-author">
             {{ post.author.name }}
           </div>
+          <div class="post-datetime pretty-date" title="{{ post.createdAt.isoformat() }}Z">
+            {{ post.createdAt|timesince }}
+          </div>
           <div class="post-message">
             <p>{{ post.message|safe }}</p>
           </div>

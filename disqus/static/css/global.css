@@ -189,9 +189,13 @@ section#main .container-fluid {
   margin-right: 10px;
 }
 .post .post-author {
+  display: inline;
   font-weight: bold;
 }
-
+.post .post-date {
+  display: inline;
+  font-weight: bold;
+}
 .new-reply {
   position: fixed;
   left: 20px;

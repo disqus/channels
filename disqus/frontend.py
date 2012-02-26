@@ -14,7 +14,7 @@ from flaskext.wtf import Form, Required, TextField, TextAreaField
 
 from disqus import app, disqusapi, schedule
 from disqus.oauth import login_required, api_call
-from disqus.utils import from_cache
+from disqus.utils import from_cache, timesince
 
 logger = logging.getLogger(__name__)
 
@@ -70,6 +70,8 @@ def inject_config():
 @app.template_filter('is_new')
 def is_new_filter(date):
     return date > datetime.now() - timedelta(days=1)
+
+app.template_filter('timesince')(timesince)
 
 
 @app.route('/', methods=['GET'])
