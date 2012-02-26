@@ -7,45 +7,55 @@ disqus.frontend
 """
 import itertools
 import logging
-import simplejson
 
 from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for
 from flaskext.wtf import Form, Required, TextField, TextAreaField
 
-from disqus import app, db, disqusapi
+from disqus import app, disqusapi, schedule
 from disqus.oauth import login_required, api_call
+from disqus.utils import from_cache
 
 logger = logging.getLogger(__name__)
 
 
-def from_cache(callback, cache_key=None, expires=60):
-    if cache_key is None:
-        cache_key = '%s.%s' % (callback.__module__, callback.__name__)
-    conn = db.get_conn(cache_key)
-    result = conn.get(cache_key)
-    if result:
-        try:
-            result = simplejson.loads(result)
-        except Exception, e:
-            logger.exception(e)
-            result = None
-
-    if result is None:
-        result = callback()
-        pipe = conn.pipeline()
-        pipe.set(cache_key, simplejson.dumps(result))
-        pipe.expire(cache_key, 60)
-        pipe.execute()
-    return result
-
-
 def get_active_threads():
-    return list(disqusapi.threads.listHot(forum=app.config['DISQUS_FORUM'], method='GET', limit=5))
+    return list(disqusapi.threads.listHot(forum=app.config['DISQUS_FORUM'], category=category_map['General']['id'], method='GET', limit=10))
 
 
 def get_categories():
     return list(disqusapi.categories.list(forum=app.config['DISQUS_FORUM'], method='GET', limit=100))
+
+category_map = dict((c['title'], c) for c in from_cache(get_categories))
+
+
+def get_active_talks():
+    start = datetime.now() - timedelta(minutes=10)
+    end = start + timedelta(minutes=20)
+    talk_urls = []
+    for talk in sorted(schedule, key=lambda x: x['start']):
+        if talk['start'] > start and talk['start'] < end:
+            talk_urls.append(talk['url'])
+
+    if not talk_urls:
+        return []
+
+    return list(disqusapi.threads.list(forum=app.config['DISQUS_FORUM'], thread=['link:%s' % s for s in talk_urls]))
+
+
+def get_upcoming_talks():
+    start = datetime.now() + timedelta(minutes=15)
+    # end = start + timedelta(minutes=30)
+    talk_urls = []
+    for talk in schedule:
+        print talk['start'], start
+        if talk['start'] > start:  # and talk['start'] < end:
+            talk_urls.append(talk['url'])
+
+    if not talk_urls:
+        return []
+
+    return list(disqusapi.threads.list(forum=app.config['DISQUS_FORUM'], thread=['link:%s' % s for s in talk_urls[:10]]))
 
 
 @app.context_processor
@@ -68,10 +78,12 @@ def landing_page():
     active_thread_list = from_cache(get_active_threads)
     active_thread_ids = set(t['id'] for t in active_thread_list)
 
-    thread_list = list(api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET', limit=10))
-    thread_list = [t for t in thread_list if t['id'] not in active_thread_ids][:5]
+    thread_list = list(api_call(disqusapi.threads.listByDate, category=category_map['General']['id'], method='GET', limit=20))
+    thread_list = [t for t in thread_list if t['id'] not in active_thread_ids][:10]
 
-    category_list = from_cache(get_categories)
+    # category=category_map['General']
+    active_talk_list = from_cache(get_active_talks)
+    upcoming_talk_list = from_cache(get_upcoming_talks)
 
     for thread in itertools.chain(active_thread_list, thread_list):
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
@@ -79,7 +91,8 @@ def landing_page():
     return render_template('landing.html', **{
         'thread_list': thread_list,
         'active_thread_list': active_thread_list,
-        'category_list': category_list
+        'active_talk_list': active_talk_list,
+        'upcoming_talk_list': upcoming_talk_list,
     })
 
 

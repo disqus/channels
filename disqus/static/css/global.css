@@ -13,7 +13,7 @@ body {
   background: #eae7df;
   color:#222;
   font: normal 93% "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding-top: 79px;
+  padding-top: 83px;
 }
 
 a, a:visited {
@@ -63,7 +63,7 @@ h6 {
 header {
   z-index: 100;
   position: fixed;
-  height: 64px;
+  height: 68px;
   left: 0;
   right: 0;
   top: 0;
@@ -75,7 +75,7 @@ header .container-fluid {
   background: #eae7df;
   border: 5px solid #006e91;
   border-width: 8px 0;
-  height: 64px;
+  height: 68px;
 }
 
 header h1#logo {
@@ -168,6 +168,7 @@ section#main .container-fluid {
 }
 
 .conversation-stream {
+  padding-top: 20px;
   padding-bottom: 90px;
 }
 

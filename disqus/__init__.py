@@ -9,8 +9,8 @@ disqus
 __all__ = ('app', 'db')
 
 from flask import Flask
-import simplejson as json
-import pickle
+import cPickle as pickle
+
 
 def init_database(app):
     from nydus.db import create_cluster
@@ -39,11 +39,11 @@ db = init_database(app)
 # Init API bindings
 disqusapi = init_disqus(app)
 
-from disqus.frontend import *
-from disqus.oauth import *
-
 schedule = pickle.load(open('sessions.pickle'))
 print ' * Schedule loaded'
+
+from disqus.frontend import *
+from disqus.oauth import *
 
 if __name__ == '__main__':
     app.run()
