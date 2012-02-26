@@ -250,31 +250,31 @@ header .nav a:hover {
 .topic.collapsed {
 /*  height: 85px;*/
 }
-.topic .conversation-author {
+.topic .author {
   height: 25px;
   line-height: 25px;
   display: inline-block;
 }
-.topic .conversation-author h4 {
+.topic .author h4 {
   display: inline-block;
 }
-.topic .conversation-author .conversation-link {
+.topic .author .link {
   margin-left: 10px;
   opacity: 0.7;
   font-size: 0.8em;
 }
-.topic .conversation-date {
+.topic .date {
   height: 25px;
   line-height: 25px;
   font-size: 0.9em;
   font-weight: bold;
   float: right;
 }
-.topic .conversation-description {
+.topic .description {
   overflow: hidden;
   margin-top: 5px;
 }
-.topic .conversation-description p {
+.topic .description p {
   margin-bottom: 0;
 }
 
