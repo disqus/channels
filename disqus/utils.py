@@ -6,6 +6,10 @@ from disqus import db
 logger = logging.getLogger(__name__)
 
 
+def datestr_to_datetime(dt):
+    return datetime.strptime(dt, '%Y-%m-%dT%H:%M:%S')
+
+
 def from_cache(callback, cache_key=None, expires=60):
     if cache_key is None:
         cache_key = '%s.%s' % (callback.__module__, callback.__name__)

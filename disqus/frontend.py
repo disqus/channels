@@ -11,10 +11,13 @@ import logging
 from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for
 
+from disqusapi import Paginator
 from disqus import app, disqusapi, schedule
-from disqus.oauth import login_required, api_call
-from disqus.utils import from_cache, timesince
 from disqus.forms import NewThreadForm, NewPostForm
+from disqus.oauth import login_required, api_call
+from disqus.utils import from_cache, timesince, datestr_to_datetime
+from disqus.views import posts
+
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +67,24 @@ def get_upcoming_talks():
     return list(disqusapi.threads.list(forum=app.config['DISQUS_FORUM'], thread=['link:%s' % s for s in talk_urls[:10]]))
 
 
+def get_thread_posts(thread_id, offset=0, limit=100):
+    result = posts.list(thread_id=thread_id, offset=offset, limit=limit)
+    if not result:
+        result = []
+        paginator = Paginator(disqusapi.threads.listPosts, thread=thread_id)
+        for idx, post in enumerate(paginator):
+            dt = datestr_to_datetime(post['createdAt'])
+            posts.add(post, dt.strftime('%s.%m'), thread_id=thread_id)
+            if idx < limit:
+                post['createdAt'] = dt
+                result.append(post)
+    else:
+        for post in result:
+            post['createdAt'] = datestr_to_datetime(post['createdAt'])
+
+    return result
+
+
 @app.context_processor
 def inject_auth():
     return dict(user=session.get('auth'))
@@ -94,7 +115,7 @@ def landing_page():
     upcoming_talk_list = from_cache(get_upcoming_talks)
 
     for thread in itertools.chain(active_thread_list, thread_list):
-        thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
+        thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
     return render_template('landing.html', **{
         'thread_list': thread_list,
@@ -121,7 +142,7 @@ def threads_by_date():
     thread_list = api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET')
 
     for thread in thread_list:
-        thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
+        thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
     return render_template('threads/by_date.html', thread_list=thread_list)
 
@@ -131,7 +152,7 @@ def threads_by_activity():
     thread_list = api_call(disqusapi.threads.listHot, forum=app.config['DISQUS_FORUM'], method='GET')
 
     for thread in thread_list:
-        thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
+        thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
     return render_template('threads/by_activity.html', thread_list=thread_list)
 
@@ -142,7 +163,7 @@ def my_threads():
     thread_list = api_call(disqusapi.users.listActiveThreads, forum=app.config['DISQUS_FORUM'], method='GET')
 
     for thread in thread_list:
-        thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
+        thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
     return render_template('threads/mine.html', thread_list=thread_list)
 
@@ -151,13 +172,12 @@ def my_threads():
 def thread_details(thread_id):
     form = NewPostForm(get_form_from_session())
 
-    thread = api_call(disqusapi.threads.details, thread=thread_id)
+    thread = from_cache(lambda: api_call(disqusapi.threads.details, thread=thread_id),
+                        'disqus.frontend.get_thread:%s' % (thread_id,))
 
-    thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
+    thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
-    post_list = api_call(disqusapi.threads.listPosts, thread=thread_id)[::-1]
-    for post in post_list:
-        post['createdAt'] = datetime.strptime(post['createdAt'], '%Y-%m-%dT%H:%M:%S')
+    post_list = get_thread_posts(thread_id)
 
     if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
         pycon_session = schedule[thread['link']]
@@ -169,8 +189,8 @@ def thread_details(thread_id):
         'post_list': post_list,
         'form': form,
         'pycon_session': pycon_session,
-        'active_talk_list': from_cache(get_upcoming_talks)[:5],
-        'active_thread_list': from_cache(get_active_threads)[:5],
+        # 'active_talk_list': from_cache(get_upcoming_talks)[:5],
+        # 'active_thread_list': from_cache(get_active_threads)[:5],
     })
 
 
@@ -180,5 +200,7 @@ def new_post(thread_id):
     form = NewPostForm()
     if form.validate_on_submit():
         post = api_call(disqusapi.posts.create, thread=thread_id, message=form.message.data)
+        dt = datestr_to_datetime(post['createdAt'])
+        posts.add(post, dt.strftime('%s.%m'), thread_id=thread_id)
 
     return redirect(url_for('thread_details', thread_id=thread_id))

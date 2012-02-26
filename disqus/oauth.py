@@ -21,10 +21,16 @@ class Logout(Exception):
     pass
 
 
+def get_access_token():
+    if 'access_token' in session:
+        return session['auth']['access_token']
+    return None
+
+
 def api_call(func, **kwargs):
     try:
         if 'auth' in session:
-            result = func(access_token=session['auth']['access_token'], **kwargs)
+            result = func(access_token=get_access_token(), **kwargs)
         else:
             result = func(**kwargs)
     except InvalidAccessToken:
