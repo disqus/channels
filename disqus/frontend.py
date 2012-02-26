@@ -11,7 +11,7 @@ import simplejson
 
 from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for, jsonify
-from jinja import Markup
+from jinja2 import Markup
 
 from disqusapi import Paginator
 from disqus import app, disqusapi, schedule
@@ -33,6 +33,7 @@ def get_form_from_session():
 
 def format_post(post):
     return {
+        'id': post['id'],
         'avatar': post['author']['avatar']['cache'],
         'name': post['author']['username'],
         'createdAtISO': post['createdAt'].isoformat(),
@@ -86,10 +87,8 @@ def get_thread_posts(thread_id, offset=0, limit=100):
         paginator = Paginator(disqusapi.threads.listPosts, thread=thread_id)
         for idx, post in enumerate(paginator):
             dt = datestr_to_datetime(post['createdAt'])
-            posts.add(post, dt.strftime('%s.%m'), thread_id=thread_id)
-            if idx < limit:
-                post['createdAt'] = dt
-                result.append(post)
+            posts.add(format_post(post), dt.strftime('%s.%m'), thread_id=thread_id)
+            result.append(post)
     else:
         for post in result:
             post['createdAt'] = datestr_to_datetime(post['createdAt'])
@@ -224,6 +223,6 @@ def new_post(thread_id):
     if form.validate_on_submit():
         post = api_call(disqusapi.posts.create, thread=thread_id, message=form.message.data)
         dt = datestr_to_datetime(post['createdAt'])
-        posts.add(post, dt.strftime('%s.%m'), thread_id=thread_id)
+        posts.add(format_post(post), dt.strftime('%s.%m'), thread_id=thread_id)
 
     return redirect(url_for('thread_details', thread_id=thread_id))
