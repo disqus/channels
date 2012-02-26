@@ -29,5 +29,37 @@ class Details
         $('body').animate scrollTop: $(document).height(), 0
 
 
+class PostView extends Backbone.View
+    el: $ '.conversation-stream'
+
+    initialize: ->
+
+        _.bindAll @
+
+        @collection = new PostList
+        @collection.bind 'add', @appendPost
+        @render()
+
+    render: ->
+        $(@el).append '<ul class="post-list"></ul>'
+
+    appendPost: ->
+        $('.post-list').append "<li>Hi!</li>"
+
+    addPost: ->
+        post = new Post
+        @collection.add post
+
+
+class Post extends Backbone.Model
+
+    defaults:
+        message: 'omg'
+
+class PostList extends Backbone.Collection
+
+    model: Post
+
 $(document).ready () ->
+    window.postView = new PostView
     new Details()

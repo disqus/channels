@@ -1,5 +1,7 @@
 (function() {
-  var Details;
+  var Details, Post, PostList, PostView,
+    __hasProp = Object.prototype.hasOwnProperty,
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   Details = (function() {
 
@@ -41,7 +43,73 @@
 
   })();
 
+  PostView = (function(_super) {
+
+    __extends(PostView, _super);
+
+    function PostView() {
+      PostView.__super__.constructor.apply(this, arguments);
+    }
+
+    PostView.prototype.el = $('.conversation-stream');
+
+    PostView.prototype.initialize = function() {
+      _.bindAll(this);
+      this.collection = new PostList;
+      this.collection.bind('add', this.appendPost);
+      return this.render();
+    };
+
+    PostView.prototype.render = function() {
+      return $(this.el).append('<ul class="post-list"></ul>');
+    };
+
+    PostView.prototype.appendPost = function() {
+      return $('.post-list').append("<li>Hi!</li>");
+    };
+
+    PostView.prototype.addPost = function() {
+      var post;
+      post = new Post;
+      return this.collection.add(post);
+    };
+
+    return PostView;
+
+  })(Backbone.View);
+
+  Post = (function(_super) {
+
+    __extends(Post, _super);
+
+    function Post() {
+      Post.__super__.constructor.apply(this, arguments);
+    }
+
+    Post.prototype.defaults = {
+      message: 'omg'
+    };
+
+    return Post;
+
+  })(Backbone.Model);
+
+  PostList = (function(_super) {
+
+    __extends(PostList, _super);
+
+    function PostList() {
+      PostList.__super__.constructor.apply(this, arguments);
+    }
+
+    PostList.prototype.model = Post;
+
+    return PostList;
+
+  })(Backbone.Collection);
+
   $(document).ready(function() {
+    window.postView = new PostView;
     return new Details();
   });
 
