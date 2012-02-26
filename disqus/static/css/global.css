@@ -115,25 +115,39 @@ header .nav a:hover {
   text-decoration: none;
 }
 
-section#main .container,
-section#main .container-fluid {
+
+.sidebar {
+  position: fixed;
+  overflow: hidden;
+  padding-right: 20px;
 }
+
 .page-header {
   padding-bottom: 0;
   border-bottom: 0;
 }
-.page-header h1, .page-header h2 {
+.page-header h1, .page-header h2,
+.page-header h3, .page-header h4 {
   font-family: LeagueGothicRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size:340%;
   color:#484746;
   text-transform:uppercase;
   text-shadow: 0 1px 0 #f9f2e6;
   line-height:50px;
 }
 
+.pageheader h1 {
+    font-size:340%;
+}
 .page-header h2 {
   font-size:240%;
 }
+.page-header h3 {
+  font-size:200%;
+}
+.page-header h4 {
+  font-size:160%;
+}
+
 
 .page-header h1 span, .page-header h2 span {
   color:#fcb500;
@@ -143,7 +157,7 @@ section#main .container-fluid {
   list-style: none;
 }
 .thread {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .thread .thread-title h3 {
   overflow: hidden;
@@ -167,9 +181,27 @@ section#main .container-fluid {
   display: none;
 }
 
+.sidebar .page-header {
+  margin: 0;
+}
+.sidebar .page-header h4 {
+  margin-bottom: 0;
+}
+.sidebar .thread-title h3 {
+  height: 20px;
+  line-height: 20px;
+  font-size: 93%;
+}
+.sidebar .thread-count {
+  height: 20px;
+  width: 20px;
+  margin-right: 5px;
+  line-height: 20px;
+}
+
 .conversation-stream {
   padding-top: 20px;
-  padding-bottom: 90px;
+  padding-bottom: 75px;
 }
 
 .post-list {
@@ -179,6 +211,7 @@ section#main .container-fluid {
 .post {
   position: relative;
   padding-left: 42px;
+  font-size: 12px;
 }
 .post .post-avatar {
   position: absolute;
@@ -188,23 +221,26 @@ section#main .container-fluid {
   height: 32px;
   margin-right: 10px;
 }
-.post .post-author {
+.post .post-meta {
   display: inline;
-  font-weight: bold;
+  color: #999;
+  font-size: 11px;
 }
-.post .post-date {
-  display: inline;
+.post .post-author {
   font-weight: bold;
+  color: #409cc1;
 }
 .new-reply {
   position: fixed;
   left: 20px;
   right: 20px;
   bottom: 0;
+  border-top: 1px solid #d5cebc;
   background: #eae7df;
+  padding-top: 10px;
+  height: 60px;
 }
 .new-reply form {
-  height: 70px;
   margin-bottom: 0;
 }
 

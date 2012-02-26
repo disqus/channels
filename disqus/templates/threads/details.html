@@ -1,10 +1,31 @@
 {% extends "layout.html" %}
 
-{% block content %}
-{#   <div class="page-header">
-    <h2>{{ thread.title }}</h2>
+{% block sidebar %}
+  <div class="page-header">
+    <h4>Sessions</h4>
+  </div>
+  <ul class="thread-list">
+    {% for thread in active_talk_list %}
+      {% include "includes/thread.html" %}
+    {% endfor %}
+  </ul>
+  <div class="page-header">
+    <h4>Active</h4>
+  </div>
+  <ul class="thread-list">
+    {% for thread in active_thread_list %}
+      {% include "includes/thread.html" %}
+    {% endfor %}
+  </ul>
+  <div class="page-header">
+    <h4>You</h4>
+  </div>
+{% endblock %}
 
-      {% if pycon_session %}
+{% block content %}
+  {% if pycon_session %}
+    <div class="page-header">
+      <h2>{{ thread.title }}</h2>
       <div class="pycon-session">
         <h3>By <strong>{{ pycon_session.authors }}</strong></h3>
         <h4>
@@ -17,27 +38,29 @@
 
 
       </div>
-      {% endif %}
+    </div>
+{% endif %}
 
-  </div>
-
-  <div class="thread">
+{#   <div class="thread">
     <div class="thread-message">
       <p>{{ thread.message }}</p>
     </div>
-  </div>
- #}
+  </div> #}
+
   <div class="conversation-stream">
   {% if post_list %}
     <ul class="post-list">
       {% for post in post_list %}
         <li class="post">
           <img src="{{ post.author.avatar.cache }}" class="post-avatar">
-          <div class="post-author">
-            {{ post.author.name }}
-          </div>
-          <div class="post-datetime pretty-date" title="{{ post.createdAt.isoformat() }}Z">
-            {{ post.createdAt|timesince }}
+          <div class="post-meta">
+            <span class="post-author">
+              {{ post.author.name }}
+            </span>
+            &middot;
+            <span class="post-datetime pretty-date" title="{{ post.createdAt.isoformat() }}Z">
+              {{ post.createdAt|timesince }}
+            </span>
           </div>
           <div class="post-message">
             <p>{{ post.message|safe }}</p>
@@ -51,11 +74,17 @@
 </div>
 
   <div class="new-reply">
-    <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
-      {{ form.csrf }}
-      <fieldset>
-        {{ form.message(class="span6", rows=2) }} <input type="submit" class="btn btn-large btn-primary" value="Send Reply">
-      </fieldset>
-    </form>
+    {% if not user %}
+      <p>You are not signed in. You can <strong><a href="{{ url_for('oauth_authorize') }}">sign in with Disqus</a></strong>. Need to create an
+        account first? <strong><a href="http://disqus.com/profile/signup/">Register a new account</a></strong> on
+        disqus.com.</p>
+    {% else %}
+      <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
+        {{ form.csrf }}
+        <fieldset>
+          {{ form.message(class="span6", rows=2) }} <input type="submit" class="btn btn-large btn-primary" value="Send Reply">
+        </fieldset>
+      </form>
+    {% endif %}
   </div>
 {% endblock %}

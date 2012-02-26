@@ -165,7 +165,14 @@ def thread_details(thread_id):
     else:
         pycon_session = False
 
-    return render_template('threads/details.html', thread=thread, post_list=post_list, form=form, pycon_session=pycon_session)
+    return render_template('threads/details.html', **{
+        'thread': thread,
+        'post_list': post_list,
+        'form': form,
+        'pycon_session': pycon_session,
+        'active_talk_list': from_cache(get_upcoming_talks)[:5],
+        'active_thread_list': from_cache(get_active_threads)[:5],
+    })
 
 
 @app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])

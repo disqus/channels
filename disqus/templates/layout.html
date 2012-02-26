@@ -66,9 +66,20 @@
 
     <section id="main">
       <div class="container-fluid">
-        <div class="content">
-          {% block content %}{% endblock %}
+        {% block main %}
+        <div class="row-fluid">
+          <div class="span9">
+            <div class="content">
+              {% block content %}{% endblock %}
+            </div>
+          </div>
+          <div class="span3">
+            <div class="sidebar">
+              {% block sidebar %}{% endblock %}
+            </div>
+          </div>
         </div>
+        {% endblock %}
       </div>
     </section>
 
