@@ -39,6 +39,8 @@ disqusapi = init_disqus(app)
 
 from disqus.frontend import *
 from disqus.oauth import *
+import disqus.setup
+
 
 if __name__ == '__main__':
     app.run()

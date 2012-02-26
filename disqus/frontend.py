@@ -49,6 +49,7 @@ class NewThreadForm(Form):
 @app.route('/threads/show/<id>', methods=['GET', 'POST'])
 def thread_details(id):
     thread = api_call(disqusapi.threads.details, thread=id, forum=app.config['DISQUS_FORUM'])
+    print thread
 
     thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
