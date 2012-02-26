@@ -48,9 +48,13 @@ window.Post = class Post extends Backbone.Model
     defaults:
         message: 'omg'
         createdAtISO: "shrug"
-        createdAtSince: "last year"
         name: "matt"
         avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+
+    initialize: ->
+        @set 'createdAtSince', Disqus.prettyDate(@get 'createdAtISO' )
+
+
 
 
 class PostList extends Backbone.Collection

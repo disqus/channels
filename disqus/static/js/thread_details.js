@@ -92,9 +92,12 @@
     Post.prototype.defaults = {
       message: 'omg',
       createdAtISO: "shrug",
-      createdAtSince: "last year",
       name: "matt",
       avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+    };
+
+    Post.prototype.initialize = function() {
+      return this.set('createdAtSince', Disqus.prettyDate(this.get('createdAtISO')));
     };
 
     return Post;
