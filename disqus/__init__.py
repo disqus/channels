@@ -43,6 +43,7 @@ from disqus.frontend import *
 from disqus.oauth import *
 
 schedule = pickle.load(open('sessions.pickle'))
+schedule_dict = dict((s['url'], s) for s in schedule)
 print ' * Schedule loaded'
 
 if __name__ == '__main__':

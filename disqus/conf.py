@@ -12,3 +12,4 @@ class DefaultConfig(object):
     DISQUS_SECRET = None
     DISQUS_FORUM = None
     DEBUG = True
+    TALK_CATEGORY_ID = 1330567

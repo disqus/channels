@@ -13,6 +13,7 @@ from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for
 from flaskext.wtf import Form, Required, TextField, TextAreaField
 
+import disqus
 from disqus import app, db, disqusapi
 from disqus.oauth import login_required, api_call
 
@@ -146,7 +147,12 @@ def thread_details(thread_id):
     for post in post_list:
         post['createdAt'] = datetime.strptime(post['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
-    return render_template('threads/details.html', thread=thread, post_list=post_list, form=form)
+    if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
+        pycon_session = disqus.schedule_dict[thread['link']]
+    else:
+        pycon_session = False
+
+    return render_template('threads/details.html', thread=thread, post_list=post_list, form=form, pycon_session=pycon_session)
 
 
 @app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])
