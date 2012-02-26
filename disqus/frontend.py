@@ -221,6 +221,7 @@ def new_post(thread_id):
     if form.validate_on_submit():
         post = api_call(disqusapi.posts.create, thread=thread_id, message=form.message.data)
         dt = datestr_to_datetime(post['createdAt'])
+        post['createdAt'] = dt
         posts.add(format_post(post), dt.strftime('%s.%m'), thread_id=thread_id)
 
     return redirect(url_for('thread_details', thread_id=thread_id))
