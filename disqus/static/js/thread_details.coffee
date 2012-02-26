@@ -1,33 +1,84 @@
-class Details
+class ListView extends Backbone.View
+    el: '.post-list'
 
-    constructor: ->
+    initialize: ->
 
-        this.scrollBottom()
-        $('.new-reply textarea').autoResize(
-            maxHeight: 84
-            minHeight: 28
-            onAfterResize: () =>
-                $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10)
-                this.scrollBottom()
-        ).focus()
+        _.bindAll @
 
-        $('#message').keydown (e) =>
-            if e.which == 13 and not e.shiftKey
-                $('.new-reply form').submit()
-                false
+        @collection = new PostList
+        @collection.bind 'add', @appendPost
+        @render()
+        @scrollBottom()
 
-        $('.new-reply form').submit () ->
-            button = $('button[type=submit]', this)
-            setTimeout () =>
-                button.attr 'disabled', 'disabled'
-            , 50
+    render: ->
+        @$el.append '<ul class="post-list"></ul>'
 
-            if button.attr 'disabled'
-                false
+    appendPost: (post) ->
+        post_view = new PostView model: post
+
+        @$el.append post_view.render().el
+
+    addPost: ->
+        scrolled = @isAtBottom()
+        post = new Post
+        @collection.add post
+        if scrolled
+            @scrollBottom()
 
     scrollBottom: ->
         $('body').animate scrollTop: $(document).height(), 0
 
+    isAtBottom: ->
+        $(window).scrollTop() + $(window).height() == $(document).height()
+
+
+class PostView extends Backbone.View
+    tagName: 'li'
+    className: 'post'
+    template: _.template $('#post-template').html()
+
+    initialize: ->
+        _.bindAll @
+
+    render: ->
+        @$el.html @template @model.toJSON()
+        @
+
+class Post extends Backbone.Model
+
+    defaults:
+        message: 'omg'
+        createdAt: "shrug"
+        name: "matt"
+        avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+
+
+class PostList extends Backbone.Collection
+
+    model: Post
 
 $(document).ready () ->
-    new Details()
+    window.list_view = new ListView
+
+    $('.new-reply textarea').autoResize(
+        maxHeight: 84
+        minHeight: 28
+        onAfterResize: () =>
+            $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10)
+            list_view.scrollBottom()
+    ).focus()
+
+    $('#message').keydown (e) =>
+        if e.which == 13 and not e.shiftKey
+            $('.new-reply form').submit()
+            false
+
+    $('.new-reply form').submit () ->
+        button = $('button[type=submit]', this)
+        setTimeout () =>
+            button.attr 'disabled', 'disabled'
+        , 50
+
+        if button.attr 'disabled'
+            false
+
