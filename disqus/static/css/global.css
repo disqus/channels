@@ -10,9 +10,10 @@
 }
 
 body {
-  background: #eae7df url('https://us.pycon.org/2012/site_media/static/img/bg.png');
+  background: #eae7df;
   color:#222;
   font: normal 93% "Helvetica Neue", Helvetica, Arial, sans-serif;
+  padding-top: 79px;
 }
 
 a, a:visited {
@@ -60,13 +61,20 @@ h6 {
 }
 
 header {
-  position: relative;
+  z-index: 100;
+  position: fixed;
   height: 64px;
+  left: 0;
+  right: 0;
+  top: 0;
+  background: #eae7df;
 }
 
 header .container,
 header .container-fluid {
-  background: url('https://us.pycon.org/2012/site_media/static/img/blue_stripe.png') repeat-x 0 0;
+  background: #eae7df;
+  border: 5px solid #006e91;
+  border-width: 8px 0;
   height: 64px;
 }
 
@@ -109,8 +117,6 @@ header .nav a:hover {
 
 section#main .container,
 section#main .container-fluid {
-  padding-top: 10px;
-  background: url('https://us.pycon.org/2012/site_media/static/img/blue_stripe.png') repeat-x 0 0;
 }
 .page-header {
   padding-bottom: 0;
@@ -144,6 +150,7 @@ footer {
   margin-bottom: 15px;
 }
 .thread .thread-title h3 {
+  overflow: hidden;
   margin-bottom: 5px;
   height: 25px;
   line-height: 25px;

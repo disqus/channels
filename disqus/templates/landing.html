@@ -3,40 +3,44 @@
 {% block nav_home_active %} class="active"{% endblock %}
 
 {% block content %}
-  {% if thread_list %}
-    {% if active_thread_list %}
-      <div class="page-header">
-        <h2>Active Conversations</h2>
-      </div>
+  <div class="row-fluid">
+    {% if thread_list %}
+    <div classn="span6">
+      {% if active_thread_list %}
+        <div class="page-header">
+          <h2>Active Conversations</h2>
+        </div>
+        <ul class="thread-list">
+          {% for thread in active_thread_list %}
+            {% include "includes/thread.html" %}
+          {% endfor %}
+        </ul>
+        <div class="page-header">
+          <h2>Other Converations</h2>
+        </div>
+      {% else %}
+        <div class="page-header">
+          <h2>Converations</h2>
+        </div>
+      {% endif %}
       <ul class="thread-list">
-        {% for thread in active_thread_list %}
+        {% for thread in thread_list %}
           {% include "includes/thread.html" %}
         {% endfor %}
       </ul>
-      <div class="page-header">
-        <h2>Other Converations</h2>
-      </div>
+    </div>
     {% else %}
-      <div class="page-header">
-        <h2>Converations</h2>
-      </div>
+      <p>There are no conversations happening yet. Be the first to <a href="{{ url_for('new_thread') }}">start a conversation</a>.</p>
     {% endif %}
-    <ul class="thread-list">
-      {% for thread in thread_list %}
-        {% include "includes/thread.html" %}
+
+    <div class="page-header">
+      <h2>Categories</h2>
+    </div>
+
+    <ul>
+      {% for category in category_list %}
+        <li>{{ category.title }}</li>
       {% endfor %}
     </ul>
-  {% else %}
-    <p>There are no conversations happening yet. Be the first to <a href="{{ url_for('new_thread') }}">start a conversation</a>.</p>
-  {% endif %}
-
-  <div class="page-header">
-    <h2>Categories</h2>
   </div>
-
-  <ul>
-    {% for category in category_list %}
-      <li>{{ category.title }}</li>
-    {% endfor %}
-  </ul>
 {% endblock %}
