@@ -29,7 +29,6 @@
         }, 50);
         if (button.attr('disabled')) return false;
       });
-      "$(document).ready(function(){\n        $(\"form#my_form\").submit(function(){\n            setTimeout(function() {\n                $('input').attr('disabled', 'disabled');\n                $('a').attr('disabled', 'disabled');\n            }, 50);\n        })\n    });\n        #$('.new-reply button[type=submit]').bind 'click', this.submit\n        $('.new-reply form').submit () =>\n            $('button[type=submit]', this).click () ->\n                console.log this\n                this.attr \"disabled\", \"disabled\"\n                false\n            false";
     }
 
     Details.prototype.scrollBottom = function() {
