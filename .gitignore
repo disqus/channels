@@ -4,3 +4,4 @@
 /dist
 /build
 local_settings.py
+schedule.json
