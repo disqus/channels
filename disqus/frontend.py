@@ -87,11 +87,9 @@ def get_thread_posts(thread_id, offset=0, limit=100):
         paginator = Paginator(disqusapi.threads.listPosts, thread=thread_id)
         for idx, post in enumerate(paginator):
             dt = datestr_to_datetime(post['createdAt'])
-            posts.add(format_post(post), dt.strftime('%s.%m'), thread_id=thread_id)
-            result.append(post)
-    else:
-        for post in result:
-            post['createdAt'] = datestr_to_datetime(post['createdAt'])
+            data = format_post(post)
+            posts.add(data, dt.strftime('%s.%m'), thread_id=thread_id)
+            result.append(data)
 
     return result
 
@@ -210,9 +208,8 @@ def thread_details(thread_id):
 
 @app.route('/posts/<thread_id>.json', methods=['GET'])
 def get_posts(thread_id):
-    post_list = get_thread_posts(thread_id)[::-1]
     return jsonify({
-        'post_list': [format_post(post) for post in post_list]
+        'post_list': get_thread_posts(thread_id)[::-1]
     })
 
 
