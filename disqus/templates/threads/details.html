@@ -35,15 +35,19 @@
 
 {% block content %}
   {% if pycon_session %}
-    <div class="pycon-session">
-      <h3>By <strong>{{ pycon_session.authors }}</strong></h3>
-      <h4>
-        From <strong>{{ pycon_session.start_iso }}</strong> &mdash; <strong>{{ pycon_session.end_iso }}</strong>
-        in <strong>{{ pycon_session.room }}</strong>
-      </h4>
+    <div class="conversation-topic collapsed">
+      <div class="conversation-author">
+        <h4><a href="#"><strong>{{ pycon_session.authors }}</strong></a></h4>
+        <a class="conversation-link" href="{{ pycon_session.url }}">pycon.org</a>
+      </div>
+      <div class="conversation-date">
+        {{ pycon_session.start|format_datetime(pycon_session.end) }}
+        in {{ pycon_session.room }}
+      </div>
 
-      <p>{{ pycon_session.description }}</p>
-      <p><a href="{{ pycon_session.url }}">More info on pycon.org</a></p>
+      <div class="conversation-description">
+        <p>{{ pycon_session.description }}</p>
+      </div>
     </div>
   {% endif %}
 

@@ -284,12 +284,43 @@ header .nav a:hover {
   right: 10px;
 }
 
-.pycon-session {
-  background: #EFEFEF;
+.conversation-topic {
+  background: #eae7df;
   padding: 10px 15px;
-  border: 1px solid #C4C4C4;
-  border-radius: 10px;
-  margin-top: 20px;
+  border: 1px solid #d5cebc;
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  overflow: hidden;
+}
+.conversation-topic.collapsed {
+/*  height: 85px;*/
+}
+.conversation-topic .conversation-author {
+  height: 25px;
+  line-height: 25px;
+  display: inline-block;
+}
+.conversation-topic .conversation-author h4 {
+  display: inline-block;
+}
+.conversation-topic .conversation-author .conversation-link {
+  margin-left: 10px;
+  opacity: 0.7;
+  font-size: 0.8em;
+}
+.conversation-topic .conversation-date {
+  height: 25px;
+  line-height: 25px;
+  font-size: 0.9em;
+  font-weight: bold;
+  float: right;
+}
+.conversation-topic .conversation-description {
+  overflow: hidden;
+  margin-top: 5px;
+}
+.conversation-topic .conversation-description p {
+  margin-bottom: 0;
 }
 
 .btn-primary {
