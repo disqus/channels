@@ -77,7 +77,8 @@
   {% endif %}
 </div>
 
-  <div class="new-reply">
+<div class="row-fluid">
+  <div class="new-reply span9">
     {% if not user %}
       <p>You are not signed in. You can <strong><a href="{{ url_for('oauth_authorize') }}">sign in with Disqus</a></strong>. Need to create an
         account first? <strong><a href="http://disqus.com/profile/signup/">Register a new account</a></strong> on
@@ -91,4 +92,5 @@
       </form>
     {% endif %}
   </div>
+</div>
 {% endblock %}

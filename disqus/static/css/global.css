@@ -135,9 +135,16 @@ header .nav a:hover {
 
 .sidebar {
   position: fixed;
+  right: 0;
+  bottom: 0;
+  top: 84px;
   overflow: hidden;
-  padding-right: 20px;
-  padding-top: 5px;
+  background: #eae7df;
+  padding-right: 40px;
+  border-left: 1px solid #d5cebc;
+}
+.sidebar-inner {
+  padding: 0 20px;
 }
 
 .page-header {
@@ -219,8 +226,12 @@ header .nav a:hover {
 
 .conversation-stream {
   padding-top: 20px;
+  padding-bottom: 60px;
 }
 
+.conversation-stream .post-list {
+  margin-bottom: 0;
+}
 .post-list {
   list-style: none;
   margin-left: 0;
@@ -248,17 +259,17 @@ header .nav a:hover {
   color: #409cc1;
 }
 .new-reply {
+  position: fixed;
   left: 0;
-  right: 0;
   bottom: 0;
-  padding: 0 20px;
   border-top: 1px solid #d5cebc;
   background: #eae7df;
   padding-top: 10px;
   overflow: hidden;
 }
 .new-reply form {
-  padding-right: 130px;
+  padding: 0 20px;
+  padding-right: 150px;
   position: relative;
   margin-bottom: 0;
 }
@@ -270,7 +281,7 @@ header .nav a:hover {
 .new-reply .btn {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 20px;
 }
 
 .pycon-session {
