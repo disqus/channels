@@ -20,7 +20,7 @@ class Details
         $('form')[0].submit()
 
     scrollBottom: ->
-        $('body').animate scrollTop: $(document).height(), "slow"
+        $('body').animate scrollTop: $(document).height(), 0
 
 
 $(document).ready () ->

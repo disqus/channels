@@ -29,7 +29,7 @@
     Details.prototype.scrollBottom = function() {
       return $('body').animate({
         scrollTop: $(document).height()
-      }, "slow");
+      }, 0);
     };
 
     return Details;
