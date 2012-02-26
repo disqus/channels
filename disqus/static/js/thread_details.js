@@ -1,15 +1,7 @@
 (function() {
-  var Details, ListView, Post, PostList, PostView,
+  var ListView, Post, PostList, PostView,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-  Details = (function() {
-
-    function Details() {}
-
-    return Details;
-
-  })();
 
   ListView = (function(_super) {
 
@@ -68,12 +60,16 @@
 
     PostView.prototype.tagName = 'li';
 
+    PostView.prototype.className = 'post';
+
+    PostView.prototype.template = _.template($('#post-template').html());
+
     PostView.prototype.initialize = function() {
       return _.bindAll(this);
     };
 
     PostView.prototype.render = function() {
-      this.$el.html('<li>HI!</li>');
+      this.$el.html(this.template(this.model.toJSON()));
       return this;
     };
 
@@ -90,7 +86,10 @@
     }
 
     Post.prototype.defaults = {
-      message: 'omg'
+      message: 'omg',
+      createdAt: "shrug",
+      name: "matt",
+      avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
     };
 
     return Post;
