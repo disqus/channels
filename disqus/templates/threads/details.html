@@ -42,16 +42,16 @@
     <div class="row-fluid">
       <div class="span9 topic collapsed">
         <div class="topic-inner">
-          <div class="conversation-author">
+          <div class="author">
             <h4><a href="#"><strong>{{ pycon_session.authors }}</strong></a></h4>
-            <a class="conversation-link" href="{{ pycon_session.url }}">pycon.org</a>
+            <a class="link" href="{{ pycon_session.url }}">pycon.org</a>
           </div>
-          <div class="conversation-date">
+          <div class="date">
             {{ pycon_session.start|format_datetime(pycon_session.end) }}
             in {{ pycon_session.room }}
           </div>
 
-          <div class="conversation-description">
+          <div class="description">
             <p>{{ pycon_session.description }}</p>
           </div>
         </div>
