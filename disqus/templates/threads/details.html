@@ -6,6 +6,9 @@
 
 {% block head %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.autoresize.js') }}"></script>
+<script type="text/javascript">
+    var threadId = "{{ thread.id }}";
+</script>
 {% endblock %}
 
 {% block foot %}
@@ -55,8 +58,8 @@
         <%= name %>
       </span>
       &middot;
-      <span class="post-datetime pretty-date" title="<%= createdAt %>Z">
-        <%= createdAt %>
+      <span class="post-datetime pretty-date" title="<%= createdAtISO %>Z">
+        <%= createdAtSince %>
       </span>
     </div>
     <div class="post-message">
