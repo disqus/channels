@@ -26,6 +26,14 @@ def init_disqus(app):
 
     return disqusapi.DisqusAPI(app.config['DISQUS_SECRET'], app.config['DISQUS_PUBLIC'])
 
+
+def init_publisher(app):
+    from redis import Redis
+
+    server = Redis(**app.config['PUBLISHER'])
+
+    return server
+
 # Init Flask app
 app = Flask(__name__)
 
@@ -35,13 +43,16 @@ app.config.from_pyfile('local_settings.py', silent=True)
 app.config.from_envvar('DISQUS_SETTINGS', silent=True)
 
 if app.config.get('USE_NODE'):
-    coffee(app) 
+    coffee(app)
 
 # Init database (Redis)
 db = init_database(app)
 
 # Init API bindings
 disqusapi = init_disqus(app)
+
+# Init Redis publisher
+publisher = init_publisher(app)
 
 schedule = dict((s['url'], s) for s in pickle.load(open('sessions.pickle')))
 print ' * Schedule loaded'

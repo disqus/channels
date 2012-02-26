@@ -1,17 +1,28 @@
 import simplejson
 
-from disqus import db
+from disqus import db, publisher
 
 
 class View(object):
     def __init__(self, redis, name, datekey='createdAt'):
         self.ns = 'view:%s' % name
+        self.pns = 'channel:%s' % name
         self.redis = redis
         self.datekey = datekey
 
     def add(self, data, score, **kwargs):
-        self.redis.set(self.get_obj_key(data['id']), simplejson.dumps(data))
+        json_data = simplejson.dumps(data)
+
+        # Immediately update this object in the shared object cache
+        self.redis.set(self.get_obj_key(data['id']), json_data)
+
+        # Update the filtered sorted set (based on kwargs)
         self.redis.zadd(self.get_key(**kwargs), data['id'], float(score))
+
+        # Send the notice out to our subscribers that this data
+        # was added
+        channel_key = self.get_channel_key(**kwargs)
+        publisher.publish(channel_key, json_data)
 
     def remove(self, data, **kwargs):
         self.redis.zrem(self.get_key(**kwargs), data['id'])
@@ -39,6 +50,11 @@ class View(object):
         kwarg_str = '&'.join('%s=%s' % (k, v) for k, v in sorted(kwargs.items()))
 
         return '%s:%s' % (self.ns, kwarg_str)
+
+    def get_channel_key(self, **kwargs):
+        kwarg_str = '&'.join('%s=%s' % (k, v) for k, v in sorted(kwargs.items()))
+
+        return '%s:%s' % (self.pns, kwarg_str)
 
     def get_obj_key(self, id):
         return '%s:objects:%s' % (self.ns, id)
