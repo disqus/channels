@@ -6,12 +6,6 @@
   </div>
 
   <div class="thread">
-    <div class="thread-count">
-      {{ thread.posts }}
-    </div>
-    <div class="thread-title">
-      <h3><a href="{{ url_for('thread_details', thread_id=thread.id) }}">{{ thread.title }}</a></h3>
-    </div>
     <div class="thread-message">
       <p>{{ thread.message }}</p>
     </div>
