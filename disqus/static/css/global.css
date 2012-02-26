@@ -203,3 +203,10 @@ section#main .container-fluid {
   height: 70px;
   margin-bottom: 0;
 }
+
+.pycon-session {
+  background: #EFEFEF;
+  padding: 10px 15px;
+  border: 1px solid #C4C4C4;
+  border-radius: 10px;
+}

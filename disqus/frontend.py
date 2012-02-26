@@ -33,7 +33,7 @@ def get_active_talks():
     start = datetime.now() - timedelta(minutes=10)
     end = start + timedelta(minutes=20)
     talk_urls = []
-    for talk in sorted(schedule, key=lambda x: x['start']):
+    for talk in sorted(schedule.itervalues(), key=lambda x: x['start']):
         if talk['start'] > start and talk['start'] < end:
             talk_urls.append(talk['url'])
 
@@ -47,8 +47,7 @@ def get_upcoming_talks():
     start = datetime.now() + timedelta(minutes=15)
     # end = start + timedelta(minutes=30)
     talk_urls = []
-    for talk in schedule:
-        print talk['start'], start
+    for talk in schedule.itervalues():
         if talk['start'] > start:  # and talk['start'] < end:
             talk_urls.append(talk['url'])
 
@@ -159,7 +158,12 @@ def thread_details(thread_id):
     for post in post_list:
         post['createdAt'] = datetime.strptime(post['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
-    return render_template('threads/details.html', thread=thread, post_list=post_list, form=form)
+    if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
+        pycon_session = schedule[thread['link']]
+    else:
+        pycon_session = False
+
+    return render_template('threads/details.html', thread=thread, post_list=post_list, form=form, pycon_session=pycon_session)
 
 
 @app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])

@@ -39,7 +39,7 @@ db = init_database(app)
 # Init API bindings
 disqusapi = init_disqus(app)
 
-schedule = pickle.load(open('sessions.pickle'))
+schedule = dict((s['url'], s) for s in pickle.load(open('sessions.pickle')))
 print ' * Schedule loaded'
 
 from disqus.frontend import *
