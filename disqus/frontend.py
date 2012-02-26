@@ -7,10 +7,11 @@ disqus.frontend
 """
 import itertools
 import logging
+import simplejson
 
 from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for, jsonify
-import json
+from jinja import Markup
 
 from disqusapi import Paginator
 from disqus import app, disqusapi, schedule
@@ -28,6 +29,7 @@ def get_form_from_session():
         postauth = session['postauth']
         del session['postauth']
         return postauth['form']
+
 
 def format_post(post):
     return {
@@ -109,6 +111,11 @@ def inject_config():
 def is_new_filter(date):
     return date > datetime.utcnow() - timedelta(days=1)
 
+
+@app.template_filter('as_json')
+def as_json_filter(data):
+    return Markup(simplejson.dumps(data))
+
 app.template_filter('timesince')(timesince)
 app.template_filter('format_datetime')(format_datetime)
 
@@ -188,12 +195,10 @@ def thread_details(thread_id):
 
     thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
-
     if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
         pycon_session = schedule[thread['link']]
     else:
         pycon_session = False
-
 
     return render_template('threads/details.html', **{
         'thread': thread,
@@ -203,12 +208,14 @@ def thread_details(thread_id):
         'active_thread_list': from_cache(get_active_threads)[:5],
     })
 
+
 @app.route('/posts/<thread_id>.json', methods=['GET'])
 def get_posts(thread_id):
     post_list = get_thread_posts(thread_id)[::-1]
     return jsonify({
         'post_list': [format_post(post) for post in post_list]
     })
+
 
 @app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])
 @login_required
