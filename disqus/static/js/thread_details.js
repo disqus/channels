@@ -6,6 +6,10 @@
     function Details() {
       var _this = this;
       this.scrollBottom();
+      $('.new-reply textarea').autoResize({
+        maxHeight: 84,
+        minHeight: 28
+      }).focus();
       $('#message').keydown(function(e) {
         if (e.which === 13 && !e.shiftKey) {
           _this.submit();
