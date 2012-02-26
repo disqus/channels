@@ -39,18 +39,22 @@
 
 {% block content %}
   {% if pycon_session %}
-    <div class="conversation-topic collapsed">
-      <div class="conversation-author">
-        <h4><a href="#"><strong>{{ pycon_session.authors }}</strong></a></h4>
-        <a class="conversation-link" href="{{ pycon_session.url }}">pycon.org</a>
-      </div>
-      <div class="conversation-date">
-        {{ pycon_session.start|format_datetime(pycon_session.end) }}
-        in {{ pycon_session.room }}
-      </div>
+    <div class="row-fluid">
+      <div class="span9 topic collapsed">
+        <div class="topic-inner">
+          <div class="conversation-author">
+            <h4><a href="#"><strong>{{ pycon_session.authors }}</strong></a></h4>
+            <a class="conversation-link" href="{{ pycon_session.url }}">pycon.org</a>
+          </div>
+          <div class="conversation-date">
+            {{ pycon_session.start|format_datetime(pycon_session.end) }}
+            in {{ pycon_session.room }}
+          </div>
 
-      <div class="conversation-description">
-        <p>{{ pycon_session.description }}</p>
+          <div class="conversation-description">
+            <p>{{ pycon_session.description }}</p>
+          </div>
+        </div>
       </div>
     </div>
   {% endif %}
@@ -71,7 +75,7 @@
     </div>
   </script>
 
-  <div class="conversation-stream">
+  <div class="conversation{% if pycon_session %} has-topic{% endif %}">
     <ul class="post-list">
     </ul>
   {#    <p>It seems no one is participating in this conversation yet.</p>#}
