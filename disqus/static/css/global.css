@@ -140,7 +140,7 @@ header .nav a:hover {
   top: 84px;
   overflow: hidden;
   background: #eae7df;
-  padding-right: 40px;
+  padding-right: 10px;
   border-left: 1px solid #d5cebc;
 }
 .sidebar-inner {
@@ -265,11 +265,11 @@ header .nav a:hover {
   border-top: 1px solid #d5cebc;
   background: #eae7df;
   padding-top: 10px;
+  padding-right: 10px;
   overflow: hidden;
 }
 .new-reply form {
-  padding: 0 20px;
-  padding-right: 150px;
+  padding: 0 140px 0 20px;
   position: relative;
   margin-bottom: 0;
 }
@@ -281,7 +281,7 @@ header .nav a:hover {
 .new-reply .btn {
   position: absolute;
   top: 0;
-  right: 20px;
+  right: 10px;
 }
 
 .pycon-session {
