@@ -16,74 +16,32 @@
 
     <!-- Le styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <style type="text/css">
-      body {
-        background: #e9e9e9;
-      }
-      .navbar {
-        margin-bottom: 0;
-      }
-      .navbar-inner {
-         border-radius: 0;
-        -moz-border-radius: 0;
-        -webkit-border-radius: 0;
-      }
-      #main {
-        background: #fff;
-        padding: 25px 25px 15px;
-      }
-      footer {
-        margin-top: 50px;
-        text-align: center;
-      }
-      .vote-unit {
-        width: 64px;
-        height: 64px;
-        display: inline-block;
-        text-align: center;
-        background: #eee;
-        border-radius: 6px;
-        -webkit-border-radius: 6px;
-        -moz-border-radius: 6px;
-      }
-      .vote-unit div {
-        height: 42px;
-        line-height: 42px;
-        font-size: 2em;
-      }
-      .vote-unit a {
-        height: 20px;
-        line-height: 20px;
-        border-top: 1px solid #ddd;
-        display: block;
-        border-radius: 0 0 6px 6px;
-        -webkit-border-radius: 0 0 6px 6px;
-        -moz-border-radius: 0 0 6px 6px;
-      }
-      .vote-unit a:hover {
-        background: #ddd;
-      }
-      .thread-list li, .thread-unit {
-        position: relative;
-        padding-left: 84px;
-        min-height: 64px;
-      }
-      .thread-list li .vote-unit,
-      .thread-unit .vote-unit {
-        position: absolute;
-        left: 0;
-        top: 0;
-      }
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     </style>
   </head>
 
   <body>
 
     <header>
-      <div class="navbar">
+      <div class="container">
+        <h1 id="logo"><a href="/">{% block brand %}{{ SITE_NAME }}{% endblock %}</a></h1>
+        <ul class="nav">
+          {# {% if user %}
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+              </ul>
+            </li>
+          {% else %}
+            <li><a href="#">Sign In</a></li>
+          {% endif %} #}
+          <li{% block nav_new_thread_active %}{% endblock %}><a href="{{ url_for('new_thread') }}">Start a Conversation</a></li>
+          <li{% block nav_my_threads_active %}{% endblock %}><a href="{{ url_for('my_threads') }}">My Conversations</a></li>
+        </ul>
+{#       <div class="navbar">
         <div class="navbar-inner">
           <div class="container">
-            <a class="brand" href="/">{% block brand %}{{ SITE_NAME }}{% endblock %}</a>
+
             <ul class="nav">
               <li{% block nav_home_active %}{% endblock %}><a href="/">Home</a></li>
               <li{% block nav_new_thread_active %}{% endblock %}><a href="{{ url_for('new_thread') }}">Start a Conversation</a></li>
@@ -102,7 +60,7 @@
             </ul>
           </div>
         </div>
-      </div>
+      </div> #}
     </header>
 
     <section id="main">

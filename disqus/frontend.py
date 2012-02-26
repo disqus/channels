@@ -5,12 +5,47 @@ disqus.frontend
 :copyright: (c) 2012 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
+import itertools
+import logging
+import simplejson
+
 from datetime import datetime, timedelta
 from flask import session, render_template, flash, redirect, url_for
 from flaskext.wtf import Form, Required, TextField, TextAreaField
 
-from disqus import app, disqusapi
+from disqus import app, db, disqusapi
 from disqus.oauth import login_required, api_call
+
+logger = logging.getLogger(__name__)
+
+
+def from_cache(callback, cache_key=None, expires=60):
+    if cache_key is None:
+        cache_key = '%s.%s' % (callback.__module__, callback.__name__)
+    conn = db.get_conn(cache_key)
+    result = conn.get(cache_key)
+    if result:
+        try:
+            result = simplejson.loads(result)
+        except Exception, e:
+            logger.exception(e)
+            result = None
+
+    if result is None:
+        result = callback()
+        pipe = conn.pipeline()
+        pipe.set(cache_key, simplejson.dumps(result))
+        pipe.expire(cache_key, 60)
+        pipe.execute()
+    return result
+
+
+def get_active_threads():
+    return list(disqusapi.threads.listHot(forum=app.config['DISQUS_FORUM'], method='GET', limit=5))
+
+
+def get_categories():
+    return list(disqusapi.categories.list(forum=app.config['DISQUS_FORUM'], method='GET', limit=100))
 
 
 @app.context_processor
@@ -30,30 +65,30 @@ def is_new_filter(date):
 
 @app.route('/', methods=['GET'])
 def landing_page():
-    thread_list = list(api_call(disqusapi.threads.listHot, forum=app.config['DISQUS_FORUM'], method='GET'))
+    active_thread_list = from_cache(get_active_threads)
+    active_thread_ids = set(t['id'] for t in active_thread_list)
 
-    if not thread_list:
-        thread_list = list(api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET'))
+    thread_list = list(api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET', limit=10))
+    thread_list = [t for t in thread_list if t['id'] not in active_thread_ids]
 
-    for thread in thread_list:
+    category_list = from_cache(get_categories)
+
+    for thread in itertools.chain(active_thread_list, thread_list):
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
-    return render_template('landing.html', thread_list=thread_list)
+    return render_template('landing.html', **{
+        'thread_list': thread_list,
+        'active_thread_list': active_thread_list,
+        'category_list': category_list
+    })
 
 
 class NewThreadForm(Form):
     subject = TextField('Subject', [Required()])
-    description = TextAreaField('Description')
 
 
-@app.route('/threads/show/<id>', methods=['GET', 'POST'])
-def thread_details(id):
-    thread = api_call(disqusapi.threads.details, thread=id, forum=app.config['DISQUS_FORUM'])
-    print thread
-
-    thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
-
-    return render_template('threads/details.html', thread=thread)
+class NewPostForm(Form):
+    message = TextAreaField('Message', [Required()])
 
 
 @app.route('/threads/new', methods=['GET', 'POST'])
@@ -61,14 +96,14 @@ def thread_details(id):
 def new_thread():
     form = NewThreadForm()
     if form.validate_on_submit():
-        thread = api_call(disqusapi.threads.create, title=form.subject.data, message=form.description.data, forum=app.config['DISQUS_FORUM'])
+        thread = api_call(disqusapi.threads.create, title=form.subject.data, forum=app.config['DISQUS_FORUM'])
         flash("Success")
-        return redirect(url_for('thread_details', id=thread['id']))
+        return redirect(url_for('thread_details', thread_id=thread['id']))
 
     return render_template('threads/new.html', form=form)
 
 
-@app.route('/threads/updated', methods=['GET'])
+@app.route('/threads/by/date', methods=['GET'])
 def threads_by_date():
     thread_list = api_call(disqusapi.threads.listByDate, forum=app.config['DISQUS_FORUM'], method='GET')
 
@@ -78,22 +113,47 @@ def threads_by_date():
     return render_template('threads/by_date.html', thread_list=thread_list)
 
 
-@app.route('/threads/liked', methods=['GET'])
-def threads_by_likes():
-    thread_list = api_call(disqusapi.threads.listMostLiked, forum=app.config['DISQUS_FORUM'], method='GET')
+@app.route('/threads/by/activity', methods=['GET'])
+def threads_by_activity():
+    thread_list = api_call(disqusapi.threads.listHot, forum=app.config['DISQUS_FORUM'], method='GET')
 
     for thread in thread_list:
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
-    return render_template('threads/by_likes.html', thread_list=thread_list)
+    return render_template('threads/by_activity.html', thread_list=thread_list)
 
 
 @app.route('/threads/mine', methods=['GET'])
 @login_required
 def my_threads():
-    thread_list = api_call(disqusapi.threads.list, author=session['auth']['user_id'], forum=app.config['DISQUS_FORUM'], method='GET')
+    thread_list = api_call(disqusapi.users.listActiveThreads, forum=app.config['DISQUS_FORUM'], method='GET')
 
     for thread in thread_list:
         thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
 
     return render_template('threads/mine.html', thread_list=thread_list)
+
+
+@app.route('/threads/<thread_id>', methods=['GET', 'POST'])
+def thread_details(thread_id):
+    form = NewPostForm()
+
+    thread = api_call(disqusapi.threads.details, thread=thread_id)
+
+    thread['createdAt'] = datetime.strptime(thread['createdAt'], '%Y-%m-%dT%H:%M:%S')
+
+    post_list = api_call(disqusapi.threads.listPosts, thread=thread_id)[::-1]
+    for post in post_list:
+        post['createdAt'] = datetime.strptime(post['createdAt'], '%Y-%m-%dT%H:%M:%S')
+
+    return render_template('threads/details.html', thread=thread, post_list=post_list, form=form)
+
+
+@app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])
+@login_required
+def new_post(thread_id):
+    form = NewPostForm()
+    if form.validate_on_submit():
+        post = api_call(disqusapi.posts.create, thread=thread_id, message=form.message.data)
+
+    return redirect(url_for('thread_details', thread_id=thread_id))

@@ -1,8 +1,8 @@
-<li>
-  <h2><a href="{{ url_for('thread_details', id=thread.id) }}">{{ thread.title }}</a>{% if thread.createdAt|is_new %} <span class="label success">New</span>{% endif %}</h2>
-  <p>{{ thread.message }}</p>
-  <div class="vote-unit">
-    <div>{{ thread.likes }}</div>
-    <a href="#">Like</a>
+<li class="thread">
+  <div class="thread-count">
+    {{ thread.posts }}
+  </div>
+  <div class="thread-title">
+    <h3><a href="{{ url_for('thread_details', thread_id=thread.id) }}">{{ thread.title }}</a></h3>
   </div>
 </li>
