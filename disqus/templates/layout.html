@@ -26,6 +26,7 @@
     <header>
       <div class="container-fluid">
         <h1 id="logo"><a href="/">{% block brand %}{{ SITE_NAME }}{% endblock %}</a></h1>
+        <div id="subhead">{% block subheader %}{% endblock %}</div>
         <ul class="nav">
           {# {% if user %}
             <li class="dropdown">

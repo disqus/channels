@@ -70,6 +70,18 @@ header {
   background: #eae7df;
 }
 
+header #subhead {
+  position: absolute;
+  left: 235px;
+  top: 20px;
+}
+header #subhead h2 {
+  font-family: LeagueGothicRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #484746;
+  text-transform:uppercase;
+  text-shadow: 0 1px 0 #f9f2e6;
+}
+
 header .container,
 header .container-fluid {
   background: #eae7df;
@@ -120,6 +132,7 @@ header .nav a:hover {
   position: fixed;
   overflow: hidden;
   padding-right: 20px;
+  padding-top: 5px;
 }
 
 .page-header {
@@ -201,7 +214,7 @@ header .nav a:hover {
 
 .conversation-stream {
   padding-top: 20px;
-  padding-bottom: 75px;
+  padding-bottom: 65px;
 }
 
 .post-list {
@@ -224,7 +237,7 @@ header .nav a:hover {
 .post .post-meta {
   display: inline;
   color: #999;
-  font-size: 11px;
+  font-size: 12px;
 }
 .post .post-author {
   font-weight: bold;
@@ -238,10 +251,22 @@ header .nav a:hover {
   border-top: 1px solid #d5cebc;
   background: #eae7df;
   padding-top: 10px;
-  height: 60px;
+  height: 50px;
+  overflow: hidden;
 }
 .new-reply form {
+  padding-right: 130px;
+  position: relative;
   margin-bottom: 0;
+}
+.new-reply textarea {
+  width: 100%;
+  height: 28px;
+}
+.new-reply .btn {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .pycon-session {
@@ -249,4 +274,38 @@ header .nav a:hover {
   padding: 10px 15px;
   border: 1px solid #C4C4C4;
   border-radius: 10px;
+  margin-top: 20px;
+}
+
+.btn-primary {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .75);
+  border: 1px solid #4c8da2;
+  background-color: #63bad4;
+  background-image: -moz-linear-gradient(top, #63bad4, #4294b0);
+  background-image: -ms-linear-gradient(top, #63bad4, #4294b0);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#63bad4), to(#4294b0));
+  background-image: -webkit-linear-gradient(top, #63bad4, #4294b0);
+  background-image: -o-linear-gradient(top, #63bad4, #4294b0);
+  background-image: linear-gradient(top, #63bad4, #4294b0);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#63bad4', endColorstr='#4294b0', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  cursor: pointer;
+}
+.btn-primary:hover {
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .75);
+  background-color: #4c8da2;
+  background-image: -moz-linear-gradient(top, #45a0bf, #4c8da2);
+  background-image: -ms-linear-gradient(top, #45a0bf, #4c8da2);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#45a0bf), to(#4c8da2));
+  background-image: -webkit-linear-gradient(top, #45a0bf, #4c8da2);
+  background-image: -o-linear-gradient(top, #45a0bf, #4c8da2);
+  background-image: linear-gradient(top, #45a0bf, #4c8da2);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#45a0bf', endColorstr='#4c8da2', GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+  background-position: 0 0;
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transition: none;
 }

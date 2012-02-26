@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
 
+{% block subheader %}
+  <h2>{{ thread.title }}</h2>
+{% endblock %}
+
 {% block sidebar %}
   <div class="page-header">
     <h4>Sessions</h4>
@@ -24,22 +28,17 @@
 
 {% block content %}
   {% if pycon_session %}
-    <div class="page-header">
-      <h2>{{ thread.title }}</h2>
-      <div class="pycon-session">
-        <h3>By <strong>{{ pycon_session.authors }}</strong></h3>
-        <h4>
-          From <strong>{{ pycon_session.start_iso }}</strong> &mdash; <strong>{{ pycon_session.end_iso }}</strong>
-          in <strong>{{ pycon_session.room }}</strong>
-        </h4>
+    <div class="pycon-session">
+      <h3>By <strong>{{ pycon_session.authors }}</strong></h3>
+      <h4>
+        From <strong>{{ pycon_session.start_iso }}</strong> &mdash; <strong>{{ pycon_session.end_iso }}</strong>
+        in <strong>{{ pycon_session.room }}</strong>
+      </h4>
 
-        <p>{{ pycon_session.description }}</p>
-        <p><a href="{{ pycon_session.url }}">More info on pycon.org</a></p>
-
-
-      </div>
+      <p>{{ pycon_session.description }}</p>
+      <p><a href="{{ pycon_session.url }}">More info on pycon.org</a></p>
     </div>
-{% endif %}
+  {% endif %}
 
 {#   <div class="thread">
     <div class="thread-message">
@@ -82,7 +81,7 @@
       <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
         {{ form.csrf }}
         <fieldset>
-          {{ form.message(class="span6", rows=2) }} <input type="submit" class="btn btn-large btn-primary" value="Send Reply">
+          {{ form.message(rows=2) }} <button type="submit" class="btn btn-large btn-primary">Send Reply</button>
         </fieldset>
       </form>
     {% endif %}
