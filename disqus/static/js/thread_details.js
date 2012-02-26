@@ -33,10 +33,9 @@
       return this.$el.append(post_view.render().el);
     };
 
-    ListView.prototype.addPost = function() {
-      var post, scrolled;
+    ListView.prototype.addPost = function(post) {
+      var scrolled;
       scrolled = this.isAtBottom();
-      post = new Post;
       this.collection.add(post);
       if (scrolled) return this.scrollBottom();
     };
@@ -82,7 +81,7 @@
 
   })(Backbone.View);
 
-  Post = (function(_super) {
+  window.Post = Post = (function(_super) {
 
     __extends(Post, _super);
 
@@ -92,7 +91,8 @@
 
     Post.prototype.defaults = {
       message: 'omg',
-      createdAt: "shrug",
+      createdAtISO: "shrug",
+      createdAtSince: "last year",
       name: "matt",
       avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
     };
@@ -132,7 +132,7 @@
         return false;
       }
     });
-    return $('.new-reply form').submit(function() {
+    $('.new-reply form').submit(function() {
       var button,
         _this = this;
       button = $('button[type=submit]', this);
@@ -140,6 +140,20 @@
         return button.attr('disabled', 'disabled');
       }, 50);
       if (button.attr('disabled')) return false;
+    });
+    return $.ajax({
+      url: "/posts/" + threadId + ".json",
+      success: function(data) {
+        var p, post, _i, _len, _ref, _results;
+        _ref = data.post_list;
+        _results = [];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          post = _ref[_i];
+          p = new Post(post);
+          _results.push(list_view.addPost(p));
+        }
+        return _results;
+      }
     });
   });
 
