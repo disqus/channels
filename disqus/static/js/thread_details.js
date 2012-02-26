@@ -1,5 +1,5 @@
 (function() {
-  var Details, Post, PostList, PostView,
+  var Details, ListView, Post, PostList, PostView,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -43,6 +43,45 @@
 
   })();
 
+  ListView = (function(_super) {
+
+    __extends(ListView, _super);
+
+    function ListView() {
+      ListView.__super__.constructor.apply(this, arguments);
+    }
+
+    ListView.prototype.el = '.post-list';
+
+    ListView.prototype.initialize = function() {
+      _.bindAll(this);
+      this.collection = new PostList;
+      this.collection.bind('add', this.appendPost);
+      return this.render();
+    };
+
+    ListView.prototype.render = function() {
+      return this.$el.append('<ul class="post-list"></ul>');
+    };
+
+    ListView.prototype.appendPost = function(post) {
+      var post_view;
+      post_view = new PostView({
+        model: post
+      });
+      return this.$el.append(post_view.render().el);
+    };
+
+    ListView.prototype.addPost = function() {
+      var post;
+      post = new Post;
+      return this.collection.add(post);
+    };
+
+    return ListView;
+
+  })(Backbone.View);
+
   PostView = (function(_super) {
 
     __extends(PostView, _super);
@@ -51,27 +90,15 @@
       PostView.__super__.constructor.apply(this, arguments);
     }
 
-    PostView.prototype.el = $('.conversation-stream');
+    PostView.prototype.tagName = 'li';
 
     PostView.prototype.initialize = function() {
-      _.bindAll(this);
-      this.collection = new PostList;
-      this.collection.bind('add', this.appendPost);
-      return this.render();
+      return _.bindAll(this);
     };
 
     PostView.prototype.render = function() {
-      return $(this.el).append('<ul class="post-list"></ul>');
-    };
-
-    PostView.prototype.appendPost = function() {
-      return $('.post-list').append("<li>Hi!</li>");
-    };
-
-    PostView.prototype.addPost = function() {
-      var post;
-      post = new Post;
-      return this.collection.add(post);
+      this.$el.html('<li>HI!</li>');
+      return this;
     };
 
     return PostView;
@@ -109,7 +136,7 @@
   })(Backbone.Collection);
 
   $(document).ready(function() {
-    window.postView = new PostView;
+    window.list_view = new ListView;
     return new Details();
   });
 

@@ -2,13 +2,13 @@ class Details
 
     constructor: ->
 
-        this.scrollBottom()
+        @scrollBottom()
         $('.new-reply textarea').autoResize(
             maxHeight: 84
             minHeight: 28
             onAfterResize: () =>
                 $('.conversation-stream').css('padding-bottom', $('.new-reply').height() + 10)
-                this.scrollBottom()
+                @scrollBottom()
         ).focus()
 
         $('#message').keydown (e) =>
@@ -29,8 +29,8 @@ class Details
         $('body').animate scrollTop: $(document).height(), 0
 
 
-class PostView extends Backbone.View
-    el: $ '.conversation-stream'
+class ListView extends Backbone.View
+    el: '.post-list'
 
     initialize: ->
 
@@ -41,15 +41,26 @@ class PostView extends Backbone.View
         @render()
 
     render: ->
-        $(@el).append '<ul class="post-list"></ul>'
+        @$el.append '<ul class="post-list"></ul>'
 
-    appendPost: ->
-        $('.post-list').append "<li>Hi!</li>"
+    appendPost: (post) ->
+        post_view = new PostView model: post
+
+        @$el.append post_view.render().el
 
     addPost: ->
         post = new Post
         @collection.add post
 
+class PostView extends Backbone.View
+    tagName: 'li'
+
+    initialize: ->
+        _.bindAll @
+
+    render: ->
+        @$el.html '<li>HI!</li>'
+        @
 
 class Post extends Backbone.Model
 
@@ -61,5 +72,5 @@ class PostList extends Backbone.Collection
     model: Post
 
 $(document).ready () ->
-    window.postView = new PostView
+    window.list_view = new ListView
     new Details()
