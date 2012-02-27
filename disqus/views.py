@@ -4,11 +4,10 @@ from disqus import db, publisher
 
 
 class View(object):
-    def __init__(self, redis, name, datekey='createdAt'):
+    def __init__(self, redis, publisher, name):
         self.ns = 'view:%s' % name
         self.pns = 'channel:%s' % name
         self.redis = redis
-        self.datekey = datekey
 
     def add(self, data, score, **kwargs):
         """
@@ -93,5 +92,5 @@ class View(object):
     def get_obj_key(self, id):
         return '%s:objects:%s' % (self.ns, id)
 
-posts = View(db, 'posts')
-threads = View(db, 'threads')
+posts = View(db, publisher, 'posts')
+threads = View(db, publisher, 'threads')
