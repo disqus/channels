@@ -15,7 +15,7 @@ from jinja2 import Markup
 
 from disqus import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
-from disqus.models import Thread, Post, Session, Category
+from disqus.models import Thread, Post, Session, Category, User
 from disqus.oauth import login_required, api_call
 from disqus.utils import from_cache, timesince, format_datetime, datestr_to_datetime
 
@@ -120,6 +120,7 @@ def thread_details(thread_id):
         'thread': thread,
         'form': form,
         'pycon_session': pycon_session,
+        'user_list': User.list_by_thread(thread_id),
         'my_thread_list': my_threads,
         'active_talk_list': from_cache(Session.list_active)[:5],
         'active_thread_list': from_cache(Thread.list_active)[:5],
