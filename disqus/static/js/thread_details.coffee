@@ -97,3 +97,9 @@ $(document).ready () ->
     for post in initialPosts
         p = new Post(post)
         list_view.addPost(p)
+
+    socket.on 'new_post', (post) ->
+        console.log post
+
+    socket.emit 'connect',
+        channel: 'one'
