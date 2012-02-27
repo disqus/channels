@@ -116,6 +116,8 @@ def thread_details(thread_id):
     else:
         my_threads = None
 
+    post_list = Post.list_by_thread(thread_id)[::-1]
+
     return render_template('threads/details.html', **{
         'thread': thread,
         'form': form,
@@ -124,7 +126,7 @@ def thread_details(thread_id):
         'my_thread_list': my_threads,
         'active_talk_list': from_cache(Session.list_active)[:5],
         'active_thread_list': from_cache(Thread.list_active)[:5],
-        'post_list': Post.list_by_thread(thread_id)[::-1],
+        'post_list': post_list,
     })
 
 
