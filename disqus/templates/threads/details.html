@@ -106,7 +106,7 @@
         account first? <strong><a href="http://disqus.com/profile/signup/">Register a new account</a></strong> on
         disqus.com.</p>
     {% else %}
-      <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
+      <form method="POST" id="replyform" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
         {{ form.csrf }}
         <fieldset>
             {{ form.message(rows=2) }}

@@ -8,9 +8,10 @@ disqus.utils
 
 import logging
 import pytz
-import simplejson
+import json
 from datetime import datetime, timedelta
 from disqus import db
+from flask import make_response
 
 logger = logging.getLogger(__name__)
 
@@ -29,7 +30,7 @@ def from_cache(callback, cache_key=None, expires=60):
     result = conn.get(cache_key)
     if result:
         try:
-            result = simplejson.loads(result)
+            result = json.loads(result)
         except Exception, e:
             logger.exception(e)
             result = None
@@ -37,7 +38,7 @@ def from_cache(callback, cache_key=None, expires=60):
     if result is None:
         result = callback()
         pipe = conn.pipeline()
-        pipe.set(cache_key, simplejson.dumps(result))
+        pipe.set(cache_key, json.dumps(result))
         pipe.expire(cache_key, 60)
         pipe.execute()
     return result
@@ -106,3 +107,9 @@ def timeuntil(value):
         return convert_pycon_dt(value).strftime('%A, %B %d')
 
     return timesince(value)
+
+
+def better_jsonify(json_obj, status=200):
+     response = make_response(json.dumps(json_obj), status)
+     response.headers['content-type'] = 'application/json'
+     return response

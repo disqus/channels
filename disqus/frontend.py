@@ -17,7 +17,7 @@ from disqus import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
 from disqus.models import Thread, Post, Session, Category, User
 from disqus.oauth import login_required, api_call
-from disqus.utils import from_cache, timesince, format_datetime, datestr_to_datetime
+from disqus.utils import from_cache, timesince, format_datetime, datestr_to_datetime, better_jsonify
 
 
 logger = logging.getLogger(__name__)
@@ -143,6 +143,6 @@ def new_post(thread_id):
     form = NewPostForm()
     if form.validate_on_submit():
         post = api_call(disqusapi.posts.create, thread=thread_id, message=form.message.data)
-        Post.save(post)
-
-    return redirect(url_for('thread_details', thread_id=thread_id))
+        formatted = Post.save(post)
+        return better_jsonify(formatted, status=201)
+    return better_jsonify({'message': "invalid request"}, status=400)
