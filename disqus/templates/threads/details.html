@@ -92,7 +92,8 @@
       <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
         {{ form.csrf }}
         <fieldset>
-          {{ form.message(rows=2) }} <button type="submit" class="btn btn-large btn-primary">Send Reply</button>
+            {{ form.message(rows=2) }}
+            <button type="submit" class="btn btn-large btn-primary">Send Reply</button>
         </fieldset>
       </form>
     {% endif %}
