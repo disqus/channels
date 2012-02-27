@@ -87,10 +87,11 @@ $(document).ready () ->
         $.post $(this).attr('action'),
             $(this).serialize(),
             (data, status) =>
-                p = new Post(data)
+                p = new Post(data.post)
                 list_view.addPost p
                 button.removeAttr 'disabled'
                 $(':input', this).not(':button, :submit, :reset, :hidden').val('')
+                $('#csrf').val(data.token)
         false
 
     for post in initialPosts
