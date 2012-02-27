@@ -55,8 +55,6 @@ window.Post = class Post extends Backbone.Model
         @set 'createdAtSince', Disqus.prettyDate(@get 'createdAtISO' )
 
 
-
-
 class PostList extends Backbone.Collection
 
     model: Post
