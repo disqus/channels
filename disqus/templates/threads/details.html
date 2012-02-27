@@ -8,6 +8,7 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.autoresize.js') }}"></script>
 <script type="text/javascript">
     var threadId = "{{ thread.id }}";
+    var initialPosts = {{ post_list |as_json }};
 </script>
 {% endblock %}
 
@@ -91,7 +92,8 @@
       <form method="POST" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
         {{ form.csrf }}
         <fieldset>
-          {{ form.message(rows=2) }} <button type="submit" class="btn btn-large btn-primary">Send Reply</button>
+            {{ form.message(rows=2) }}
+            <button type="submit" class="btn btn-large btn-primary">Send Reply</button>
         </fieldset>
       </form>
     {% endif %}

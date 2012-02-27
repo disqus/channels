@@ -17,8 +17,7 @@
       _.bindAll(this);
       this.collection = new PostList;
       this.collection.bind('add', this.appendPost);
-      this.render();
-      return this.scrollBottom();
+      return this.render();
     };
 
     ListView.prototype.render = function() {
@@ -37,7 +36,7 @@
       var scrolled;
       scrolled = this.isAtBottom();
       this.collection.add(post);
-      if (scrolled) return this.scrollBottom();
+      if (scrolled) return this.scrollBottom;
     };
 
     ListView.prototype.scrollBottom = function() {
@@ -119,7 +118,8 @@
   })(Backbone.Collection);
 
   $(document).ready(function() {
-    var _this = this;
+    var p, post, _i, _len,
+      _this = this;
     window.list_view = new ListView;
     $('.new-reply textarea').autoResize({
       maxHeight: 84,
@@ -144,20 +144,14 @@
       }, 50);
       if (button.attr('disabled')) return false;
     });
-    return $.ajax({
-      url: "/posts/" + threadId + ".json",
-      success: function(data) {
-        var p, post, _i, _len, _ref, _results;
-        _ref = data.post_list;
-        _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          post = _ref[_i];
-          p = new Post(post);
-          _results.push(list_view.addPost(p));
-        }
-        return _results;
-      }
-    });
+    for (_i = 0, _len = initialPosts.length; _i < _len; _i++) {
+      post = initialPosts[_i];
+      p = new Post(post);
+      list_view.addPost(p);
+    }
+    return setTimeout((function() {
+      return list_view.scrollBottom();
+    }), 200);
   });
 
 }).call(this);
