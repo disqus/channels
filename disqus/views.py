@@ -11,6 +11,12 @@ class View(object):
         self.datekey = datekey
 
     def add(self, data, score, **kwargs):
+        """
+        Adds an object.
+
+        This will serialize it into the shared object cache, as well
+        as add it to the materialized view designated with ``kwargs``.
+        """
         json_data = simplejson.dumps(data)
 
         # Immediately update this object in the shared object cache
@@ -25,18 +31,40 @@ class View(object):
         publisher.publish(channel_key, json_data)
 
     def add_to_set(self, id, score, **kwargs):
+        """
+        Adds an object to a materialized view.
+        """
         self.redis.zadd(self.get_key(**kwargs), id, float(score))
 
     def remove(self, data, **kwargs):
+        """
+        Removes an object.
+
+        This will only remove it from the materialized view as passed with
+        ``kwargs``.
+        """
         self.redis.zrem(self.get_key(**kwargs), data['id'])
+        self.redis.remove(self.get_obj_key(data['id']))
+
+    def remove_from_set(self, id, **kwargs):
+        """
+        Removes an object from its materialized view.
+        """
+        self.redis.zrem(self.get_key(**kwargs), id)
 
     def get(self, id):
+        """
+        Fetchs an object from the shared object cache.
+        """
         result = self.redis.get(self.get_obj_key(id))
         if result is None:
             return
         return simplejson.loads(result)
 
     def list(self, offset=0, limit=-1, desc=True, **kwargs):
+        """
+        Returns a list of objects from the given materialized view.
+        """
         if desc:
             func = self.redis.zrevrange
         else:
@@ -51,9 +79,6 @@ class View(object):
         results = filter(bool, [simplejson.loads(unicode(obj_cache[t])) for t in id_list if obj_cache])
 
         return results
-
-    def flush(self, **kwargs):
-        self.redis.delete(self.get_key(**kwargs))
 
     def get_key(self, **kwargs):
         kwarg_str = '&'.join('%s=%s' % (k, v) for k, v in sorted(kwargs.items()))
