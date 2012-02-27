@@ -118,7 +118,7 @@
   })(Backbone.Collection);
 
   $(document).ready(function() {
-    var p, post, _i, _len, _results,
+    var p, post, _i, _len,
       _this = this;
     window.list_view = new ListView;
     $('.new-reply textarea').autoResize({
@@ -153,13 +153,17 @@
       });
       return false;
     });
-    _results = [];
     for (_i = 0, _len = initialPosts.length; _i < _len; _i++) {
       post = initialPosts[_i];
       p = new Post(post);
-      _results.push(list_view.addPost(p));
+      list_view.addPost(p);
     }
-    return _results;
+    socket.on('new_post', function(post) {
+      return console.log(post);
+    });
+    return socket.emit('connect', {
+      channel: 'one'
+    });
   });
 
 }).call(this);
