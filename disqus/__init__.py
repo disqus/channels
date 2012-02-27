@@ -10,7 +10,7 @@ __all__ = ('app', 'db')
 
 from flask import Flask
 import cPickle as pickle
-from disqus.coffee import coffee
+from disqus.contrib.coffee import coffee
 
 
 def init_database(app):

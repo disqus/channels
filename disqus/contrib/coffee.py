@@ -1,9 +1,10 @@
 """
-disqus.coffee
+flask-coffee
 ~~~~~~~~~~~~~
+http://pypi.python.org/pypi/Flask-Coffee
 
-:copyright: (c) 2012 DISQUS.
-:license: Apache License 2.0, see LICENSE for more details.
+:Author: Col Wilson
+:license: BSD
 """
 import os
 import subprocess
