@@ -5,7 +5,7 @@ redis = require "redis"
 client = redis.createClient()
 
 subscribers = {}
-socket2channel = {}
+id2channel = {}
 
 client.on 'message', (channel, message) ->
     _.each subscribers[channel], (socket) ->
@@ -27,15 +27,13 @@ io.sockets.on 'connection', (socket) ->
         else
             subscribers[channel] = [socket]
             client.subscribe channel
-        console.log "subscribers: " + subscribers[channel].length
 
-        socket2channel[socket] = channel
+        id2channel[socket.id] = channel
 
     socket.on 'disconnect', () ->
-        console.log "disconnect"
-        channel = socket2channel[socket]
+        channel = id2channel[socket.id]
         subscribers[channel] = _.without subscribers[channel], socket
         if subscribers[channel].length == 0
-            client.unsubscribe channel
             delete subscribers[channel]
-        delete socket2channel[socket]
+            client.unsubscribe channel
+        delete id2channel[socket.id]
