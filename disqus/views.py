@@ -17,15 +17,24 @@ class View(object):
         self.redis.set(self.get_obj_key(data['id']), json_data)
 
         # Update the filtered sorted set (based on kwargs)
-        self.redis.zadd(self.get_key(**kwargs), data['id'], float(score))
+        self.add_to_set(data['id'], score, **kwargs)
 
         # Send the notice out to our subscribers that this data
         # was added
         channel_key = self.get_channel_key(**kwargs)
         publisher.publish(channel_key, json_data)
 
+    def add_to_set(self, id, score, **kwargs):
+        self.redis.zadd(self.get_key(**kwargs), id, float(score))
+
     def remove(self, data, **kwargs):
         self.redis.zrem(self.get_key(**kwargs), data['id'])
+
+    def get(self, id):
+        result = self.redis.get(self.get_obj_key(id))
+        if result is None:
+            return
+        return simplejson.loads(result)
 
     def list(self, offset=0, limit=-1, desc=True, **kwargs):
         if desc:
@@ -60,3 +69,4 @@ class View(object):
         return '%s:objects:%s' % (self.ns, id)
 
 posts = View(db, 'posts')
+threads = View(db, 'threads')
