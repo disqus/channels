@@ -29,18 +29,20 @@ class View(object):
         self.redis.set(self.get_obj_key(data['id']), json_data)
 
         # Update the filtered sorted set (based on kwargs)
-        self.add_to_set(data['id'], score, **kwargs)
+        self.add_to_set(data['id'], score, json_data, **kwargs)
 
-        # Send the notice out to our subscribers that this data
-        # was added
-        channel_key = self.get_channel_key(**kwargs)
-        publisher.publish(channel_key, json_data)
-
-    def add_to_set(self, id, score, **kwargs):
+    def add_to_set(self, id, score, _data=None, **kwargs):
         """
         Adds an object to a materialized view.
         """
         self.redis.zadd(self.get_key(**kwargs), id, float(score))
+
+        if _data is None:
+            _data = self.get(id)
+
+        # Send the notice out to our subscribers that this data
+        # was added
+        publisher.publish(self.get_channel_key(**kwargs), _data)
 
     def remove(self, data, **kwargs):
         """
