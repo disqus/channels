@@ -25,18 +25,19 @@
     };
 
     ListView.prototype.appendPost = function(post) {
-      var post_view, scrolled;
+      var post_view;
       post_view = new PostView({
         model: post
       });
-      scrolled = this.isAtBottom();
-      console.log(scrolled);
-      this.$el.append(post_view.render().el);
-      if (scrolled) return this.scrollBottom;
+      return this.$el.append(post_view.render().el);
     };
 
     ListView.prototype.addPost = function(post) {
-      return this.collection.add(post);
+      var scrolled;
+      scrolled = this.isAtBottom();
+      console.log(scrolled);
+      this.collection.add(post);
+      if (scrolled) return this.scrollBottom;
     };
 
     ListView.prototype.scrollBottom = function() {
