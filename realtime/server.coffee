@@ -1,6 +1,6 @@
-_ = require "underscore"
 io = require('socket.io').listen(3000)
 redis = require "redis"
+State = require('./lib/state.coffee').SubscriberState
 
 client = redis.createClient()
 
@@ -18,29 +18,14 @@ client.on 'unsubscribe', (channel) ->
     delete subscribers[channel]
 """
 
+substate = new State(client)
 
 
 io.sockets.on 'connection', (socket) ->
     socket.on 'connect', (message) ->
         channel = message.channel
         console.log channel
-
-        if _.has subscribers, channel and _.size(subscribers[channel]) > 0
-            subscribers[channel].push socket
-        else
-            subscribers[channel] = [socket]
-            client.subscribe channel
-            console.log 'subscribing'
-        console.log "channel length: " + channel + ' ' +  subscribers[channel].length
-
-        id2channel[socket.id] = channel
+        substate.subscribe socket, channel
 
     socket.on 'disconnect', () ->
-        console.log "disconnect!"
-        channel = id2channel[socket.id]
-        subscribers[channel] = _.without subscribers[channel], socket
-        if subscribers[channel].length == 0
-            console.log "unsubscribing"
-            delete subscribers[channel]
-            client.unsubscribe channel
-        delete id2channel[socket.id]
+        substate.unsubscribe socket
