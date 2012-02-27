@@ -323,6 +323,14 @@ header .nav a:hover {
   padding-top: 10px;
   padding-right: 10px;
   overflow: hidden;
+  height: 48px;
+  line-height: 28px;
+}
+.new-reply p {
+  padding: 0 140px 0 20px;
+  position: relative;
+  margin-bottom: 0;
+  line-height: 38px;
 }
 .new-reply form {
   padding: 0 140px 0 20px;
