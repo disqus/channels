@@ -21,7 +21,7 @@ class ListView extends Backbone.View
         scrolled = @isAtBottom()
         @collection.add post
         if scrolled
-            @scrollBottom
+            @scrollBottom()
 
     scrollBottom: ->
         $('body').animate scrollTop: $(document).height(), 0
@@ -84,9 +84,14 @@ $(document).ready () ->
         if button.attr 'disabled'
             false
 
+        $.post $(this).attr('action'),
+            $(this).serialize(),
+            (data, status) =>
+                p = new Post(data)
+                list_view.addPost p
+                button.removeAttr 'disabled'
+        false
+
     for post in initialPosts
         p = new Post(post)
         list_view.addPost(p)
-    setTimeout ( () ->
-        list_view.scrollBottom()
-    ) , 200

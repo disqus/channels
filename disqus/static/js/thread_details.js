@@ -36,7 +36,7 @@
       var scrolled;
       scrolled = this.isAtBottom();
       this.collection.add(post);
-      if (scrolled) return this.scrollBottom;
+      if (scrolled) return this.scrollBottom();
     };
 
     ListView.prototype.scrollBottom = function() {
@@ -118,7 +118,7 @@
   })(Backbone.Collection);
 
   $(document).ready(function() {
-    var p, post, _i, _len,
+    var p, post, _i, _len, _results,
       _this = this;
     window.list_view = new ListView;
     $('.new-reply textarea').autoResize({
@@ -142,16 +142,22 @@
       setTimeout(function() {
         return button.attr('disabled', 'disabled');
       }, 50);
-      if (button.attr('disabled')) return false;
+      if (button.attr('disabled')) false;
+      $.post($(this).attr('action'), $(this).serialize(), function(data, status) {
+        var p;
+        p = new Post(data);
+        list_view.addPost(p);
+        return button.removeAttr('disabled');
+      });
+      return false;
     });
+    _results = [];
     for (_i = 0, _len = initialPosts.length; _i < _len; _i++) {
       post = initialPosts[_i];
       p = new Post(post);
-      list_view.addPost(p);
+      _results.push(list_view.addPost(p));
     }
-    return setTimeout((function() {
-      return list_view.scrollBottom();
-    }), 200);
+    return _results;
   });
 
 }).call(this);
