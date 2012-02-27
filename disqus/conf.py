@@ -28,3 +28,4 @@ class DefaultConfig(object):
     USE_NODE = False
     DEBUG = True
     TALK_CATEGORY_ID = 1330567
+    CSRF_ENABLED = False
