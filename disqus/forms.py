@@ -6,12 +6,21 @@ disqus.forms
 :license: Apache License 2.0, see LICENSE for more details.
 """
 
-from flaskext.wtf import Form, Required, TextField, TextAreaField
+from flask import request
+from flaskext.wtf import Form, Required, TextField, TextAreaField, ValidationError
 
 
-class NewThreadForm(Form):
+class ReferrerCheckForm(Form):
+    def validate_on_submit(self, *args, **kwargs):
+        referrer = request.environ['HTTP_REFERER']
+        if not referrer.startswith(request.host_url):
+            raise ValidationError('Invalid referrer')
+        return super(ReferrerCheckForm, self).validate_on_submit(*args, **kwargs)
+
+
+class NewThreadForm(ReferrerCheckForm):
     subject = TextField('Subject', [Required()])
 
 
-class NewPostForm(Form):
+class NewPostForm(ReferrerCheckForm):
     message = TextAreaField('Message', [Required()])

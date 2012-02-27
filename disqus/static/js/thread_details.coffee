@@ -89,7 +89,6 @@ $(document).ready () ->
             (data, status) =>
                 button.removeAttr 'disabled'
                 $(':input', this).not(':button, :submit, :reset, :hidden').val('')
-                $('#csrf').val(data.token)
         false
 
     for post in initialPosts

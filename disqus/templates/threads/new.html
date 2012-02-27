@@ -12,7 +12,6 @@
     conversation.</p>
 
   <form method="POST" class="form-stack" action="{{ url_for('new_thread') }}">
-    {{ form.csrf }}
     <fieldset>
       <div class="control-group{% if form.subject.errors %} error{% endif %}">
         <div class="controls">
