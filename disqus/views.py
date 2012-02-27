@@ -101,3 +101,4 @@ class View(object):
 
 posts = View(db, publisher, 'posts')
 threads = View(db, publisher, 'threads')
+users = View(db, publisher, 'users')

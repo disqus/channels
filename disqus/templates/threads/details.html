@@ -18,15 +18,25 @@
 
 {% block sidebar %}
   <div class="page-header">
-    <h4>Sessions</h4>
+    <h4>Particpants</h4>
   </div>
-  <ul class="thread-list">
-    {% for thread in active_talk_list %}
-      {% include "includes/thread.html" %}
+  <ul class="user-list">
+    {% for user in user_list %}
+      <li><img src="{{ user.avatar }}" title="{{ user.name }}"></li>
     {% endfor %}
   </ul>
+  {% if active_talk_list %}
+    <div class="page-header">
+      <h4>Sessions</h4>
+    </div>
+    <ul class="thread-list">
+      {% for thread in active_talk_list %}
+        {% include "includes/thread.html" %}
+      {% endfor %}
+    </ul>
+  {% endif %}
   <div class="page-header">
-    <h4>Active</h4>
+    <h4>Active Conversations</h4>
   </div>
   <ul class="thread-list">
     {% for thread in active_thread_list %}
@@ -35,7 +45,7 @@
   </ul>
   {% if my_thread_list %}
     <div class="page-header">
-      <h4>You</h4>
+      <h4>Your Conversations</h4>
     </div>
     <ul class="thread-list">
       {% for thread in my_thread_list %}

@@ -12,7 +12,27 @@ from flask import session
 from disqus import app, disqusapi, schedule
 from disqus.oauth import api_call
 from disqus.utils import datestr_to_datetime, from_cache
-from disqus.views import threads, posts
+from disqus.views import threads, posts, users
+
+
+class User:
+    @classmethod
+    def format(cls, user):
+        return {
+            'id': user['id'],
+            'avatar': user['avatar']['cache'],
+            'name': user['username'],
+        }
+
+    @classmethod
+    def save(cls, user):
+        result = cls.format(user)
+        users.add(result, datetime.utcnow().strftime('%s.%m'))
+        return result
+
+    @classmethod
+    def list_by_thread(cls, thread_id, offset=0, limit=100):
+        return users.list(thread_id=thread_id, offset=offset, limit=limit)
 
 
 class Category:
@@ -120,7 +140,10 @@ class Post:
         dt = datestr_to_datetime(post['createdAt'])
         post['createdAt'] = dt
         result = cls.format(post)
-        posts.add(result, dt.strftime('%s.%m'), thread_id=post['thread'])
+        score = dt.strftime('%s.%m')
+        posts.add(result, score, thread_id=post['thread'])
+        user = User.save(post['author'])
+        users.add_to_set(user['id'], score, thread_id=post['thread'])
         return result
 
     @classmethod

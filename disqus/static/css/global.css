@@ -226,6 +226,21 @@ header .nav a:hover {
   margin-right: 5px;
   line-height: 20px;
 }
+.sidebar .user-list {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+}
+.sidebar .user-list li {
+  display: inline-block;
+}
+.sidebar .user-list li img {
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
 
 
 .topic {
