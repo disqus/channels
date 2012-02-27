@@ -1,7 +1,5 @@
-app = require('express').createServer()
+io = require('socket.io').listen(80)
 
-app.get '/', (req, res) ->
-  res.send 'hello world'
-
-
-app.listen 3000
+io.sockets.on 'connection', (socket) ->
+  socket.on('connect', (channel) ->
+    console.log channel
