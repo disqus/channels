@@ -90,6 +90,7 @@ $(document).ready () ->
                 p = new Post(data)
                 list_view.addPost p
                 button.removeAttr 'disabled'
+                $(':input', this).not(':button, :submit, :reset, :hidden').val('')
         false
 
     for post in initialPosts
