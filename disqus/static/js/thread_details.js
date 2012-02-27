@@ -159,10 +159,12 @@
       list_view.addPost(p);
     }
     socket.on('new_post', function(post) {
-      return console.log(post);
+      p = new Post(JSON.parse(post));
+      console.log(p);
+      return list_view.addPost(p);
     });
     return socket.emit('connect', {
-      channel: 'one'
+      channel: channels.posts
     });
   });
 
