@@ -25,8 +25,13 @@ exports.testSomething = (test) ->
 
     s.unsubscribe id: 1234
 
-    test.ok s.subscribers[channel].length == 1, "length"
-    test.ok mock.subscribes == 1, "subscribes"
-    test.ok mock.unsubscribes == 0, "unsubscribes"
+    test.ok s.subscribers[channel].length == 1, "One connection left"
+    test.ok mock.subscribes == 1, "sanity check that we subscribe once only"
+    test.ok mock.unsubscribes == 0, "Test that we don't unsubscribe yet"
+
+    s.unsubscribe id: 4321
+    test.ok s.subscribers[channel] == undefined, "no connections"
+    test.ok mock.unsubscribes == 1,
+        "Test that we unsubscribe when last user parts"
 
     test.done()
