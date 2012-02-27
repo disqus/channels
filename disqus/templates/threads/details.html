@@ -8,7 +8,8 @@
 <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.autoresize.js') }}"></script>
 <script type="text/javascript">
     var threadId = "{{ thread.id }}";
-    var initialPosts = {{ post_list |as_json }};
+    var initialPosts = {{ post_list|as_json }};
+    var channels = {{ channel_list|as_json }}
 </script>
 {% endblock %}
 

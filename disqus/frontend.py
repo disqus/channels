@@ -18,7 +18,7 @@ from disqus.forms import NewThreadForm, NewPostForm
 from disqus.models import Thread, Post, Session, Category, User
 from disqus.oauth import login_required, api_call
 from disqus.utils import from_cache, timesince, format_datetime, datestr_to_datetime, better_jsonify
-
+from disqus.views import posts, users
 
 logger = logging.getLogger(__name__)
 
@@ -127,6 +127,10 @@ def thread_details(thread_id):
         'active_talk_list': from_cache(Session.list_active)[:5],
         'active_thread_list': from_cache(Thread.list_active)[:5],
         'post_list': post_list,
+        'channel_list': {
+            'posts': posts.get_channel_key(thread_id=thread_id),
+            'participants': users.get_channel_key(thread_id=thread_id),
+        }
     })
 
 
