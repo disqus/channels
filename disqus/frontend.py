@@ -130,7 +130,8 @@ def thread_details(thread_id):
         'channel_list': {
             'posts': posts.get_channel_key(thread_id=thread_id),
             'participants': users.get_channel_key(thread_id=thread_id),
-        }
+        },
+        'realtime_host': app.config.get('REALTIME_HOST')
     })
 
 
