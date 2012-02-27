@@ -147,7 +147,8 @@
         var p;
         p = new Post(data);
         list_view.addPost(p);
-        return button.removeAttr('disabled');
+        button.removeAttr('disabled');
+        return $(':input', _this).not(':button, :submit, :reset, :hidden').val('');
       });
       return false;
     });
