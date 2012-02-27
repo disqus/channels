@@ -87,8 +87,6 @@ $(document).ready () ->
         $.post $(this).attr('action'),
             $(this).serialize(),
             (data, status) =>
-                p = new Post(data.post)
-                list_view.addPost p
                 button.removeAttr 'disabled'
                 $(':input', this).not(':button, :submit, :reset, :hidden').val('')
                 $('#csrf').val(data.token)
@@ -99,7 +97,9 @@ $(document).ready () ->
         list_view.addPost(p)
 
     socket.on 'new_post', (post) ->
-        console.log post
+        p = new Post(JSON.parse post)
+        console.log p
+        list_view.addPost(p)
 
     socket.emit 'connect',
-        channel: 'one'
+        channel: channels.posts
