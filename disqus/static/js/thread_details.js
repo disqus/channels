@@ -35,7 +35,6 @@
     ListView.prototype.addPost = function(post) {
       var scrolled;
       scrolled = this.isAtBottom();
-      console.log(scrolled);
       this.collection.add(post);
       if (scrolled) return this.scrollBottom;
     };
@@ -150,7 +149,9 @@
       p = new Post(post);
       list_view.addPost(p);
     }
-    return list_view.scrollBottom();
+    return setTimeout((function() {
+      return list_view.scrollBottom();
+    }), 200);
   });
 
 }).call(this);

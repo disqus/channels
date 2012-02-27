@@ -19,7 +19,6 @@ class ListView extends Backbone.View
 
     addPost: (post) ->
         scrolled = @isAtBottom()
-        console.log scrolled
         @collection.add post
         if scrolled
             @scrollBottom
@@ -59,6 +58,7 @@ class PostList extends Backbone.Collection
 
     model: Post
 
+
 $(document).ready () ->
     window.list_view = new ListView
 
@@ -87,4 +87,6 @@ $(document).ready () ->
     for post in initialPosts
         p = new Post(post)
         list_view.addPost(p)
-    list_view.scrollBottom()
+    setTimeout ( () ->
+        list_view.scrollBottom()
+    ) , 200
