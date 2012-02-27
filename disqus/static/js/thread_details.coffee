@@ -15,14 +15,14 @@ class ListView extends Backbone.View
     appendPost: (post) ->
         post_view = new PostView model: post
 
-        scrolled = @isAtBottom()
-        console.log scrolled
         @$el.append post_view.render().el
-        if scrolled
-            @scrollBottom
 
     addPost: (post) ->
+        scrolled = @isAtBottom()
+        console.log scrolled
         @collection.add post
+        if scrolled
+            @scrollBottom
 
     scrollBottom: ->
         $('body').animate scrollTop: $(document).height(), 0
