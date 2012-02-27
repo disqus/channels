@@ -114,6 +114,7 @@ def get_thread(thread_id):
         score = dt.strftime('%s.%m')
         threads.add(result, score)
         threads.add_to_set(result['id'], score, author_id=thread['author'])
+        threads.add_to_set(result['id'], score, category_id=thread['category'])
     return result
 
 
@@ -173,7 +174,8 @@ def new_thread():
         thread['createdAt'] = dt
         score = dt.strftime('%s.%m')
         threads.add(format_thread(thread), score)
-        threads.add_to_set(thread['id'], score, author_id=thread['author']['id'])
+        threads.add_to_set(thread['id'], score, author_id=thread['author'])
+        threads.add_to_set(thread['id'], score, category_id=thread['category'])
         return redirect(url_for('thread_details', thread_id=thread['id']))
 
     return render_template('threads/new.html', form=form)
