@@ -55,19 +55,19 @@ app.template_filter('format_datetime')(format_datetime)
 
 @app.route('/', methods=['GET'])
 def landing_page():
-    active_thread_list = from_cache(Thread.list_active())
+    active_thread_list = from_cache(Thread.list_active)
     active_thread_ids = set(t['id'] for t in active_thread_list)
 
     thread_list = list(api_call(disqusapi.threads.listByDate,
-        category=Category.get_category('Generaly')['id'],
+        category=Category.get('Generaly')['id'],
         method='GET',
         limit=20,
     ))
     thread_list = [t for t in thread_list if t['id'] not in active_thread_ids][:10]
 
     # category=category_map['General']
-    active_talk_list = from_cache(Session.list_active())
-    upcoming_talk_list = from_cache(Session.list_upcoming())
+    active_talk_list = from_cache(Session.list_active)
+    upcoming_talk_list = from_cache(Session.list_upcoming)
 
     for thread in itertools.chain(active_thread_list, thread_list):
         thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
@@ -115,9 +115,10 @@ def thread_details(thread_id):
         'thread': thread,
         'form': form,
         'pycon_session': pycon_session,
-        'my_threads': Thread.list_by_author(author_id=session['auth']['id'])[:5],
+        'my_threads': Thread.list_by_author(author_id=session['auth']['user_id'])[:5],
         'active_talk_list': from_cache(Session.list_active)[:5],
         'active_thread_list': from_cache(Thread.list_active)[:5],
+        'post_list': Post.list_by_thread(thread_id)[::-1],
     })
 
 

@@ -21,7 +21,10 @@ def datestr_to_datetime(dt):
 
 def from_cache(callback, cache_key=None, expires=60):
     if cache_key is None:
-        cache_key = '%s.%s' % (callback.__module__, callback.__name__)
+        if hasattr(callback, 'im_self'):
+            cache_key = '.'.join([callback.__module__, callback.im_self.__name__, callback.__name__])
+        else:
+            cache_key = '%s.%s' % (callback.__module__, callback.__name__)
     conn = db.get_conn(cache_key)
     result = conn.get(cache_key)
     if result:

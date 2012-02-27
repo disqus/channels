@@ -8,7 +8,6 @@ class ListView extends Backbone.View
         @collection = new PostList
         @collection.bind 'add', @appendPost
         @render()
-        @scrollBottom()
 
     render: ->
         @$el.append '<ul class="post-list"></ul>'
@@ -22,7 +21,7 @@ class ListView extends Backbone.View
         scrolled = @isAtBottom()
         @collection.add post
         if scrolled
-            @scrollBottom()
+            @scrollBottom
 
     scrollBottom: ->
         $('body').animate scrollTop: $(document).height(), 0
@@ -59,6 +58,7 @@ class PostList extends Backbone.Collection
 
     model: Post
 
+
 $(document).ready () ->
     window.list_view = new ListView
 
@@ -84,10 +84,9 @@ $(document).ready () ->
         if button.attr 'disabled'
             false
 
-    $.ajax
-        url: "/posts/" + threadId + ".json"
-        success: (data) ->
-            for post in data.post_list
-                p = new Post(post)
-                list_view.addPost(p)
-
+    for post in initialPosts
+        p = new Post(post)
+        list_view.addPost(p)
+    setTimeout ( () ->
+        list_view.scrollBottom()
+    ) , 200
