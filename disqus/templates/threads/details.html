@@ -33,9 +33,16 @@
       {% include "includes/thread.html" %}
     {% endfor %}
   </ul>
-  <div class="page-header">
-    <h4>You</h4>
-  </div>
+  {% if my_thread_list %}
+    <div class="page-header">
+      <h4>You</h4>
+    </div>
+    <ul class="thread-list">
+      {% for thread in my_thread_list %}
+        {% include "includes/thread.html" %}
+      {% endfor %}
+    </ul>
+  {% endif %}
 {% endblock %}
 
 {% block content %}

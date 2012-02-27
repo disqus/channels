@@ -111,11 +111,16 @@ def thread_details(thread_id):
     else:
         pycon_session = False
 
+    if 'auth' in session:
+        my_threads = Thread.list_by_author(author_id=session['auth']['user_id'])[:5]
+    else:
+        my_threads = None
+
     return render_template('threads/details.html', **{
         'thread': thread,
         'form': form,
         'pycon_session': pycon_session,
-        'my_threads': Thread.list_by_author(author_id=session['auth']['user_id'])[:5],
+        'my_thread_list': my_threads,
         'active_talk_list': from_cache(Session.list_active)[:5],
         'active_thread_list': from_cache(Thread.list_active)[:5],
         'post_list': Post.list_by_thread(thread_id)[::-1],
