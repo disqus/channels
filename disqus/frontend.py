@@ -95,7 +95,7 @@ def new_thread():
 @app.route('/threads/mine', methods=['GET'])
 @login_required
 def my_threads():
-    thread_list = Thread.by_author(author_id=session['auth']['id'])
+    thread_list = Thread.list_by_author(author_id=session['auth']['user_id'])
 
     return render_template('threads/mine.html', thread_list=thread_list)
 
