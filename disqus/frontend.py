@@ -10,7 +10,7 @@ import logging
 import simplejson
 
 from datetime import datetime, timedelta
-from flask import session, render_template, flash, redirect, url_for, jsonify
+from flask import session, render_template, redirect, url_for, jsonify
 from jinja2 import Markup
 
 from disqusapi import Paginator
@@ -18,7 +18,7 @@ from disqus import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
 from disqus.oauth import login_required, api_call
 from disqus.utils import from_cache, timesince, format_datetime, datestr_to_datetime
-from disqus.views import posts
+from disqus.views import posts, threads
 
 
 logger = logging.getLogger(__name__)
@@ -31,13 +31,22 @@ def get_form_from_session():
         return postauth['form']
 
 
+def format_thread(thread):
+    return {
+        'id': thread['id'],
+        'title': thread['title'],
+        'createdAtISO': thread['createdAt'].isoformat(),
+        'category': thread['category'],
+        'link': thread['link'],
+    }
+
+
 def format_post(post):
     return {
         'id': post['id'],
         'avatar': post['author']['avatar']['cache'],
         'name': post['author']['username'],
         'createdAtISO': post['createdAt'].isoformat(),
-#        'createdAt': post['createdAt'],
         'message': post['message']
     }
 
@@ -95,6 +104,19 @@ def get_thread_posts(thread_id, offset=0, limit=100):
     return result
 
 
+def get_thread(thread_id):
+    result = threads.get(thread_id)
+    if not result:
+        thread = disqusapi.threads.details(thread=thread_id, forum=app.config['DISQUS_FORUM'])
+        dt = datestr_to_datetime(thread['createdAt'])
+        thread['createdAt'] = dt
+        result = format_thread(thread)
+        score = dt.strftime('%s.%m')
+        threads.add(result, score)
+        threads.add_to_set(result['id'], score, author_id=thread['author'])
+    return result
+
+
 @app.context_processor
 def inject_auth():
     return dict(user=session.get('auth'))
@@ -147,7 +169,11 @@ def new_thread():
     form = NewThreadForm()
     if form.validate_on_submit():
         thread = api_call(disqusapi.threads.create, title=form.subject.data, forum=app.config['DISQUS_FORUM'])
-        flash("Success")
+        dt = datestr_to_datetime(thread['createdAt'])
+        thread['createdAt'] = dt
+        score = dt.strftime('%s.%m')
+        threads.add(format_thread(thread), score)
+        threads.add_to_set(thread['id'], score, author_id=thread['author']['id'])
         return redirect(url_for('thread_details', thread_id=thread['id']))
 
     return render_template('threads/new.html', form=form)
@@ -188,10 +214,7 @@ def my_threads():
 def thread_details(thread_id):
     form = NewPostForm(get_form_from_session())
 
-    thread = from_cache(lambda: api_call(disqusapi.threads.details, thread=thread_id),
-                        'disqus.frontend.get_thread:%s' % (thread_id,))
-
-    thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
+    thread = get_thread(thread_id)
 
     if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
         pycon_session = schedule[thread['link']]
