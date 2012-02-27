@@ -229,6 +229,7 @@ def thread_details(thread_id):
         'pycon_session': pycon_session,
         'active_talk_list': from_cache(get_active_talks)[:5],
         'active_thread_list': from_cache(get_active_threads)[:5],
+        'post_list': get_thread_posts(thread_id)[::-1]
     })
 
 
