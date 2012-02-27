@@ -31,3 +31,6 @@ exports.SubscriberState = class
             @client.unsubscribe channel
 
         delete @id2channel[socket.id]
+
+    channel2socket: (channel) ->
+        @subscribers[channel]
