@@ -43,7 +43,12 @@ app.config.from_pyfile('local_settings.py', silent=True)
 app.config.from_envvar('DISQUS_SETTINGS', silent=True)
 
 if app.config.get('USE_NODE'):
-    coffee(app)
+    import os.path
+
+    coffee_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        'node_modules/.bin/coffee')
+    coffee(app, coffee_path)
 
 # Init database (Redis)
 db = init_database(app)

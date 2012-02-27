@@ -1,16 +1,19 @@
+# -*- coding: utf-8 -*-
 """
-flask-coffee
-~~~~~~~~~~~~~
-http://pypi.python.org/pypi/Flask-Coffee
+    flaskext.coffee
+    ~~~~~~~~~~~~~
 
-:Author: Col Wilson
-:license: BSD
+    A CoffeeScript extension for Flask
+
+    :copyright: (c) 2011 by Col Wilson.
+    :license: MIT, see LICENSE for more details.
 """
+
 import os
 import subprocess
 
 
-def coffee(app):
+def coffee(app, coffe_ex_path):
     @app.before_request
     def _render_coffee():
         try:
@@ -33,4 +36,4 @@ def coffee(app):
                 js_mtime = os.path.getmtime(js_path)
             coffee_mtime = os.path.getmtime(coffee_path)
             if coffee_mtime >= js_mtime:
-                subprocess.call(['node_modules/.bin/coffee', '-c', coffee_path], shell=False)
+                subprocess.call([coffe_ex_path, '-c', coffee_path], shell=False)
