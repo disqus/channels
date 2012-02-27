@@ -144,5 +144,9 @@ def new_post(thread_id):
     if form.validate_on_submit():
         post = api_call(disqusapi.posts.create, thread=thread_id, message=form.message.data)
         formatted = Post.save(post)
-        return better_jsonify(formatted, status=201)
+        new_form = NewPostForm()
+        return better_jsonify({
+            'token': new_form.csrf.data,
+            'post': formatted
+        }, status=201)
     return better_jsonify({'message': "invalid request"}, status=400)

@@ -145,10 +145,11 @@
       if (button.attr('disabled')) false;
       $.post($(this).attr('action'), $(this).serialize(), function(data, status) {
         var p;
-        p = new Post(data);
+        p = new Post(data.post);
         list_view.addPost(p);
         button.removeAttr('disabled');
-        return $(':input', _this).not(':button, :submit, :reset, :hidden').val('');
+        $(':input', _this).not(':button, :submit, :reset, :hidden').val('');
+        return $('#csrf').val(data.token);
       });
       return false;
     });
