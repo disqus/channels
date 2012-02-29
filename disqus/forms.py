@@ -8,6 +8,7 @@ disqus.forms
 
 from flask import request
 from flaskext.wtf import Form, Required, TextField, TextAreaField, ValidationError
+from flaskext.wtf import validators
 
 
 class ReferrerCheckForm(Form):
@@ -23,4 +24,4 @@ class NewThreadForm(ReferrerCheckForm):
 
 
 class NewPostForm(ReferrerCheckForm):
-    message = TextAreaField('Message', [Required()])
+    message = TextAreaField('Message', [Required(), validators.Length(min=2)])

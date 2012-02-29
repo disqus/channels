@@ -138,14 +138,20 @@
     $('.new-reply form').submit(function() {
       var button,
         _this = this;
+      if ($('textarea', this).val().length === 0) return false;
       button = $('button[type=submit]', this);
-      setTimeout(function() {
-        return button.attr('disabled', 'disabled');
-      }, 50);
-      if (button.attr('disabled')) false;
-      $.post($(this).attr('action'), $(this).serialize(), function(data, status) {
-        button.removeAttr('disabled');
-        return $(':input', _this).not(':button, :submit, :reset, :hidden').val('');
+      if (button.attr('disabled')) return false;
+      button.attr('disabled', 'disabled');
+      $.ajax({
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        type: 'POST',
+        success: function(data, status) {
+          return $(':input', _this).not(':button, :submit, :reset, :hidden').val('');
+        },
+        complete: function(jqxhr, status) {
+          return button.removeAttr('disabled');
+        }
       });
       return false;
     });

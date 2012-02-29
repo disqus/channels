@@ -76,19 +76,27 @@ $(document).ready () ->
             false
 
     $('.new-reply form').submit () ->
+        if $('textarea', this).val().length <= 2
+            return false
         button = $('button[type=submit]', this)
-        setTimeout () =>
-            button.attr 'disabled', 'disabled'
-        , 50
+        #setTimeout () =>
+            #    button.attr 'disabled', 'disabled'
+        #, 5
 
         if button.attr 'disabled'
-            false
+            return false
 
-        $.post $(this).attr('action'),
-            $(this).serialize(),
-            (data, status) =>
-                button.removeAttr 'disabled'
+        button.attr 'disabled', 'disabled'
+
+        $.ajax
+            url: $(this).attr 'action'
+            data: $(this).serialize()
+            type: 'POST'
+            success: (data, status) =>
                 $(':input', this).not(':button, :submit, :reset, :hidden').val('')
+            complete: (jqxhr, status) ->
+                button.removeAttr 'disabled'
+
         false
 
     for post in initialPosts
