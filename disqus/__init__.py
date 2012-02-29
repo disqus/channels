@@ -8,9 +8,10 @@ disqus
 
 __all__ = ('app', 'db')
 
-from flask import Flask
 import cPickle as pickle
 from disqus.contrib.coffee import coffee
+from flask import Flask
+from werkzeug.contrib.fixers import ProxyFix
 
 
 def init_database(app):
@@ -36,6 +37,8 @@ def init_publisher(app):
 
 # Init Flask app
 app = Flask(__name__)
+
+app.wsgi_app = ProxyFix(app.wsgi_app)
 
 # Build configuration
 app.config.from_object('disqus.conf.DefaultConfig')

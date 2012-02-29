@@ -81,7 +81,7 @@ class Thread:
     def list_by_author(cls, author_id, offset=0, limit=100):
         assert author_id == session['auth']['user_id']
         result = threads.list(author_id=author_id, offset=offset, limit=limit)
-        if not result:
+        if result is None:
             result = []
             for thread in api_call(disqusapi.users.listActiveThreads, forum=app.config['DISQUS_FORUM'], method='GET'):
                 result.append(Thread.save(thread))

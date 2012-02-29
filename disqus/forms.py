@@ -12,7 +12,7 @@ from flaskext.wtf import Form, Required, TextField, TextAreaField, ValidationErr
 
 class ReferrerCheckForm(Form):
     def validate_on_submit(self, *args, **kwargs):
-        referrer = request.environ['HTTP_REFERER']
+        referrer = request.environ.get('HTTP_REFERER')
         if not referrer.startswith(request.host_url):
             raise ValidationError('Invalid referrer')
         return super(ReferrerCheckForm, self).validate_on_submit(*args, **kwargs)
