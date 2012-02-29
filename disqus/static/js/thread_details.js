@@ -121,14 +121,6 @@
     var p, post, _i, _len,
       _this = this;
     window.list_view = new ListView;
-    $('.new-reply textarea').autoResize({
-      maxHeight: 84,
-      minHeight: 28,
-      onAfterResize: function() {
-        $('.conversation').css('padding-bottom', $('.new-reply').height() + 10);
-        return list_view.scrollBottom();
-      }
-    }).focus();
     $('#message').keydown(function(e) {
       if (e.which === 13 && !e.shiftKey) {
         $('.new-reply form').submit();
@@ -138,7 +130,7 @@
     $('.new-reply form').submit(function() {
       var button,
         _this = this;
-      if ($('textarea', this).val().length === 0) return false;
+      if ($('textarea', this).val().length <= 2) return false;
       button = $('button[type=submit]', this);
       if (button.attr('disabled')) return false;
       button.attr('disabled', 'disabled');
@@ -160,13 +152,25 @@
       p = new Post(post);
       list_view.addPost(p);
     }
-    socket.on('new_post', function(post) {
-      p = new Post(JSON.parse(post));
-      console.log(p);
-      return list_view.addPost(p);
-    });
-    return socket.emit('connect', {
-      channel: channels.posts
+    $('.new-reply textarea').autoResize({
+      maxHeight: 84,
+      minHeight: 28,
+      onAfterResize: function() {
+        $('.conversation').css('padding-bottom', $('.new-reply').height() + 10);
+        return list_view.scrollBottom();
+      }
+    }).focus();
+    return $.getScript(realtime_host + '/socket.io/socket.io.js').done(function(script, status) {
+      var socket;
+      socket = io.connect(realtime_host);
+      socket.on('new_post', function(post) {
+        p = new Post(JSON.parse(post));
+        console.log(p);
+        return list_view.addPost(p);
+      });
+      return socket.emit('connect', {
+        channel: channels.posts
+      });
     });
   });
 

@@ -9,15 +9,12 @@
 <script type="text/javascript">
     var threadId = "{{ thread.id }}";
     var initialPosts = {{ post_list|as_json }};
-    var channels = {{ channel_list|as_json }}
+    var channels = {{ channel_list|as_json }};
+    var realtime_host = "{{ realtime_host }}";
 </script>
 {% endblock %}
 
 {% block foot %}
-<script src="{{ realtime_host }}/socket.io/socket.io.js"></script>
-<script>
-    var socket = io.connect("{{ realtime_host }}");
-</script>
 <script type="text/javascript" src="{{ url_for('static', filename='js/thread_details.js') }}"></script>
 {% endblock %}
 

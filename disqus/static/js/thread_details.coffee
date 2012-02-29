@@ -62,14 +62,6 @@ class PostList extends Backbone.Collection
 $(document).ready () ->
     window.list_view = new ListView
 
-    $('.new-reply textarea').autoResize(
-        maxHeight: 84
-        minHeight: 28
-        onAfterResize: () =>
-            $('.conversation').css('padding-bottom', $('.new-reply').height() + 10)
-            list_view.scrollBottom()
-    ).focus()
-
     $('#message').keydown (e) =>
         if e.which == 13 and not e.shiftKey
             $('.new-reply form').submit()
@@ -79,9 +71,6 @@ $(document).ready () ->
         if $('textarea', this).val().length <= 2
             return false
         button = $('button[type=submit]', this)
-        #setTimeout () =>
-            #    button.attr 'disabled', 'disabled'
-        #, 5
 
         if button.attr 'disabled'
             return false
@@ -103,10 +92,23 @@ $(document).ready () ->
         p = new Post(post)
         list_view.addPost(p)
 
-    socket.on 'new_post', (post) ->
-        p = new Post(JSON.parse post)
-        console.log p
-        list_view.addPost(p)
+    $('.new-reply textarea').autoResize(
+        maxHeight: 84
+        minHeight: 28
+        onAfterResize: () =>
+            $('.conversation').css('padding-bottom', $('.new-reply').height() + 10)
+            list_view.scrollBottom()
+    ).focus()
 
-    socket.emit 'connect',
-        channel: channels.posts
+
+    $.getScript(realtime_host + '/socket.io/socket.io.js')
+    .done (script, status) ->
+        socket = io.connect realtime_host
+
+        socket.on 'new_post', (post) ->
+            p = new Post(JSON.parse post)
+            console.log p
+            list_view.addPost(p)
+
+        socket.emit 'connect',
+            channel: channels.posts
