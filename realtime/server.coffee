@@ -9,23 +9,17 @@ substate = new State(client)
 
 
 client.on 'message', (channel, message) ->
-    console.log "new message: " + message
     _.each substate.channel2socket(channel), (socket) ->
         socket.emit 'new_post',
             message
-
-"""
-client.on 'unsubscribe', (channel) ->
-    delete subscribers[channel]
-"""
-
 
 
 io.sockets.on 'connection', (socket) ->
     socket.on 'connect', (message) ->
         channel = message.channel
-        console.log channel
+        console.log "client connected: " + socket.id
         substate.subscribe socket, channel
 
     socket.on 'disconnect', () ->
         substate.unsubscribe socket
+        console.log "client disconnected: " + socket.id
