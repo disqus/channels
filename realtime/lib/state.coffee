@@ -17,18 +17,25 @@ exports.SubscriberState = class
             console.log "subscribing to channel: " + channel
         console.log "channel length: " + channel + ' ' +  @subscribers[channel].length
 
-        @id2channel[socket.id] = channel
+        if _.has @id2channel, socket.id
+            @id2channel[socket.id].push channel
+        else
+            @id2channel[socket.id] = [channel]
 
     unsubscribe: (socket) ->
-        channel = @id2channel[socket.id]
-        return if not channel?
-        @subscribers[channel] = _.filter @subscribers[channel], (member) ->
+        channels = @id2channel[socket.id]
+        return if not channels?
+        filter = (member) ->
             member.id != socket.id
 
-        if @subscribers[channel].length == 0
-            console.log "unsubscribing from channel: " + channel
-            delete @subscribers[channel]
-            @client.unsubscribe channel
+        for channel of @subscribers
+            @subscribers[channel] = _.filter @subscribers[channel], (member) ->
+                member.id != socket.id
+
+            if @subscribers[channel].length == 0
+                console.log "unsubscribing from channel: " + channel
+                delete @subscribers[channel]
+                @client.unsubscribe channel
 
         delete @id2channel[socket.id]
 
