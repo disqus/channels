@@ -27,8 +27,8 @@ exports.SubscriberState = class
 
         if @subscribers[channel].length == 0
             console.log "unsubscribing from channel: " + channel
-            delete @subscribers[channel]
-            @client.unsubscribe channel
+            #delete @subscribers[channel]
+            #@client.unsubscribe channel
 
         delete @id2channel[socket.id]
 
