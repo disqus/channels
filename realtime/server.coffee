@@ -3,12 +3,18 @@ io = require('socket.io').listen(3000)
 redis = require "redis"
 State = require('./lib/state.coffee').SubscriberState
 
-client = redis.createClient()
+r = redis.createClient()
 
-substate = new State(client)
+substate = new State(r)
 
 
-client.on 'message', (channel, message) ->
+io.configure 'production', () ->
+    io.enable 'browser client minification'
+    io.enable 'browser client gzip'
+    io.enable 'browser client etag'
+
+
+r.on 'message', (channel, message) ->
     _.each substate.channel2socket(channel), (socket) ->
         socket.emit 'new_post',
             message
