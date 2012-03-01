@@ -110,5 +110,6 @@ $(document).ready () ->
             console.log p
             list_view.addPost(p)
 
-        socket.emit 'connect',
-            channel: channels.posts
+        socket.on 'connect', () ->
+            socket.emit 'connect',
+                channel: channels.posts
