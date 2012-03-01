@@ -12,6 +12,7 @@ io.configure 'production', () ->
     io.enable 'browser client minification'
     io.enable 'browser client gzip'
     io.enable 'browser client etag'
+    io.enable 'match origin protocol'
 
 
 r.on 'message', (channel, message) ->
