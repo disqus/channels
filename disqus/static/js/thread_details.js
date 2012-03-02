@@ -168,8 +168,10 @@
         console.log(p);
         return list_view.addPost(p);
       });
-      return socket.emit('connect', {
-        channel: channels.posts
+      return socket.on('connect', function() {
+        return socket.emit('connect', {
+          channel: channels.posts
+        });
       });
     });
   });
