@@ -14,10 +14,10 @@ from jinja2 import Markup
 
 from disqus import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
-from disqus.models import Thread, Post, Session, User
+from disqus.models import Thread, Post, Session, User, Category
 from disqus.oauth import login_required, api_call
 from disqus.utils import timesince, format_datetime, better_jsonify
-from disqus.views import posts, users
+from disqus.views import posts, users, threads
 
 logger = logging.getLogger(__name__)
 
@@ -96,6 +96,12 @@ def thread_details(thread_id):
 
     thread = Thread.get(thread_id)
 
+    channel_list = {
+        'posts': posts.get_channel_key(posts.get_key(thread_id=thread_id)),
+        'participants': users.get_channel_key(users.get_key(thread_id=thread_id)),
+        'active_thread_list': threads.get_channel_key(threads.get_key(category_id=Category.get('General')['id'])),
+    }
+
     if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
         pycon_session = schedule[thread['link']]
     else:
@@ -103,6 +109,7 @@ def thread_details(thread_id):
 
     if 'auth' in session:
         my_threads = Thread.list_by_author(author_id=session['auth']['user_id'])[:5]
+        channel_list['my_thread_list'] = threads.get_channel_key(threads.get_key(author_id=thread_id))
     else:
         my_threads = None
 
@@ -117,10 +124,7 @@ def thread_details(thread_id):
         'active_talk_list': Session.list_active(limit=5),
         'active_thread_list': Thread.list(limit=5),
         'post_list': post_list,
-        'channel_list': {
-            'posts': posts.get_channel_key(posts.get_key(thread_id=thread_id)),
-            'participants': users.get_channel_key(users.get_key(thread_id=thread_id)),
-        },
+        'channel_list': channel_list,
         'realtime_host': app.config.get('REALTIME_HOST')
     })
 
