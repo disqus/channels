@@ -291,11 +291,16 @@
         payload = JSON.parse(data);
         return console.log(payload);
       });
-      return socket.on('connect', function() {
+      socket.on('connect', function() {
         return socket.emit('connect', {
           channels: _.values(channels),
-          the_user: the_user.toJSON()
+          user: the_user.toJSON()
         });
+      });
+      return socket.on('peer_disconnect', function(peer) {
+        var u;
+        u = new User(peer);
+        return console.log(u);
       });
     });
   });

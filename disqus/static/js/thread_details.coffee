@@ -181,3 +181,7 @@ $(document).ready () ->
             socket.emit 'connect',
                 channels: _.values channels
                 user: the_user.toJSON()
+
+        socket.on 'peer_disconnect', (peer) ->
+            u = new User peer
+            console.log u

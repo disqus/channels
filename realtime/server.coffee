@@ -35,8 +35,8 @@ io.sockets.on 'connection', (socket) ->
         socket2user[socket] = message.user
 
     socket.on 'disconnect', () ->
-        substate.unsubscribe socket
         # here we can actively disconnect people.
-        _.each substate.peers socket, (ps) ->
+        _.each substate.peers(socket), (ps) ->
             ps.emit 'peer_disconnect', socket2user[socket]
+        substate.unsubscribe socket
         console.log "client disconnected: " + socket.id

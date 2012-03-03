@@ -43,10 +43,13 @@ exports.SubscriberState = class
         @subscribers[channel]
 
     peers: (socket) ->
-        peers = []
+        p = []
         for channel in @id2channel[socket.id]
+            console.log @listeners channel
+            if _.isUndefined @listeners channel
+                continue
             cp = _.filter @listeners(channel), (s) ->
                 s.id != socket.id
             if cp.length > 0
-                peers.push cp
-        _.unique _.flatten peers
+                p.push cp
+        _.unique _.flatten p
