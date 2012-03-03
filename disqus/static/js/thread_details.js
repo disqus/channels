@@ -255,14 +255,17 @@
     return $.getScript(realtime_host + '/socket.io/socket.io.js').done(function(script, status) {
       var socket;
       socket = io.connect(realtime_host);
-      socket.on(channels.posts, function(post) {
-        p = new Post(JSON.parse(post));
+      socket.on(channels.posts, function(data) {
+        var payload;
+        payload = JSON.parse(data);
+        p = new Post(payload.data);
         console.log(p);
         return list_view.addPost(p);
       });
-      socket.on(channels.participants, function(participant) {
-        var u;
-        u = new User(JSON.parse(participant));
+      socket.on(channels.participants, function(data) {
+        var payload, u;
+        payload = JSON.parse(data);
+        u = new User(payload.data);
         console.log(u);
         return participants_view.addUser(u);
       });

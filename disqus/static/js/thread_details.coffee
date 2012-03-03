@@ -149,13 +149,15 @@ $(document).ready () ->
     .done (script, status) ->
         socket = io.connect realtime_host
 
-        socket.on channels.posts, (post) ->
-            p = new Post(JSON.parse post)
+        socket.on channels.posts, (data) ->
+            payload = JSON.parse data
+            p = new Post payload.data
             console.log p
             list_view.addPost(p)
 
-        socket.on channels.participants, (participant) ->
-            u = new User(JSON.parse participant)
+        socket.on channels.participants, (data) ->
+            payload = JSON.parse data
+            u = new User payload.data
             console.log u
             participants_view.addUser u
 
