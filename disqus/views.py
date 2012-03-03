@@ -5,8 +5,6 @@ disqus.views
 :copyright: (c) 2012 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
-import simplejson
-
 from disqus import db, publisher
 
 
@@ -16,60 +14,93 @@ class View(object):
         self.pns = 'channel:%s' % name
         self.redis = redis
 
-    def add(self, data, score, **kwargs):
+    def add(self, data, score, _key=None, **kwargs):
         """
         Adds an object.
 
         This will serialize it into the shared object cache, as well
         as add it to the materialized view designated with ``kwargs``.
         """
-        json_data = simplejson.dumps(data)
-
         # Immediately update this object in the shared object cache
-        self.redis.set(self.get_obj_key(data['id']), json_data)
+        self.redis.hmset(self.get_obj_key(data['id']), data)
 
         # Update the filtered sorted set (based on kwargs)
-        self.add_to_set(data['id'], score, json_data, **kwargs)
+        self.add_to_set(data['id'], score, data, _key, **kwargs)
 
-    def add_to_set(self, id, score, _data=None, **kwargs):
+    def add_to_set(self, id, score, _data=None, _key=None, **kwargs):
         """
         Adds an object to a materialized view.
         """
-        self.redis.zadd(self.get_key(**kwargs), id, float(score))
+        key = self.get_key(_key, **kwargs)
+        self.redis.zadd(key, id, float(score))
 
         if _data is None:
             _data = self.get(id)
 
         # Send the notice out to our subscribers that this data
         # was added
-        publisher.publish(self.get_channel_key(**kwargs), _data)
+        publisher.publish(self.get_channel_key(key), _data)
 
-    def remove(self, data, **kwargs):
+    def incr_in_set(self, id, score, _data=None, _key=None, **kwargs):
+        """
+        Adds an object to a materialized view.
+        """
+        key = self.get_key(_key, **kwargs)
+        self.redis.zincrby(key, id, float(score))
+
+        if _data is None:
+            _data = self.get(id)
+
+        # Send the notice out to our subscribers that this data
+        # was added
+        publisher.publish(self.get_channel_key(key), _data)
+
+    def remove(self, data, _key=None, **kwargs):
         """
         Removes an object.
 
         This will only remove it from the materialized view as passed with
         ``kwargs``.
         """
-        self.redis.zrem(self.get_key(**kwargs), data['id'])
+        self.redis.zrem(self.get_key(_key, **kwargs), data['id'])
         self.redis.remove(self.get_obj_key(data['id']))
 
-    def remove_from_set(self, id, **kwargs):
+    def remove_from_set(self, id, _key=None, **kwargs):
         """
         Removes an object from its materialized view.
         """
-        self.redis.zrem(self.get_key(**kwargs), id)
+        self.redis.zrem(self.get_key(_key, **kwargs), id)
 
-    def get(self, id):
+    def incr_counter(self, id, key, amount=1):
+        self.redis.hincrby(self.get_obj_key(id), key, amount)
+
+    def get(self, *ids):
         """
         Fetchs an object from the shared object cache.
         """
-        result = self.redis.get(self.get_obj_key(id))
+        result = self.redis.hgetall(self.get_obj_key(id))
         if result is None:
             return
-        return simplejson.loads(result)
+        return result
 
-    def list(self, offset=0, limit=-1, desc=True, **kwargs):
+    def get_many(self, id_list):
+        """
+        Fetchs many objects from the shared object cache.
+        """
+        result = {}
+        with self.redis.map() as conn:
+            for id in id_list:
+                result[id] = conn.hgetall(self.get_obj_key(id))
+
+        for key, value in result.iteritems():
+            if value:
+                result[key] = dict(value)
+            else:
+                result[key] = None
+
+        return result
+
+    def list(self, offset=0, limit=-1, desc=True, _key=None, **kwargs):
         """
         Returns a list of objects from the given materialized view.
         """
@@ -77,26 +108,29 @@ class View(object):
             func = self.redis.zrevrange
         else:
             func = self.redis.zrange
-        id_list = func(self.get_key(**kwargs), offset, limit)
+        id_list = func(self.get_key(_key, **kwargs), offset, limit)
         obj_cache = {}
         with self.redis.map() as conn:
             for id in id_list:
                 key = self.get_obj_key(id)
-                obj_cache[id] = conn.get(key)
+                obj_cache[id] = conn.hgetall(key)
 
-        results = filter(bool, [simplejson.loads(unicode(obj_cache[t])) for t in id_list if obj_cache])
+        results = filter(bool, [dict(obj_cache[t]) for t in id_list if obj_cache])
 
         return results
 
-    def get_key(self, **kwargs):
+    def get_key(self, keybase=None, **kwargs):
         kwarg_str = '&'.join('%s=%s' % (k, v) for k, v in sorted(kwargs.items()))
 
-        return '%s:%s' % (self.ns, kwarg_str)
+        if keybase:
+            keybase = '%s:%s' % (self.ns, keybase)
+        else:
+            keybase = self.ns
 
-    def get_channel_key(self, **kwargs):
-        kwarg_str = '&'.join('%s=%s' % (k, v) for k, v in sorted(kwargs.items()))
+        return '%s:%s' % (keybase, kwarg_str)
 
-        return '%s:%s' % (self.pns, kwarg_str)
+    def get_channel_key(self, key):
+        return '%s:%s' % (self.pns, key)
 
     def get_obj_key(self, id):
         return '%s:objects:%s' % (self.ns, id)

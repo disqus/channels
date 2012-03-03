@@ -5,7 +5,6 @@ disqus.frontend
 :copyright: (c) 2012 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
-import itertools
 import logging
 import simplejson
 
@@ -15,9 +14,9 @@ from jinja2 import Markup
 
 from disqus import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
-from disqus.models import Thread, Post, Session, Category, User
+from disqus.models import Thread, Post, Session, User
 from disqus.oauth import login_required, api_call
-from disqus.utils import from_cache, timesince, format_datetime, datestr_to_datetime, better_jsonify
+from disqus.utils import timesince, format_datetime, better_jsonify
 from disqus.views import posts, users
 
 logger = logging.getLogger(__name__)
@@ -55,26 +54,17 @@ app.template_filter('format_datetime')(format_datetime)
 
 @app.route('/', methods=['GET'])
 def landing_page():
-    active_thread_list = from_cache(Thread.list_active)
-    active_thread_ids = set(t['id'] for t in active_thread_list)
-
-    thread_list = list(api_call(disqusapi.threads.listByDate,
-        category=Category.get('Generaly')['id'],
-        method='GET',
-        limit=20,
-    ))
-    thread_list = [t for t in thread_list if t['id'] not in active_thread_ids][:10]
+    thread_list = Thread.list(limit=15)
 
     # category=category_map['General']
-    active_talk_list = from_cache(Session.list_active)
-    upcoming_talk_list = from_cache(Session.list_upcoming)
+    active_talk_list = Session.list_active(limit=10)
+    upcoming_talk_list = Session.list_upcoming(limit=10)
 
-    for thread in itertools.chain(active_thread_list, thread_list):
-        thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
+    # for thread in thread_list:
+    #     thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
 
     return render_template('landing.html', **{
         'thread_list': thread_list,
-        'active_thread_list': active_thread_list,
         'active_talk_list': active_talk_list,
         'upcoming_talk_list': upcoming_talk_list,
     })
@@ -124,12 +114,12 @@ def thread_details(thread_id):
         'pycon_session': pycon_session,
         'user_list': User.list_by_thread(thread_id),
         'my_thread_list': my_threads,
-        'active_talk_list': from_cache(Session.list_active)[:5],
-        'active_thread_list': from_cache(Thread.list_active)[:5],
+        'active_talk_list': Session.list_active(limit=5),
+        'active_thread_list': Thread.list(limit=5),
         'post_list': post_list,
         'channel_list': {
-            'posts': posts.get_channel_key(thread_id=thread_id),
-            'participants': users.get_channel_key(thread_id=thread_id),
+            'posts': posts.get_channel_key(posts.get_key(thread_id=thread_id)),
+            'participants': users.get_channel_key(users.get_key(thread_id=thread_id)),
         },
         'realtime_host': app.config.get('REALTIME_HOST')
     })

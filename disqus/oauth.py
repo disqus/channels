@@ -28,9 +28,10 @@ def get_access_token():
 
 
 def api_call(func, **kwargs):
+    access_token = get_access_token()
     try:
-        if 'auth' in session:
-            result = func(access_token=get_access_token(), **kwargs)
+        if access_token:
+            result = func(access_token=access_token, **kwargs)
         else:
             result = func(**kwargs)
     except InvalidAccessToken:

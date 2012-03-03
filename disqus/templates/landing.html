@@ -31,24 +31,7 @@
           {% endfor %}
         </ul>
       {% endif %}
-    </div>
-    <div class="span6">
-      <div class="page-header">
-        <h2>Active Conversations</h2>
-      </div>
-      {% if not active_thread_list %}
-        <p>There don't seem to be any active conversations.</p>
-      {% else %}
-        <ul class="thread-list">
-          {% for thread in active_thread_list %}
-            {% include "includes/thread.html" %}
-          {% endfor %}
-        </ul>
-      {% endif %}
-    </div>
-  </div>
-  <div class="row-fluid">
-    <div class="span6">
+
       <div class="page-header">
         <h2>Sessions <small>Coming Up</small></h2>
       </div>
@@ -62,12 +45,13 @@
         </ul>
       {% endif %}
     </div>
+
     <div class="span6">
       <div class="page-header">
-        <h2>Other Converations</h2>
+        <h2>Active Conversations</h2>
       </div>
       {% if not thread_list %}
-        <p>There don't seem to be any older conversations.</p>
+        <p>There don't seem to be any active conversations.</p>
       {% else %}
         <ul class="thread-list">
           {% for thread in thread_list %}
