@@ -255,14 +255,20 @@
     return $.getScript(realtime_host + '/socket.io/socket.io.js').done(function(script, status) {
       var socket;
       socket = io.connect(realtime_host);
-      socket.on('new_post', function(post) {
+      socket.on(channels.posts, function(post) {
         p = new Post(JSON.parse(post));
         console.log(p);
         return list_view.addPost(p);
       });
+      socket.on(channels.participants, function(participant) {
+        var u;
+        u = new User(JSON.parse(participant));
+        console.log(u);
+        return participants_view.addUser(u);
+      });
       return socket.on('connect', function() {
         return socket.emit('connect', {
-          channel: channels.posts
+          channels: _.values(channels)
         });
       });
     });
