@@ -66,7 +66,6 @@ class Thread:
         result = cls.format(thread)
         score = dt.strftime('%s.%m')
         threads.add(result, score)
-        threads.add_to_set(result['id'], score, author_id=thread['author'])
         threads.add_to_set(result['id'], score, category_id=thread['category'])
         threads.add_to_set(result['id'], thread['posts'], _key='posts', category_id=thread['category'])
         return result
@@ -74,7 +73,7 @@ class Thread:
     @classmethod
     def get(cls, thread_id):
         result = threads.get(thread_id)
-        if not result:
+        if result is None:
             thread = disqusapi.threads.details(thread=thread_id, forum=app.config['DISQUS_FORUM'])
             result = cls.save(thread)
         return result
@@ -83,10 +82,12 @@ class Thread:
     def list_by_author(cls, author_id, offset=0, limit=100):
         assert author_id == session['auth']['user_id']
         result = threads.list(author_id=author_id, offset=offset, limit=limit)
-        if not result:
+        if result is None:
             result = []
             for thread in api_call(disqusapi.users.listActiveThreads, forum=app.config['DISQUS_FORUM'], method='GET'):
                 result.append(Thread.save(thread))
+                score = thread['createdAt'].strftime('%s.%m')
+                threads.add_to_set(thread['id'], score, author_id=author_id)
             result.reverse()
 
         return result
@@ -94,7 +95,7 @@ class Thread:
     @classmethod
     def list(cls, offset=0, limit=100):
         result = threads.list(category_id=Category.get('General')['id'], offset=offset, limit=limit)
-        if not result:
+        if result is None:
             result = []
             for thread in disqusapi.threads.list(forum=app.config['DISQUS_FORUM'], category=Category.get('General')['id'], method='GET'):
                 result.append(Thread.save(thread))
@@ -177,13 +178,14 @@ class Post:
 
         user = User.save(post['author'])
         users.add_to_set(user['id'], score, thread_id=post['thread'])
+        threads.add_to_set(post['thread'], score, author_id=post['author'])
 
         return result
 
     @classmethod
     def list_by_thread(cls, thread_id, offset=0, limit=100):
         result = posts.list(thread_id=thread_id, offset=offset, limit=limit)
-        if not result:
+        if result is None:
             result = []
             paginator = Paginator(disqusapi.threads.listPosts, thread=thread_id)
             for idx, post in enumerate(paginator):

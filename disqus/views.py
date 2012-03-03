@@ -93,7 +93,7 @@ class View(object):
         Fetchs an object from the shared object cache.
         """
         result = self.redis.hgetall(self.get_obj_key(id))
-        if result is None:
+        if not result:
             return
         return result
 
@@ -122,7 +122,15 @@ class View(object):
             func = self.redis.zrevrange
         else:
             func = self.redis.zrange
-        id_list = func(self.get_key(_key, **kwargs), offset, limit)
+
+        key = self.get_key(_key, **kwargs)
+        id_list = func(key, offset, limit)
+
+        if not id_list:
+            if not self.redis.exists(key):
+                return None
+            return []
+
         obj_cache = {}
         with self.redis.map() as conn:
             for id in id_list:
