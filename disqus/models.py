@@ -173,7 +173,11 @@ class Post:
 
         if incr_posts:
             threads.incr_counter(post['thread'], 'posts', 1)
-            threads.incr_in_set(post['thread'], 1, _key='posts', category_id=post['category'])
+            # XXX: disqus api has a pending change for this
+            if 'category' in post:
+                threads.incr_in_set(post['thread'], 1, _key='posts', category_id=post['category'])
+            else:
+                threads.incr_in_set(post['thread'], 1, _key='posts', category_id=Thread.get(post['thread'])['category'])
 
         user = User.save(post['author'])
         users.add_to_set(user['id'], score, thread_id=post['thread'])
