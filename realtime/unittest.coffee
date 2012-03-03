@@ -59,6 +59,25 @@ exports.testMultipleChannels = (test) ->
 
     test.done()
 
+exports.testPeers = (test) ->
+    mock = new RedisMock()
+    s = new State mock
+    channel1 = 'testchannel'
+    channel2 = 'testchannel2'
+    channel3 = 'testchannel3'
+    s.subscribe id: 123, channel1
+    s.subscribe id: 123, channel2
+    s.subscribe id: 456, channel2
+    s.subscribe id: 456, channel3
+
+    res = s.peers id: 123
+    console.log res
+    test.ok res[channel2].length == 1
+    test.ok res[channel2][0].id == 456
+    test.ok _.keys(res).length == 1
+
+    test.done()
+
 exports.testListeners = (test) ->
     mock = new RedisMock()
     s = new State mock

@@ -41,3 +41,12 @@ exports.SubscriberState = class
 
     listeners: (channel) ->
         @subscribers[channel]
+
+    peers: (socket) ->
+        peers = {}
+        for channel in @id2channel[socket.id]
+            cp = _.filter @listeners(channel), (s) ->
+                s.id != socket.id
+            if cp.length > 0
+                peers[channel] = cp
+        peers
