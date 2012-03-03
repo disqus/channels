@@ -1,7 +1,95 @@
 (function() {
-  var ListView, Post, PostList, PostView,
+  var ListView, ParticipantsView, Post, PostList, PostView, User, UserList, UserView,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
+  ParticipantsView = (function(_super) {
+
+    __extends(ParticipantsView, _super);
+
+    function ParticipantsView() {
+      ParticipantsView.__super__.constructor.apply(this, arguments);
+    }
+
+    ParticipantsView.prototype.el = '.user-list';
+
+    ParticipantsView.prototype.initialize = function() {
+      _.bindAll(this);
+      this.collection = new UserList;
+      return this.collection.bind('add', this.appendUser);
+    };
+
+    ParticipantsView.prototype.appendUser = function(user) {
+      var user_view;
+      user_view = new UserView({
+        model: user
+      });
+      return this.$el.append(user_view.render().el);
+    };
+
+    ParticipantsView.prototype.addUser = function(user) {
+      return this.collection.add(user);
+    };
+
+    return ParticipantsView;
+
+  })(Backbone.View);
+
+  UserView = (function(_super) {
+
+    __extends(UserView, _super);
+
+    function UserView() {
+      UserView.__super__.constructor.apply(this, arguments);
+    }
+
+    UserView.prototype.tagName = 'li';
+
+    UserView.prototype.template = _.template($('#participant-template').html());
+
+    UserView.prototype.initialize = function() {
+      return _.bindAll(this);
+    };
+
+    UserView.prototype.render = function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    };
+
+    return UserView;
+
+  })(Backbone.View);
+
+  window.User = User = (function(_super) {
+
+    __extends(User, _super);
+
+    function User() {
+      User.__super__.constructor.apply(this, arguments);
+    }
+
+    User.prototype.defaults = {
+      name: "matt",
+      avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+    };
+
+    return User;
+
+  })(Backbone.Model);
+
+  UserList = (function(_super) {
+
+    __extends(UserList, _super);
+
+    function UserList() {
+      UserList.__super__.constructor.apply(this, arguments);
+    }
+
+    UserList.prototype.model = User;
+
+    return UserList;
+
+  })(Backbone.Collection);
 
   ListView = (function(_super) {
 
@@ -16,12 +104,7 @@
     ListView.prototype.initialize = function() {
       _.bindAll(this);
       this.collection = new PostList;
-      this.collection.bind('add', this.appendPost);
-      return this.render();
-    };
-
-    ListView.prototype.render = function() {
-      return this.$el.append('<ul class="post-list"></ul>');
+      return this.collection.bind('add', this.appendPost);
     };
 
     ListView.prototype.appendPost = function(post) {
@@ -118,9 +201,10 @@
   })(Backbone.Collection);
 
   $(document).ready(function() {
-    var p, post, _i, _len,
+    var p, post, user, _i, _j, _len, _len2,
       _this = this;
     window.list_view = new ListView;
+    window.participants_view = new ParticipantsView;
     $('#message').keydown(function(e) {
       if (e.which === 13 && !e.shiftKey) {
         $('.new-reply form').submit();
@@ -151,6 +235,11 @@
       post = initialPosts[_i];
       p = new Post(post);
       list_view.addPost(p);
+    }
+    for (_j = 0, _len2 = initialParticipants.length; _j < _len2; _j++) {
+      user = initialParticipants[_j];
+      p = new User(user);
+      participants_view.addUser(p);
     }
     $('.new-reply textarea').autoResize({
       maxHeight: 84,

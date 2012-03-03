@@ -1,3 +1,43 @@
+class ParticipantsView extends Backbone.View
+    el: '.user-list'
+
+    initialize: ->
+
+        _.bindAll @
+
+        @collection = new UserList
+        @collection.bind 'add', @appendUser
+
+    appendUser: (user) ->
+        user_view = new UserView model: user
+
+        @$el.append user_view.render().el
+
+    addUser: (user) ->
+        @collection.add user
+
+
+class UserView extends Backbone.View
+    tagName: 'li'
+    template: _.template $('#participant-template').html()
+
+    initialize: ->
+        _.bindAll @
+
+    render: ->
+        @$el.html @template @model.toJSON()
+        @
+
+window.User = class User extends Backbone.Model
+
+    defaults:
+        name: "matt"
+        avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+
+class UserList extends Backbone.Collection
+
+    model: User
+
 class ListView extends Backbone.View
     el: '.post-list'
 
@@ -7,10 +47,6 @@ class ListView extends Backbone.View
 
         @collection = new PostList
         @collection.bind 'add', @appendPost
-        @render()
-
-    render: ->
-        @$el.append '<ul class="post-list"></ul>'
 
     appendPost: (post) ->
         post_view = new PostView model: post
@@ -61,6 +97,7 @@ class PostList extends Backbone.Collection
 
 $(document).ready () ->
     window.list_view = new ListView
+    window.participants_view = new ParticipantsView
 
     $('#message').keydown (e) =>
         if e.which == 13 and not e.shiftKey
@@ -91,6 +128,10 @@ $(document).ready () ->
     for post in initialPosts
         p = new Post(post)
         list_view.addPost(p)
+
+    for user in initialParticipants
+        p = new User user
+        participants_view.addUser p
 
     $('.new-reply textarea').autoResize(
         maxHeight: 84
