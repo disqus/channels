@@ -5,6 +5,8 @@ disqus.views
 :copyright: (c) 2012 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
+import simplejson
+
 from disqus import db, publisher
 
 
@@ -39,21 +41,33 @@ class View(object):
 
         # Send the notice out to our subscribers that this data
         # was added
-        publisher.publish(self.get_channel_key(key), _data)
+        json_data = simplejson.dumps({
+            'event': 'add',
+            'score': score,
+            'data': _data,
+        })
+
+        publisher.publish(self.get_channel_key(key), json_data)
 
     def incr_in_set(self, id, score, _data=None, _key=None, **kwargs):
         """
         Adds an object to a materialized view.
         """
         key = self.get_key(_key, **kwargs)
-        self.redis.zincrby(key, id, float(score))
+        score = self.redis.zincrby(key, id, float(score))
 
         if _data is None:
             _data = self.get(id)
 
+        json_data = simplejson.dumps({
+            'event': 'add',
+            'score': score,
+            'data': _data,
+        })
+
         # Send the notice out to our subscribers that this data
         # was added
-        publisher.publish(self.get_channel_key(key), _data)
+        publisher.publish(self.get_channel_key(key), json_data)
 
     def remove(self, data, _key=None, **kwargs):
         """
