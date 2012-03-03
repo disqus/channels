@@ -260,14 +260,22 @@
         payload = JSON.parse(data);
         p = new Post(payload.data);
         console.log(p);
-        return list_view.addPost(p);
+        if (payload.event === 'add') {
+          return list_view.addPost(p);
+        } else {
+          return console.log(payload);
+        }
       });
       socket.on(channels.participants, function(data) {
         var payload, u;
         payload = JSON.parse(data);
         u = new User(payload.data);
         console.log(u);
-        return participants_view.addUser(u);
+        if (payload.event === 'add') {
+          return participants_view.addUser(u);
+        } else {
+          return console.log(payload);
+        }
       });
       return socket.on('connect', function() {
         return socket.emit('connect', {
