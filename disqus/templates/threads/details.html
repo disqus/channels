@@ -9,6 +9,7 @@
 <script type="text/javascript">
     var threadId = "{{ thread.id }}";
     var initialPosts = {{ post_list|as_json }};
+    var initialParticipants = {{ participant_list|as_json }};
     var channels = {{ channel_list|as_json }};
     var realtime_host = "{{ realtime_host }}";
 </script>
@@ -23,9 +24,6 @@
     <h4>Participants</h4>
   </div>
   <ul class="user-list">
-    {% for user in user_list %}
-      <li><img src="{{ user.avatar }}" title="{{ user.name }}"></li>
-    {% endfor %}
   </ul>
   {% if active_talk_list %}
     <div class="page-header">
@@ -93,6 +91,12 @@
     <div class="post-message">
       <p><%= message %></p>
     </div>
+  </script>
+
+  <script id="participant-template" type="text/template">
+      <a href="<%= profileLink %>">
+          <img rel="tooltip" src="<%= avatar %>" title="<%= name %>">
+      </a>
   </script>
 
   <div class="conversation{% if pycon_session %} has-topic{% endif %}">

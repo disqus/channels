@@ -21,15 +21,16 @@ io.configure () ->
 
 r.on 'message', (channel, message) ->
     _.each substate.channel2socket(channel), (socket) ->
-        socket.emit 'new_post',
+        socket.emit channel,
             message
 
 
 io.sockets.on 'connection', (socket) ->
     socket.on 'connect', (message) ->
-        channel = message.channel
-        console.log "client connected: " + socket.id
-        substate.subscribe socket, channel
+        for channel in message.channels
+            do (channel) ->
+                console.log "client connected: " + socket.id
+                substate.subscribe socket, channel
 
     socket.on 'disconnect', () ->
         substate.unsubscribe socket
