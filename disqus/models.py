@@ -34,6 +34,10 @@ class User:
     def list_by_thread(cls, thread_id, offset=0, limit=100):
         return users.list(thread_id=thread_id, offset=offset, limit=limit)
 
+    @classmethod
+    def get_by_id(cls, user_id):
+        return users.get(user_id)
+
 
 class Category:
     @classmethod

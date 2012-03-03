@@ -24,6 +24,7 @@ r.on 'message', (channel, message) ->
         socket.emit channel,
             message
 
+socket2user = {}
 
 io.sockets.on 'connection', (socket) ->
     socket.on 'connect', (message) ->
@@ -31,7 +32,11 @@ io.sockets.on 'connection', (socket) ->
             do (channel) ->
                 console.log "client connected: " + socket.id
                 substate.subscribe socket, channel
+        socket2user[socket] = message.user
 
     socket.on 'disconnect', () ->
         substate.unsubscribe socket
+        # here we can actively disconnect people.
+        _.each substate.peers socket, (ps) ->
+            ps.emit 'peer_disconnect', socket2user[socket]
         console.log "client disconnected: " + socket.id

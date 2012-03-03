@@ -9,6 +9,7 @@
 <script type="text/javascript">
     var threadId = "{{ thread.id }}";
     var initialPosts = {{ post_list|as_json }};
+    var current_user = {{ current_user|as_json }};
     var initialParticipants = {{ participant_list|as_json }};
     var channels = {{ channel_list|as_json }};
     var realtime_host = "{{ realtime_host }}";
@@ -24,6 +25,11 @@
     <h4>Participants</h4>
   </div>
   <ul class="user-list">
+  </ul>
+  <div class="page-header">
+    <h4>Active Participants</h4>
+  </div>
+  <ul class="active-user-list">
   </ul>
   {% if active_talk_list %}
     <div class="page-header">

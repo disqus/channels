@@ -104,6 +104,7 @@ class PostList extends Backbone.Collection
 $(document).ready () ->
     window.list_view = new ListView
     window.participants_view = new ParticipantsView
+    window.the_user = new User current_user
 
     $('#message').keydown (e) =>
         if e.which == 13 and not e.shiftKey
@@ -179,3 +180,4 @@ $(document).ready () ->
         socket.on 'connect', () ->
             socket.emit 'connect',
                 channels: _.values channels
+                user: the_user.toJSON()

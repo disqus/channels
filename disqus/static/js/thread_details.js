@@ -216,6 +216,7 @@
       _this = this;
     window.list_view = new ListView;
     window.participants_view = new ParticipantsView;
+    window.the_user = new User(current_user);
     $('#message').keydown(function(e) {
       if (e.which === 13 && !e.shiftKey) {
         $('.new-reply form').submit();
@@ -292,7 +293,8 @@
       });
       return socket.on('connect', function() {
         return socket.emit('connect', {
-          channels: _.values(channels)
+          channels: _.values(channels),
+          the_user: the_user.toJSON()
         });
       });
     });

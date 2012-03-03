@@ -43,10 +43,10 @@ exports.SubscriberState = class
         @subscribers[channel]
 
     peers: (socket) ->
-        peers = {}
+        peers = []
         for channel in @id2channel[socket.id]
             cp = _.filter @listeners(channel), (s) ->
                 s.id != socket.id
             if cp.length > 0
-                peers[channel] = cp
-        peers
+                peers.push cp
+        _.unique _.flatten peers

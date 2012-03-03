@@ -72,9 +72,8 @@ exports.testPeers = (test) ->
 
     res = s.peers id: 123
     console.log res
-    test.ok res[channel2].length == 1
-    test.ok res[channel2][0].id == 456
-    test.ok _.keys(res).length == 1
+    test.ok res.length == 1
+    test.ok res[0].id == 456
 
     test.done()
 

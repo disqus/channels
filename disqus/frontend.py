@@ -125,7 +125,8 @@ def thread_details(thread_id):
         'active_thread_list': Thread.list(limit=5),
         'post_list': post_list,
         'channel_list': channel_list,
-        'realtime_host': app.config.get('REALTIME_HOST')
+        'realtime_host': app.config.get('REALTIME_HOST'),
+        'current_user': User.get_by_id(session['auth']['user_id'])
     })
 
 
