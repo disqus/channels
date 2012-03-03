@@ -1,4 +1,5 @@
 State = require('./lib/state.coffee').SubscriberState
+_ = require "underscore"
 
 
 class RedisMock
@@ -55,5 +56,22 @@ exports.testMultipleChannels = (test) ->
     test.ok s.subscribers[channel2] == undefined
     test.ok mock.subscribes == 2, "sanity check that we subscribe twice"
     test.ok mock.unsubscribes == 2, "Test that we don't unsubscribe yet"
+
+    test.done()
+
+exports.testListeners = (test) ->
+    mock = new RedisMock()
+    s = new State mock
+    channel1 = 'testchannel'
+    channel2 = 'testchannel2'
+    channel3 = 'testchannel3'
+    s.subscribe id: 123, channel1
+    s.subscribe id: 123, channel2
+    s.subscribe id: 456, channel2
+    s.subscribe id: 456, channel3
+
+    test.ok s.listeners(channel1).length == 1 #[id: 123]
+    test.ok s.listeners(channel2).length == 2 #[id: 123, id: 456]
+    test.ok s.listeners(channel3).length == 1 #[id: 456]
 
     test.done()

@@ -33,6 +33,14 @@
       return this.collection.add(user);
     };
 
+    ParticipantsView.prototype.hasUser = function(user) {
+      if (this.collection.get(user.id)) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
     return ParticipantsView;
 
   })(Backbone.View);
@@ -272,7 +280,7 @@
         u = new User(payload.data);
         console.log(u);
         if (payload.event === 'add') {
-          return participants_view.addUser(u);
+          if (!participants_view.hasUser(u)) return participants_view.addUser(u);
         } else {
           return console.log(payload);
         }

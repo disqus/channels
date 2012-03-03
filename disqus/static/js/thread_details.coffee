@@ -18,6 +18,9 @@ class ParticipantsView extends Backbone.View
     addUser: (user) ->
         @collection.add user
 
+    hasUser: (user) ->
+        if @collection.get user.id then true else false
+
 
 class UserView extends Backbone.View
     tagName: 'li'
@@ -163,7 +166,8 @@ $(document).ready () ->
             u = new User payload.data
             console.log u
             if payload.event == 'add'
-                participants_view.addUser u
+                if not participants_view.hasUser u
+                    participants_view.addUser u
             else
                 console.log payload
 

@@ -20,7 +20,7 @@ io.configure () ->
 
 
 r.on 'message', (channel, message) ->
-    _.each substate.channel2socket(channel), (socket) ->
+    _.each substate.listeners(channel), (socket) ->
         socket.emit channel,
             message
 
