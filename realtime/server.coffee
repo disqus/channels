@@ -14,6 +14,10 @@ io.configure 'production', () ->
     io.enable 'browser client etag'
     io.enable 'match origin protocol'
 
+io.configure () ->
+    io.set 'close timeout', 30
+    console.log 'config'
+
 
 r.on 'message', (channel, message) ->
     _.each substate.channel2socket(channel), (socket) ->
