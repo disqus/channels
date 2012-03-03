@@ -277,6 +277,11 @@
           return console.log(payload);
         }
       });
+      socket.on(channels.active_thread_list, function(data) {
+        var payload;
+        payload = JSON.parse(data);
+        return console.log(payload);
+      });
       return socket.on('connect', function() {
         return socket.emit('connect', {
           channels: _.values(channels)

@@ -167,6 +167,11 @@ $(document).ready () ->
             else
                 console.log payload
 
+        socket.on channels.active_thread_list, (data) ->
+            payload = JSON.parse data
+            #u = new User payload.data
+            console.log payload
+
         socket.on 'connect', () ->
             socket.emit 'connect',
                 channels: _.values channels
