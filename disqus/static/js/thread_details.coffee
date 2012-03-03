@@ -11,7 +11,9 @@ class ParticipantsView extends Backbone.View
     appendUser: (user) ->
         user_view = new UserView model: user
 
-        @$el.append user_view.render().el
+        um = user_view.render()
+        @$el.append um.el
+        $('img', um.$el).tooltip()
 
     addUser: (user) ->
         @collection.add user
@@ -33,6 +35,7 @@ window.User = class User extends Backbone.Model
     defaults:
         name: "matt"
         avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+        profileLink: "http://example.com"
 
 class UserList extends Backbone.Collection
 

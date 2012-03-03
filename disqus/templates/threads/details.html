@@ -94,7 +94,9 @@
   </script>
 
   <script id="participant-template" type="text/template">
-    <img src="<%= avatar %>" title="<%= name %>">
+      <a href="<%= profileLink %>">
+          <img rel="tooltip" src="<%= avatar %>" title="<%= name %>">
+      </a>
   </script>
 
   <div class="conversation{% if pycon_session %} has-topic{% endif %}">

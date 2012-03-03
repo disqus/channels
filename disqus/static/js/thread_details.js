@@ -20,11 +20,13 @@
     };
 
     ParticipantsView.prototype.appendUser = function(user) {
-      var user_view;
+      var um, user_view;
       user_view = new UserView({
         model: user
       });
-      return this.$el.append(user_view.render().el);
+      um = user_view.render();
+      this.$el.append(um.el);
+      return $('img', um.$el).tooltip();
     };
 
     ParticipantsView.prototype.addUser = function(user) {
@@ -70,7 +72,8 @@
 
     User.prototype.defaults = {
       name: "matt",
-      avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+      avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831",
+      profileLink: "http://example.com"
     };
 
     return User;
