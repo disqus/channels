@@ -5,6 +5,19 @@
 {% block main %}
 <div class="content">
   <div class="row-fluid">
+    <div class="span12">
+      <div class="callout">
+        <div class="page-header">
+          <h2>What is this?</h2>
+        </div>
+        <p>PyCon with Disqus is a web application built on top of the <a href="http://disqus.com/api/">Disqus Web API</a>. It's
+          a place where you can ask questions and give feedback about PyCon and meet likeminded individuals at the conference.</p>
+        <p>Jump into an existing topic, or <a href="{{ url_for('new_thread') }}">start a a new onversation</a></p>
+      </div>
+    </div>
+  </div>
+  <div class="row-fluid">
+
     <div class="span6">
       <div class="page-header">
         <h2>Sessions <small>Happening Now</small></h2>

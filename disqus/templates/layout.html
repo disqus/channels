@@ -28,19 +28,16 @@
       <div class="container-fluid">
         <h1 id="logo"><a href="/">{% block brand %}{{ SITE_NAME }}{% endblock %}</a></h1>
         <div id="subhead">{% block subheader %}{% endblock %}</div>
-        <ul class="nav">
-          {# {% if user %}
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-              </ul>
-            </li>
+        <div class="nav">
+          {% if user %}
+            {{ user.username }} |
+            <a href="{{ url_for('new_thread') }}">New Conversation</a> |
+            <a href="{{ url_for('logout') }}">Logout</a>
           {% else %}
-            <li><a href="#">Sign In</a></li>
-          {% endif %} #}
-          <li{% block nav_new_thread_active %}{% endblock %}><a href="{{ url_for('new_thread') }}">Start a Conversation</a></li>
-          <li{% block nav_my_threads_active %}{% endblock %}><a href="{{ url_for('my_threads') }}">My Conversations</a></li>
-        </ul>
+            <a href="{{ url_for('oauth_authorize') }}">Sign In</a> or
+            <a href="http://disqus.com/profile/signup/">Register</a> with DISQUS
+          {% endif %}
+        </div>
 {#       <div class="navbar">
         <div class="navbar-inner">
           <div class="container">

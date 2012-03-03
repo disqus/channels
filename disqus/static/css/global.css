@@ -117,18 +117,23 @@ header .nav {
   padding-left: 10px;
   color: #7caec3;
   font-size: 77%;
-  margin: 18px 0 0 0;
+  margin: 7px 0 0 0;
+  vertical-align: middle;
   text-shadow: 0 1px 0 #f9f2e6;
   line-height: 1.4em;
+}
+header .nav a {
+  display: inline-block;
 }
 header .nav a, header .nav a:visited {
   color: #649fae;
   text-decoration: none;
   font-weight: bold;
-  text-transform:uppercase;
+  text-transform: uppercase;
 }
 header .nav a:hover {
   color: #006e91;
+  background: inherit;
   text-decoration: none;
 }
 
@@ -157,8 +162,8 @@ header .nav a:hover {
 .page-header h1, .page-header h2,
 .page-header h3, .page-header h4 {
   font-family: LeagueGothicRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#484746;
   text-transform:uppercase;
+  color:#484746;
   text-shadow: 0 1px 0 #f9f2e6;
   line-height:50px;
 }
@@ -361,6 +366,9 @@ header .nav a:hover {
   right: 10px;
 }
 
+.btn-small {
+  padding: 3px 6px;
+}
 .btn-primary {
   text-shadow: 0 1px 1px rgba(0, 0, 0, .75);
   border: 1px solid #4c8da2;
@@ -392,4 +400,8 @@ header .nav a:hover {
   -ms-transition: none;
   -o-transition: none;
   transition: none;
+}
+
+.callout a {
+  font-weight: bold;
 }
