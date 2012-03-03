@@ -86,9 +86,9 @@ class View(object):
         self.redis.zrem(self.get_key(_key, **kwargs), id)
 
     def incr_counter(self, id, key, amount=1):
-        self.redis.hincrby(self.get_obj_key(id), key, amount)
+        return self.redis.hincrby(self.get_obj_key(id), key, amount)
 
-    def get(self, *ids):
+    def get(self, id):
         """
         Fetchs an object from the shared object cache.
         """
