@@ -206,7 +206,7 @@ header .nav a:hover {
   background: #409cc1;
   color: #fff;
   line-height: 25px;
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
   margin-right: 10px;
 }
@@ -228,6 +228,7 @@ header .nav a:hover {
 .sidebar .thread-count {
   height: 20px;
   width: 20px;
+  font-size: 9px;
   margin-right: 5px;
   line-height: 20px;
 }
