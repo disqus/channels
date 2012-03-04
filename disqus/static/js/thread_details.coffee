@@ -70,6 +70,9 @@ class ListView extends Backbone.View
 
         @$el.append post_view.render().el
 
+        if post.get("message").indexOf(the_user.get("name")) >= 0 and post.get("name") != the_user.get("name")
+            post_view.$el.addClass('alert alert-info')
+
     addPost: (post) ->
         scrolled = @isAtBottom()
         @collection.add post

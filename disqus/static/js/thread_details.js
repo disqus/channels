@@ -134,7 +134,10 @@
         model: post,
         id: post.eid()
       });
-      return this.$el.append(post_view.render().el);
+      this.$el.append(post_view.render().el);
+      if (post.get("message").indexOf(the_user.get("name")) >= 0) {
+        return post_view.$el.addClass('alert alert-info');
+      }
     };
 
     ListView.prototype.addPost = function(post) {
