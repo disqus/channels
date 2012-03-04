@@ -45,6 +45,12 @@ app.config.from_object('disqus.conf.DefaultConfig')
 app.config.from_pyfile('local_settings.py', silent=True)
 app.config.from_envvar('DISQUS_SETTINGS', silent=True)
 
+if app.config.get('SENTRY_DSN'):
+    from raven.contrib.flask import Sentry
+    sentry = Sentry(app)
+else:
+    sentry = None
+
 if app.config.get('USE_NODE'):
     import os.path
 
