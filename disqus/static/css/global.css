@@ -136,6 +136,25 @@ header .nav a:hover {
   background: inherit;
   text-decoration: none;
 }
+header .powered-by {
+  text-transform: lowercase;
+  font-size: 14px;
+  color: #999;
+  vertical-align: bottom;
+  line-height: 26px;
+  height: 20px;
+  position: absolute;
+  right: 20px;
+  margin-top: 40px;
+  text-decoration: none;
+}
+header .powered-by span {
+  text-indent: -10000em;
+  display: inline-block;
+  width: 104px;
+  height: 20px;
+  background: url('../img/logo_light_sm.png') 0 0 no-repeat;
+}
 
 .content {
   position: relative !important;
