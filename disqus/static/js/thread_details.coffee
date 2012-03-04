@@ -7,19 +7,27 @@ class ParticipantsView extends Backbone.View
 
         @collection = new UserList
         @collection.bind 'add', @appendUser
+        @collection.bind 'remove', @clearUser
 
     appendUser: (user) ->
         user_view = new UserView model: user
 
         um = user_view.render()
-        @$el.append um.el
+        $('#' + @id).append um.el
         $('img', um.$el).tooltip()
 
     addUser: (user) ->
-        @collection.add user
+        if not @hasUser user
+            @collection.add user
 
     hasUser: (user) ->
         if @collection.get user.id then true else false
+
+    removeUser: (user) ->
+        @collection.remove user
+
+    clearUser: (user) ->
+        $('#' + @id + ' li:has(img[src="' + user.get("avatar") + '"])').remove()
 
 
 class UserView extends Backbone.View
@@ -36,9 +44,9 @@ class UserView extends Backbone.View
 window.User = class User extends Backbone.Model
 
     defaults:
-        name: "matt"
-        avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
-        profileLink: "http://example.com"
+        name: null
+        avatar: null
+        profileLink: null
 
 class UserList extends Backbone.Collection
 
@@ -150,7 +158,8 @@ class PostList extends Backbone.Collection
 
 $(document).ready () ->
     window.list_view = new ListView
-    window.participants_view = new ParticipantsView
+    window.participants_view = new ParticipantsView id: 'participant-ul'
+    window.ap_view = new ParticipantsView id: 'active-ul'
     window.the_user = new User current_user
 
     $('#message').keydown (e) =>
@@ -234,6 +243,17 @@ $(document).ready () ->
                 channels: _.values channels
                 user: the_user.toJSON()
 
+        socket.on 'current_peers', (peers) ->
+            console.log peers
+            for p in peers
+                console.log p
+                peer = new User p
+                ap_view.addUser peer
+
         socket.on 'peer_disconnect', (peer) ->
             u = new User peer
-            console.log u
+            ap_view.removeUser u
+
+        socket.on 'peer_connect', (peer) ->
+            u = new User peer
+            ap_view.addUser u

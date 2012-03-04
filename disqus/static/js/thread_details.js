@@ -16,7 +16,8 @@
     ParticipantsView.prototype.initialize = function() {
       _.bindAll(this);
       this.collection = new UserList;
-      return this.collection.bind('add', this.appendUser);
+      this.collection.bind('add', this.appendUser);
+      return this.collection.bind('remove', this.clearUser);
     };
 
     ParticipantsView.prototype.appendUser = function(user) {
@@ -25,12 +26,12 @@
         model: user
       });
       um = user_view.render();
-      this.$el.append(um.el);
+      $('#' + this.id).append(um.el);
       return $('img', um.$el).tooltip();
     };
 
     ParticipantsView.prototype.addUser = function(user) {
-      return this.collection.add(user);
+      if (!this.hasUser(user)) return this.collection.add(user);
     };
 
     ParticipantsView.prototype.hasUser = function(user) {
@@ -39,6 +40,14 @@
       } else {
         return false;
       }
+    };
+
+    ParticipantsView.prototype.removeUser = function(user) {
+      return this.collection.remove(user);
+    };
+
+    ParticipantsView.prototype.clearUser = function(user) {
+      return $('#' + this.id + ' li:has(img[src="' + user.get("avatar") + '"])').remove();
     };
 
     return ParticipantsView;
@@ -79,9 +88,9 @@
     }
 
     User.prototype.defaults = {
-      name: "matt",
-      avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831",
-      profileLink: "http://example.com"
+      name: null,
+      avatar: null,
+      profileLink: null
     };
 
     return User;
@@ -267,7 +276,12 @@
     var p, post, user, _i, _j, _len, _len2,
       _this = this;
     window.list_view = new ListView;
-    window.participants_view = new ParticipantsView;
+    window.participants_view = new ParticipantsView({
+      id: 'participant-ul'
+    });
+    window.ap_view = new ParticipantsView({
+      id: 'active-ul'
+    });
     window.the_user = new User(current_user);
     $('#message').keydown(function(e) {
       if (e.which === 13 && !e.shiftKey) {
@@ -353,10 +367,27 @@
           user: the_user.toJSON()
         });
       });
-      return socket.on('peer_disconnect', function(peer) {
+      socket.on('current_peers', function(peers) {
+        var p, peer, _k, _len3, _results;
+        console.log(peers);
+        _results = [];
+        for (_k = 0, _len3 = peers.length; _k < _len3; _k++) {
+          p = peers[_k];
+          console.log(p);
+          peer = new User(p);
+          _results.push(ap_view.addUser(peer));
+        }
+        return _results;
+      });
+      socket.on('peer_disconnect', function(peer) {
         var u;
         u = new User(peer);
-        return console.log(u);
+        return ap_view.removeUser(u);
+      });
+      return socket.on('peer_connect', function(peer) {
+        var u;
+        u = new User(peer);
+        return ap_view.addUser(u);
       });
     });
   });
