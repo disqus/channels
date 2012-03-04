@@ -107,10 +107,17 @@ class ListView extends Backbone.View
         $('.post-resend', '#' + post.eid()).hide()
 
     addTentatively: (post) ->
+        console.log post
         @addPost post
         @timeouts[post.cid] = setTimeout () =>
             @error post
         , 10 * 1000
+
+    removePlaceholder: (post) ->
+        placeholder = @collection.find (p) ->
+            p.get("name") == post.get("name") and not p.id?
+        $('#' + placeholder.eid()).remove()
+
 
 
 class PostView extends Backbone.View
@@ -215,11 +222,10 @@ $(document).ready () ->
         socket.on channels.posts, (data) ->
             payload = JSON.parse data
             p = new Post payload.data
-            if p.get("name") == the_user.get("name")
-                return
-            console.log p
             if payload.event == 'add'
-                list_view.addPost(p)
+                if p.get("name") == the_user.get("name")
+                    list_view.removePlaceholder p
+                list_view.addPost p
             else
                 console.log payload
 

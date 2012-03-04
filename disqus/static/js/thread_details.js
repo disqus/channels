@@ -188,10 +188,21 @@
 
     ListView.prototype.addTentatively = function(post) {
       var _this = this;
+      console.log(post);
       this.addPost(post);
       return this.timeouts[post.cid] = setTimeout(function() {
         return _this.error(post);
       }, 10 * 1000);
+    };
+
+    ListView.prototype.removePlaceholder = function(post) {
+      var placeholder;
+      placeholder = this.collection.find(function(p) {
+        return p.get("name") === post.get("name") && !(p.id != null);
+      });
+      console.log("ph");
+      console.log(placeholder);
+      return $('#' + placeholder.eid()).remove();
     };
 
     return ListView;
@@ -247,6 +258,8 @@
     Post.prototype.serialize = function() {
       return "message=" + this.get('message');
     };
+
+    "id: ->\n    @get('message') + ':' + @get('name')";
 
     Post.prototype.eid = function() {
       return "post-" + this.cid;
@@ -337,9 +350,10 @@
         var payload;
         payload = JSON.parse(data);
         p = new Post(payload.data);
-        if (p.get("name") === the_user.get("name")) return;
-        console.log(p);
         if (payload.event === 'add') {
+          if (p.get("name") === the_user.get("name")) {
+            list_view.removePlaceholder(p);
+          }
           return list_view.addPost(p);
         } else {
           return console.log(payload);
