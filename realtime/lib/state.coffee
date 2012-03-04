@@ -51,4 +51,5 @@ exports.SubscriberState = class
                 s.id != socket.id
             if cp.length > 0
                 p.push cp
+        p.push socket
         _.unique _.flatten p

@@ -38,11 +38,7 @@ io.sockets.on 'connection', (socket) ->
             _.each substate.peers(socket), (ps) ->
                 ps.emit 'peer_connect', socket2user[socket.id]
 
-        console.log message.user
         ids = (ps.id for ps in substate.peers socket)
-        ids.push socket.id
-        console.log ids
-        console.log socket2user
         socket.emit 'current_peers',
             (socket2user[id] for id in _.unique ids when socket2user[id]?)
 
