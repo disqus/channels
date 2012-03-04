@@ -137,9 +137,9 @@ header .nav a:hover {
   text-decoration: none;
 }
 header .powered-by {
+  font-size: 77%;
   text-transform: lowercase;
-  font-size: 14px;
-  color: #999;
+  color: #7caec3;
   vertical-align: bottom;
   line-height: 26px;
   height: 20px;
