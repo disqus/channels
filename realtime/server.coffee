@@ -16,7 +16,6 @@ io.configure 'production', () ->
 
 io.configure () ->
     io.set 'close timeout', 30
-    console.log 'config'
 
 
 r.on 'message', (channel, message) ->

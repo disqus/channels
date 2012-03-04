@@ -45,7 +45,6 @@ exports.SubscriberState = class
     peers: (socket) ->
         p = []
         for channel in @id2channel[socket.id]
-            console.log @listeners channel
             if _.isUndefined @listeners channel
                 continue
             cp = _.filter @listeners(channel), (s) ->

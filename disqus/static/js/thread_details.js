@@ -193,6 +193,8 @@
       return this.set('createdAtSince', Disqus.prettyDate(this.get('createdAtISO')));
     };
 
+    "@make: (o) ->\n    user = new User name: o.name, avatar: o.avatar\n    delete o.name\n    delete o.avatar\n    o.user = user\n    new Post o";
+
     return Post;
 
   })(Backbone.Model);

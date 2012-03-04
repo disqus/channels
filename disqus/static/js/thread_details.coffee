@@ -95,6 +95,15 @@ window.Post = class Post extends Backbone.Model
     initialize: ->
         @set 'createdAtSince', Disqus.prettyDate(@get 'createdAtISO' )
 
+    """
+    @make: (o) ->
+        user = new User name: o.name, avatar: o.avatar
+        delete o.name
+        delete o.avatar
+        o.user = user
+        new Post o
+    """
+
 
 class PostList extends Backbone.Collection
 
