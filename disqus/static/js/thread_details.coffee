@@ -211,7 +211,7 @@ $(document).ready () ->
         minHeight: 28
         onAfterResize: () =>
             $('.conversation').css('padding-bottom', $('.new-reply').outerHeight())
-            list_view.scrollBottom()
+            setTimeout list_view.scrollBottom, 500
     ).focus()
 
 
@@ -242,6 +242,7 @@ $(document).ready () ->
         socket.on channels.active_thread_list, (data) ->
             payload = JSON.parse data
             #u = new User payload.data
+            # TODO
             console.log payload
 
         socket.on 'connect', () ->

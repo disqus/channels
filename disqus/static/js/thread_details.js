@@ -200,8 +200,6 @@
       placeholder = this.collection.find(function(p) {
         return p.get("name") === post.get("name") && !(p.id != null);
       });
-      console.log("ph");
-      console.log(placeholder);
       return $('#' + placeholder.eid()).remove();
     };
 
@@ -258,8 +256,6 @@
     Post.prototype.serialize = function() {
       return "message=" + this.get('message');
     };
-
-    "id: ->\n    @get('message') + ':' + @get('name')";
 
     Post.prototype.eid = function() {
       return "post-" + this.cid;
@@ -340,7 +336,7 @@
       minHeight: 28,
       onAfterResize: function() {
         $('.conversation').css('padding-bottom', $('.new-reply').outerHeight());
-        return list_view.scrollBottom();
+        return setTimeout(list_view.scrollBottom, 500);
       }
     }).focus();
     return $.getScript(realtime_host + '/socket.io/socket.io.js').done(function(script, status) {
