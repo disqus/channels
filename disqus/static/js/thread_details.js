@@ -93,6 +93,10 @@
       profileLink: null
     };
 
+    User.prototype.isAnonymous = function() {
+      return !(this.id != null);
+    };
+
     return User;
 
   })(Backbone.Model);
@@ -131,8 +135,7 @@
     ListView.prototype.appendPost = function(post) {
       var post_view;
       post_view = new PostView({
-        model: post,
-        id: post.eid()
+        model: post
       });
       return this.$el.append(post_view.render().el);
     };
@@ -259,18 +262,19 @@
     };
 
     Post.prototype.mentions = function(user) {
-      return this.get("message").toLowerCase().indexOf(user.get("name").toLowerCase()) >= 0;
+      if (the_user.isAnonymous()) return false;
+      return this.get("name") !== user.get("name") && this.get("message").toLowerCase().indexOf(user.get("name").toLowerCase()) >= 0;
     };
-
-    Post.prototype.eid = function() {
-      return "post-" + this.cid;
-    };
-
-    "@make: (o) ->\n    user = new User name: o.name, avatar: o.avatar\n    delete o.name\n    delete o.avatar\n    o.user = user\n    new Post o";
 
     return Post;
 
   })(Backbone.Model);
+
+  ({
+    eid: function() {
+      return "post-" + this.cid;
+    }
+  });
 
   PostList = (function(_super) {
 
@@ -340,10 +344,10 @@
       maxHeight: 84,
       minHeight: 28,
       onAfterResize: function() {
-        $('.conversation').css('padding-bottom', $('.new-reply').outerHeight());
-        return setTimeout(list_view.scrollBottom, 500);
+        return $('.conversation').css('padding-bottom', $('.new-reply').outerHeight());
       }
     }).focus();
+    setTimeout(list_view.scrollBottom, 500);
     return $.getScript(realtime_host + '/socket.io/socket.io.js').done(function(script, status) {
       var socket;
       socket = io.connect(realtime_host);

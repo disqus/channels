@@ -48,6 +48,9 @@ window.User = class User extends Backbone.Model
         avatar: null
         profileLink: null
 
+    isAnonymous: ->
+        not @id?
+
 class UserList extends Backbone.Collection
 
     model: User
@@ -66,7 +69,6 @@ class ListView extends Backbone.View
     appendPost: (post) ->
         post_view = new PostView
             model: post
-            id: post.eid()
 
         @$el.append post_view.render().el
 
@@ -149,20 +151,15 @@ window.Post = class Post extends Backbone.Model
         "message=" + @get 'message'
 
     mentions: (user) ->
-         @get("name") != user.get("name") and
+        if the_user.isAnonymous()
+            return false
+        @get("name") != user.get("name") and
              @get("message").toLowerCase().indexOf(
-                 user.get("name").toLowerCase()) >= 0
+                 user.get("name").toLowerCase()
+             ) >= 0
 
     eid: ->
         "post-" + @cid
-    """
-    @make: (o) ->
-        user = new User name: o.name, avatar: o.avatar
-        delete o.name
-        delete o.avatar
-        o.user = user
-        new Post o
-    """
 
 
 class PostList extends Backbone.Collection
@@ -218,8 +215,8 @@ $(document).ready () ->
         minHeight: 28
         onAfterResize: () =>
             $('.conversation').css('padding-bottom', $('.new-reply').outerHeight())
-            setTimeout list_view.scrollBottom, 500
     ).focus()
+    setTimeout list_view.scrollBottom, 500
 
 
     $.getScript(realtime_host + '/socket.io/socket.io.js')
