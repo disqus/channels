@@ -134,10 +134,7 @@
         model: post,
         id: post.eid()
       });
-      this.$el.append(post_view.render().el);
-      if (post.get("message").indexOf(the_user.get("name")) >= 0) {
-        return post_view.$el.addClass('alert alert-info');
-      }
+      return this.$el.append(post_view.render().el);
     };
 
     ListView.prototype.addPost = function(post) {
@@ -230,6 +227,7 @@
 
     PostView.prototype.render = function() {
       this.$el.html(this.template(this.model.toJSON()));
+      if (this.model.mentions(the_user)) this.$el.addClass('alert alert-info');
       return this;
     };
 
@@ -258,6 +256,10 @@
 
     Post.prototype.serialize = function() {
       return "message=" + this.get('message');
+    };
+
+    Post.prototype.mentions = function(user) {
+      return this.get("message").toLowerCase().indexOf(user.get("name").toLowerCase()) >= 0;
     };
 
     Post.prototype.eid = function() {

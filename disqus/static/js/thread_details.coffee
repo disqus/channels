@@ -70,9 +70,6 @@ class ListView extends Backbone.View
 
         @$el.append post_view.render().el
 
-        if post.get("message").indexOf(the_user.get("name")) >= 0 and post.get("name") != the_user.get("name")
-            post_view.$el.addClass('alert alert-info')
-
     addPost: (post) ->
         scrolled = @isAtBottom()
         @collection.add post
@@ -133,6 +130,8 @@ class PostView extends Backbone.View
 
     render: ->
         @$el.html @template @model.toJSON()
+        if @model.mentions the_user
+            @$el.addClass('alert alert-info')
         @
 
 window.Post = class Post extends Backbone.Model
@@ -148,6 +147,11 @@ window.Post = class Post extends Backbone.Model
 
     serialize: ->
         "message=" + @get 'message'
+
+    mentions: (user) ->
+         @get("name") != user.get("name") and
+             @get("message").toLowerCase().indexOf(
+                 user.get("name").toLowerCase()) >= 0
 
     eid: ->
         "post-" + @cid
