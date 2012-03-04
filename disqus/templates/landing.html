@@ -20,26 +20,13 @@
 
     <div class="span6">
       <div class="page-header">
-        <h2>Sessions <small>Happening Now</small></h2>
+        <h2>Sessions <small><a href="{{ url_for('session_list') }}">show all &rsaquo;</a></small></h2>
       </div>
-      {% if not active_talk_list %}
+      {% if not session_list %}
         <p>There don't seem to be any active sessions.</p>
       {% else %}
         <ul class="thread-list">
-          {% for thread in active_talk_list %}
-            {% include "includes/thread.html" %}
-          {% endfor %}
-        </ul>
-      {% endif %}
-
-      <div class="page-header">
-        <h2>Sessions <small>Coming Up</small></h2>
-      </div>
-      {% if not upcoming_talk_list %}
-        <p>There don't seem to be any upcoming sessions.</p>
-      {% else %}
-        <ul class="thread-list">
-          {% for thread in upcoming_talk_list %}
+          {% for thread in session_list %}
             {% include "includes/thread.html" %}
           {% endfor %}
         </ul>
@@ -48,7 +35,7 @@
 
     <div class="span6">
       <div class="page-header">
-        <h2>Active Conversations</h2>
+        <h2>Active Conversations <small><a href="{{ url_for('thread_list') }}">show all &rsaquo;</a></small></h2>
       </div>
       {% if not thread_list %}
         <p>There don't seem to be any active conversations.</p>

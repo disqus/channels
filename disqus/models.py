@@ -110,6 +110,31 @@ class Thread:
 
 class Session:
     @classmethod
+    def list(cls, offset=0, limit=100):
+        thread_ids = []
+        for talk in sorted(schedule.itervalues(), key=lambda x: x['start']):
+            thread_ids.append(talk['disqus:thread']['id'])
+
+        if not thread_ids:
+            return []
+
+        thread_ids = thread_ids[:limit]
+
+        result = threads.get_many(thread_ids)
+        missing_thread_ids = [t for t, v in result.iteritems() if not v]
+        if missing_thread_ids:
+            thread_list = disqusapi.threads.list(thread=missing_thread_ids, forum=app.config['DISQUS_FORUM'])
+            for thread in thread_list:
+                result[thread['id']] = Thread.save(thread)
+
+        for thread in result.itervalues():
+            if not thread:
+                continue
+            thread['session'] = schedule.get(thread.get('link'))
+
+        return [result[t] for t in thread_ids if result.get(t)]
+
+    @classmethod
     def list_active(cls, offset=0, limit=100):
         start = datetime.utcnow() - timedelta(minutes=10)
         end = start + timedelta(minutes=20)
@@ -130,7 +155,7 @@ class Session:
             for thread in thread_list:
                 result[thread['id']] = Thread.save(thread)
 
-        return [result[t] for t in thread_ids if t in result]
+        return [result[t] for t in thread_ids if result.get(t)]
 
     @classmethod
     def list_upcoming(cls, offset=0, limit=100):
@@ -153,7 +178,7 @@ class Session:
             for thread in thread_list:
                 result[thread['id']] = Thread.save(thread)
 
-        return [result[t] for t in thread_ids if t in result]
+        return [result[t] for t in thread_ids if result.get(t)]
 
 
 class Post:

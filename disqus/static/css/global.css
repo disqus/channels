@@ -204,6 +204,11 @@ header .powered-by span {
 .page-header h1 span, .page-header h2 span {
   color:#fcb500;
 }
+.page-header h2 small a {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-transform: lowercase;
+  font-size: 14px;
+}
 .thread-list {
   margin-left: 0;
   list-style: none;

@@ -5,11 +5,12 @@ disqus.frontend
 :copyright: (c) 2012 DISQUS.
 :license: Apache License 2.0, see LICENSE for more details.
 """
+import itertools
 import logging
 import simplejson
 
 from datetime import datetime, timedelta
-from flask import session, render_template, redirect, url_for, jsonify
+from flask import request, session, render_template, redirect, url_for, jsonify
 from jinja2 import Markup
 
 from disqus import app, disqusapi, schedule
@@ -56,17 +57,11 @@ app.template_filter('format_datetime')(format_datetime)
 def landing_page():
     thread_list = Thread.list(limit=15)
 
-    # category=category_map['General']
-    active_talk_list = Session.list_active(limit=10)
-    upcoming_talk_list = Session.list_upcoming(limit=10)
-
-    # for thread in thread_list:
-    #     thread['createdAt'] = datestr_to_datetime(thread['createdAt'])
+    session_list = Session.list_active(limit=10)
 
     return render_template('landing.html', **{
         'thread_list': thread_list,
-        'active_talk_list': active_talk_list,
-        'upcoming_talk_list': upcoming_talk_list,
+        'session_list': session_list,
     })
 
 
@@ -88,6 +83,39 @@ def my_threads():
     thread_list = Thread.list_by_author(author_id=session['auth']['user_id'])
 
     return render_template('threads/mine.html', thread_list=thread_list)
+
+
+@app.route('/threads/all', methods=['GET', 'POST'])
+def thread_list():
+    try:
+        page = int(request.args.get('p', 1)) - 1
+    except (TypeError, ValueError):
+        return redirect(url_for('thread_list'))
+
+    thread_list = Thread.list(offset=page * 50, limit=50 + 1)
+    has_next = len(thread_list) > 50
+    has_prev = page > 1
+
+    thread_list = thread_list[:50]
+
+    return render_template('threads/all.html', **{
+        'thread_list': thread_list,
+        'next_page': (page + 1) if has_next else None,
+        'prev_page': (page - 1) if has_prev else None,
+    })
+
+
+@app.route('/sessions/all', methods=['GET', 'POST'])
+def session_list():
+    session_list = Session.list(limit=1000)
+
+    sorter = lambda x: x['session']['start'].date()
+
+    sessions_by_date = itertools.groupby(session_list, key=sorter)
+
+    return render_template('sessions/all.html', **{
+        'sessions_by_date': sessions_by_date,
+    })
 
 
 @app.route('/threads/<thread_id>', methods=['GET', 'POST'])
