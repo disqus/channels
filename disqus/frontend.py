@@ -114,6 +114,10 @@ def thread_details(thread_id):
         my_threads = None
 
     post_list = Post.list_by_thread(thread_id)[::-1]
+    if 'auth' in session:
+        current_user = User.get_by_id(session['auth']['user_id'])
+    else:
+        current_user = None
 
     return render_template('threads/details.html', **{
         'thread': thread,
@@ -126,7 +130,7 @@ def thread_details(thread_id):
         'post_list': post_list,
         'channel_list': channel_list,
         'realtime_host': app.config.get('REALTIME_HOST'),
-        'current_user': User.get_by_id(session['auth']['user_id'])
+        'current_user': current_user,
     })
 
 
@@ -136,7 +140,6 @@ def get_posts(thread_id):
         'post_list': Post.list_by_thread(thread_id)[::-1]
     })
 
-from gevent import sleep
 
 @app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])
 @login_required
