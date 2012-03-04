@@ -230,7 +230,7 @@
 
     PostView.prototype.render = function() {
       this.$el.html(this.template(this.model.toJSON()));
-      if (this.model.mentions(the_user)) this.$el.addClass('alert alert-info');
+      if (this.model.mentions(the_user)) this.$el.addClass('highlight');
       return this;
     };
 
