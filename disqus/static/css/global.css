@@ -345,8 +345,11 @@ header .powered-by span {
   background: #D9EDF7;
   margin-left: -20px;
   margin-right: -20px;
-  padding-left: 20px;
+  padding-left: 62px;
   padding-right: 20px;
+}
+.post.highlight .post-avatar {
+  left: 20px;
 }
 .post .post-avatar {
   position: absolute;
