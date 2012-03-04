@@ -114,6 +114,7 @@
 
     ListView.prototype.initialize = function() {
       _.bindAll(this);
+      this.timeouts = {};
       this.collection = new PostList;
       return this.collection.bind('add', this.appendPost);
     };
@@ -121,7 +122,8 @@
     ListView.prototype.appendPost = function(post) {
       var post_view;
       post_view = new PostView({
-        model: post
+        model: post,
+        id: post.eid()
       });
       return this.$el.append(post_view.render().el);
     };
@@ -141,6 +143,46 @@
 
     ListView.prototype.isAtBottom = function() {
       return $(window).scrollTop() + $(window).height() === $(document).height();
+    };
+
+    ListView.prototype.error = function(post) {
+      var that;
+      this._clearTimeout(post);
+      that = this;
+      return $('#' + post.eid() + ' .post-resend').show().click(function() {
+        var _this = this;
+        $('button', this).button('loading');
+        return $.ajax({
+          url: $('form').attr('action'),
+          type: 'POST',
+          data: post.serialize(),
+          error: function(jqxr, status, error) {
+            return $('button', _this).button('reset');
+          },
+          success: function(jqxr, status) {
+            that.commit(post);
+            return $('button', _this).button('done');
+          }
+        });
+      });
+    };
+
+    ListView.prototype._clearTimeout = function(post) {
+      clearTimeout(this.timeouts[post.cid]);
+      return delete this.timeouts[post.cid];
+    };
+
+    ListView.prototype.commit = function(post) {
+      this._clearTimeout(post);
+      return $('.post-resend', '#' + post.eid()).hide();
+    };
+
+    ListView.prototype.addTentatively = function(post) {
+      var _this = this;
+      this.addPost(post);
+      return this.timeouts[post.cid] = setTimeout(function() {
+        return _this.error(post);
+      }, 10 * 1000);
     };
 
     return ListView;
@@ -183,14 +225,22 @@
     }
 
     Post.prototype.defaults = {
-      message: 'omg',
-      createdAtISO: "shrug",
-      name: "matt",
-      avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+      message: null,
+      createdAtISO: (new Date()).toISOString(),
+      name: null,
+      avatar: null
     };
 
     Post.prototype.initialize = function() {
       return this.set('createdAtSince', Disqus.prettyDate(this.get('createdAtISO')));
+    };
+
+    Post.prototype.serialize = function() {
+      return "message=" + this.get('message');
+    };
+
+    Post.prototype.eid = function() {
+      return "post-" + this.cid;
     };
 
     "@make: (o) ->\n    user = new User name: o.name, avatar: o.avatar\n    delete o.name\n    delete o.avatar\n    o.user = user\n    new Post o";
@@ -226,23 +276,26 @@
       }
     });
     $('.new-reply form').submit(function() {
-      var button,
-        _this = this;
+      var post;
       if ($('textarea', this).val().length <= 2) return false;
-      button = $('button[type=submit]', this);
-      if (button.attr('disabled')) return false;
-      button.attr('disabled', 'disabled');
+      post = new Post({
+        message: $('#message', this).val(),
+        name: the_user.get('name'),
+        avatar: the_user.get('avatar')
+      });
+      list_view.addTentatively(post);
       $.ajax({
         url: $(this).attr('action'),
         data: $(this).serialize(),
         type: 'POST',
-        success: function(data, status) {
-          return $(':input', _this).not(':button, :submit, :reset, :hidden').val('');
+        error: function(jqxhr, status, error) {
+          return list_view.error(post);
         },
-        complete: function(jqxhr, status) {
-          return button.removeAttr('disabled');
+        success: function(jqxr, status) {
+          return list_view.commit(post);
         }
       });
+      $(':input', this).not(':button, :submit, :reset, :hidden').val('');
       return false;
     });
     for (_i = 0, _len = initialPosts.length; _i < _len; _i++) {
@@ -270,6 +323,7 @@
         var payload;
         payload = JSON.parse(data);
         p = new Post(payload.data);
+        if (p.get("name") === the_user.get("name")) return;
         console.log(p);
         if (payload.event === 'add') {
           return list_view.addPost(p);

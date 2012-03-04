@@ -51,11 +51,14 @@ class ListView extends Backbone.View
 
         _.bindAll @
 
+        @timeouts = {}
         @collection = new PostList
         @collection.bind 'add', @appendPost
 
     appendPost: (post) ->
-        post_view = new PostView model: post
+        post_view = new PostView
+            model: post
+            id: post.eid()
 
         @$el.append post_view.render().el
 
@@ -70,6 +73,36 @@ class ListView extends Backbone.View
 
     isAtBottom: ->
         $(window).scrollTop() + $(window).height() == $(document).height()
+
+    error: (post) ->
+        @_clearTimeout post
+        that = @
+        $('#' + post.eid() + ' .post-resend').show().click () ->
+            $('button', this).button('loading')
+            $.ajax
+                url: $('form').attr 'action'
+                type: 'POST'
+                data: post.serialize()
+                error: (jqxr, status, error) =>
+                    $('button', this).button 'reset'
+                success: (jqxr, status) =>
+                    that.commit post
+                    $('button', this).button 'done'
+
+
+    _clearTimeout: (post) ->
+        clearTimeout @timeouts[post.cid]
+        delete @timeouts[post.cid]
+
+    commit: (post) ->
+        @_clearTimeout post
+        $('.post-resend', '#' + post.eid()).hide()
+
+    addTentatively: (post) ->
+        @addPost post
+        @timeouts[post.cid] = setTimeout () =>
+            @error post
+        , 10 * 1000
 
 
 class PostView extends Backbone.View
@@ -87,14 +120,19 @@ class PostView extends Backbone.View
 window.Post = class Post extends Backbone.Model
 
     defaults:
-        message: 'omg'
-        createdAtISO: "shrug"
-        name: "matt"
-        avatar: "http://mediacdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330244831"
+        message: null
+        createdAtISO: (new Date()).toISOString()
+        name: null
+        avatar: null
 
     initialize: ->
         @set 'createdAtSince', Disqus.prettyDate(@get 'createdAtISO' )
 
+    serialize: ->
+        "message=" + @get 'message'
+
+    eid: ->
+        "post-" + @cid
     """
     @make: (o) ->
         user = new User name: o.name, avatar: o.avatar
@@ -123,21 +161,24 @@ $(document).ready () ->
     $('.new-reply form').submit () ->
         if $('textarea', this).val().length <= 2
             return false
-        button = $('button[type=submit]', this)
 
-        if button.attr 'disabled'
-            return false
+        post = new Post
+            message: $('#message', this).val()
+            name: the_user.get 'name'
+            avatar: the_user.get 'avatar'
 
-        button.attr 'disabled', 'disabled'
+        list_view.addTentatively post
 
         $.ajax
             url: $(this).attr 'action'
             data: $(this).serialize()
             type: 'POST'
-            success: (data, status) =>
-                $(':input', this).not(':button, :submit, :reset, :hidden').val('')
-            complete: (jqxhr, status) ->
-                button.removeAttr 'disabled'
+            error: (jqxhr, status, error) ->
+                list_view.error(post)
+            success: (jqxr, status) ->
+                list_view.commit(post)
+
+        $(':input', this).not(':button, :submit, :reset, :hidden').val('')
 
         false
 
@@ -165,6 +206,8 @@ $(document).ready () ->
         socket.on channels.posts, (data) ->
             payload = JSON.parse data
             p = new Post payload.data
+            if p.get("name") == the_user.get("name")
+                return
             console.log p
             if payload.event == 'add'
                 list_view.addPost(p)

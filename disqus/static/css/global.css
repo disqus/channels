@@ -334,6 +334,11 @@ header .nav a:hover {
   font-weight: bold;
   color: #409cc1;
 }
+
+.post .post-resend {
+    float: right;
+}
+
 .new-reply {
   position: fixed;
   left: 0;

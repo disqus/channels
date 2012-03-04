@@ -136,6 +136,7 @@ def get_posts(thread_id):
         'post_list': Post.list_by_thread(thread_id)[::-1]
     })
 
+from gevent import sleep
 
 @app.route('/threads/<thread_id>/reply', methods=['GET', 'POST'])
 @login_required
