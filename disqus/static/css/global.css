@@ -325,6 +325,7 @@ header .powered-by span {
 
 .conversation {
   padding-top: 20px;
+  padding-bottom: 50px;
 }
 .conversation.has-topic {
   padding-top: 120px;
@@ -344,12 +345,10 @@ header .powered-by span {
 .post {
   position: relative;
   font-size: 12px;
-  padding: 5px 0 0 42px;
+  padding: 5px 0 0 45px;
 }
 .post.highlight {
   background: #D9EDF7;
-  padding-left: 42px;
-  padding-right: 20px;
 }
 .post.author .post-author {
   color: darkred;
@@ -361,6 +360,9 @@ header .powered-by span {
   width: 32px;
   height: 32px;
   margin-right: 10px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 .post .post-meta {
   display: inline;

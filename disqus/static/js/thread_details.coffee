@@ -180,10 +180,10 @@ $(document).ready () ->
     window.ap_view = new ParticipantsView id: 'active-ul'
     window.the_user = new User current_user
 
-    $('#message').keydown (e) =>
-        if e.which == 13 and not e.shiftKey
-            $('.new-reply form').submit()
-            false
+    # $('#message').keydown (e) =>
+    #     if e.which == 13 and not e.shiftKey
+    #         $('.new-reply form').submit()
+    #         false
 
     $('.new-reply form').submit () ->
         if $('textarea', this).val().length <= 2

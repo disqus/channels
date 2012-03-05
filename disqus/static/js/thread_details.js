@@ -310,12 +310,6 @@
       id: 'active-ul'
     });
     window.the_user = new User(current_user);
-    $('#message').keydown(function(e) {
-      if (e.which === 13 && !e.shiftKey) {
-        $('.new-reply form').submit();
-        return false;
-      }
-    });
     $('.new-reply form').submit(function() {
       var post;
       if ($('textarea', this).val().length <= 2) return false;
