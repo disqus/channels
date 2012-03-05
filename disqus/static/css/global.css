@@ -331,7 +331,7 @@ header .powered-by span {
 }
 
 .conversation .post-list {
-  margin-bottom: 0;
+  margin-bottom: 5px;
 }
 .post-list {
   list-style: none;
@@ -383,7 +383,6 @@ header .powered-by span {
   border-top: 1px solid #d5cebc;
   background: #eae7df;
   overflow: hidden;
-  line-height: 28px;
   padding: 10px;
 }
 .new-reply p {
@@ -393,22 +392,46 @@ header .powered-by span {
   line-height: 15px;
 }
 .new-reply form {
-  padding: 0 150px 0 15px;
+  padding: 0 100px 0 15px;
   position: relative;
   margin-bottom: 0;
 }
 .new-reply textarea {
   width: 100%;
-  height: 28px;
+  height: 82px;
+  max-height: 82px;
+  min-height: 16px;
+  line-height: 16px;
   margin-bottom: 0;
   resize: none;
 }
 .new-reply .btn {
   position: absolute;
-  top: 0;
+  bottom: 0;
+  padding: 5px 0;
+  width: 57px;
   right: 20px;
+  font-size: 0.9em;
 }
-
+.new-reply .avatar {
+  position: absolute;
+  right: 20px;
+  bottom: 36px;
+  width: 54px;
+  height: 54px;
+  border: 1px solid #d5cebc;
+  padding: 1px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.new-reply .avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
 .btn-small {
   padding: 3px 6px;
 }

@@ -125,7 +125,10 @@
         <form method="POST" id="replyform" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
           <fieldset>
               {{ form.message(rows=2) }}
-              <button type="submit" class="btn btn-large btn-primary">Send Reply</button>
+              <button type="submit" class="btn btn-large btn-primary">Post</button>
+              <div class="avatar">
+                <img src="{{ current_user.avatar }}">
+              </div>
           </fieldset>
         </form>
       {% endif %}

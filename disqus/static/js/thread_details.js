@@ -350,8 +350,8 @@
       participants_view.addUser(p);
     }
     $('.new-reply textarea').autoResize({
-      maxHeight: 84,
-      minHeight: 28,
+      maxHeight: 82,
+      minHeight: 82,
       onAfterResize: function() {
         return $('.conversation').css('padding-bottom', $('.new-reply').outerHeight());
       }
