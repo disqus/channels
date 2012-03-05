@@ -19,6 +19,9 @@ def deploy():
 
     sudo('supervisorctl restart all')
 
+def flushredis():
+    sudo('redis-cli flushall')
+
 
 def realtime():
     local('./node_modules/.bin/coffee realtime/server.coffee')
