@@ -59,7 +59,7 @@
             <a class="link" href="{{ pycon_session.url }}">pycon.org</a>
           </div>
           <div class="date">
-            {{ pycon_session.start.strftime('%A, %B %d at %I:%M %p') }}
+            {{ (pycon_session.start|convert_pycon_dt).strftime('%A, %B %d at %I:%M %p') }}
             in {{ pycon_session.room }}
           </div>
 

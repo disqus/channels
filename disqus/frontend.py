@@ -17,7 +17,7 @@ from disqus import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
 from disqus.models import Thread, Post, Session, User
 from disqus.oauth import login_required, api_call
-from disqus.utils import timesince, format_datetime, better_jsonify
+from disqus.utils import timesince, format_datetime, better_jsonify, convert_pycon_dt
 from disqus.views import posts, users, threads
 
 logger = logging.getLogger(__name__)
@@ -51,7 +51,7 @@ def as_json_filter(data):
 
 app.template_filter('timesince')(timesince)
 app.template_filter('format_datetime')(format_datetime)
-
+app.template_filter('convert_pycon_dt')(convert_pycon_dt)
 
 @app.route('/', methods=['GET'])
 def landing_page():
