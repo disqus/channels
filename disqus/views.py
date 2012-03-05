@@ -6,8 +6,26 @@ disqus.views
 :license: Apache License 2.0, see LICENSE for more details.
 """
 import simplejson
+import time
+
 
 from disqus import db, publisher
+from disqus.contrib.lrucache import LRUCache
+
+
+class Publisher(object):
+    def __init__(self, client, buffer_size=10000):
+        self.client = client
+        self.lru = LRUCache(1500, 1, buffer_size)
+
+    def publish(self, key, value):
+        now = time.time()
+        val = self.lru.get(key)
+        if val and (val + 3) < now:
+            return False
+        self.lru.put(key, now)
+        self.client.publish(key, value)
+        return True
 
 
 class View(object):
@@ -16,6 +34,7 @@ class View(object):
         self.ns = 'view:%d:%s' % (self.version, name)
         self.pns = 'channel:%d: %s' % (self.version, name)
         self.redis = redis
+        self.publisher = Publisher(publisher)
 
     def add(self, data, score, _key=None, **kwargs):
         """
@@ -48,7 +67,7 @@ class View(object):
             'data': _data,
         })
 
-        publisher.publish(self.get_channel_key(key), json_data)
+        self.publisher.publish(self.get_channel_key(key), json_data)
 
     def incr_in_set(self, id, score, _data=None, _key=None, **kwargs):
         """
@@ -68,7 +87,7 @@ class View(object):
 
         # Send the notice out to our subscribers that this data
         # was added
-        publisher.publish(self.get_channel_key(key), json_data)
+        self.publisher.publish(self.get_channel_key(key), json_data)
 
     def remove(self, data, _key=None, **kwargs):
         """
