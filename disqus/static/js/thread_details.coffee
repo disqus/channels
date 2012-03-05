@@ -90,9 +90,16 @@ $(document).ready () ->
         socket.on channels.active_thread_list, (data) ->
             payload = JSON.parse data
             t = new Thread payload.data
-            console.log payload
             if payload.event == 'add'
                 threads_view.addThread t
+            else
+                console.log payload
+
+        socket.on channels.my_thread_list, (data) ->
+            payload = JSON.parse data
+            t = new Thread payload.data
+            if payload.event == 'add'
+                my_threads_view.addThread t
             else
                 console.log payload
 
