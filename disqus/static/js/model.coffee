@@ -39,7 +39,7 @@ window.Post = class Post extends Backbone.Model
             .indexOf(user.get("name").toLowerCase()) >= 0
 
     format: ->
-        new_text = "<p>" + @get("message").replace(/\n/g, "<br />") + "</p>"
+        new_text = "<p>" + @get("message").replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br/>") + "</p>"
         @set "message", new_text
 
     eid: ->

@@ -76,7 +76,7 @@
 
     Post.prototype.format = function() {
       var new_text;
-      new_text = "<p>" + this.get("message").replace(/\n/g, "<br />") + "</p>";
+      new_text = "<p>" + this.get("message").replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br/>") + "</p>";
       return this.set("message", new_text);
     };
 
