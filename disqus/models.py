@@ -123,7 +123,7 @@ class Session:
         result = threads.get_many(thread_ids)
         missing_thread_ids = [t for t, v in result.iteritems() if not v]
         if missing_thread_ids:
-            thread_list = disqusapi.threads.list(thread=missing_thread_ids, forum=app.config['DISQUS_FORUM'])
+            thread_list = Paginator(disqusapi.threads.list, thread=missing_thread_ids, forum=app.config['DISQUS_FORUM'])
             for thread in thread_list:
                 result[thread['id']] = Thread.save(thread)
 
@@ -217,7 +217,7 @@ class Post:
         if result is None:
             result = []
             paginator = Paginator(disqusapi.threads.listPosts, thread=thread_id)
-            for idx, post in enumerate(paginator):
+            for post in paginator:
                 result.append(cls.save(post, incr_posts=False))
 
         return result
