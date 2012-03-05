@@ -132,8 +132,10 @@ class PostView extends Backbone.View
 
     render: ->
         @$el.html @template @model.toJSON()
-        if @model.mentions the_user
-            @$el.addClass('alert alert-info')
+        if @model.isAuthor the_user
+            @$el.addClass('author')
+        else if @model.mentions the_user
+            @$el.addClass('highlight')
         @
 
 window.Post = class Post extends Backbone.Model
@@ -149,6 +151,11 @@ window.Post = class Post extends Backbone.Model
 
     serialize: ->
         "message=" + @get 'message'
+
+    isAuthor: (user) ->
+        if the_user.isAnonymous()
+            return false
+        @get("name") == user.get("name")
 
     mentions: (user) ->
         if the_user.isAnonymous()

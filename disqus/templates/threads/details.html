@@ -116,18 +116,20 @@
 
 <div class="row-fluid">
   <div class="new-reply span9">
-    {% if not user %}
-      <p>You are not signed in. You can <strong><a href="{{ url_for('oauth_authorize') }}">sign in with Disqus</a></strong>. Need to create an
-        account first? <strong><a href="http://disqus.com/profile/signup/">Register a new account</a></strong> on
-        disqus.com.</p>
-    {% else %}
-      <form method="POST" id="replyform" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
-        <fieldset>
-            {{ form.message(rows=2) }}
-            <button type="submit" class="btn btn-large btn-primary">Send Reply</button>
-        </fieldset>
-      </form>
-    {% endif %}
+    <div class="new-reply-inner">
+      {% if not user %}
+        <p>You are not signed in. You can <strong><a href="{{ url_for('oauth_authorize') }}">sign in with Disqus</a></strong>. Need to create an
+          account first? <strong><a href="http://disqus.com/profile/signup/">Register a new account</a></strong> on
+          disqus.com.</p>
+      {% else %}
+        <form method="POST" id="replyform" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
+          <fieldset>
+              {{ form.message(rows=2) }}
+              <button type="submit" class="btn btn-large btn-primary">Send Reply</button>
+          </fieldset>
+        </form>
+      {% endif %}
+    </div>
   </div>
 </div>
 {% endblock %}

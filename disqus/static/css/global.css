@@ -167,7 +167,7 @@ header .powered-by span {
   top: 84px;
   overflow: hidden;
   background: #eae7df;
-  padding-right: 17px;
+  padding-right: 15px;
   border-left: 1px solid #d5cebc;
 }
 .sidebar-inner {
@@ -263,6 +263,7 @@ header .powered-by span {
 }
 .sidebar .user-list li {
   display: inline-block;
+  margin: 1px;
 }
 .sidebar .user-list li img {
   width: 24px;
@@ -336,25 +337,27 @@ header .powered-by span {
   list-style: none;
   margin-left: 0;
 }
+.post-list .post {
+  margin-bottom: 0;
+  display: block;
+}
 .post {
   position: relative;
-  padding-left: 42px;
   font-size: 12px;
+  padding: 5px 0 0 42px;
 }
 .post.highlight {
   background: #D9EDF7;
-  margin-left: -20px;
-  margin-right: -20px;
-  padding-left: 62px;
+  padding-left: 42px;
   padding-right: 20px;
 }
-.post.highlight .post-avatar {
-  left: 20px;
+.post.author .post-author {
+  color: darkred;
 }
 .post .post-avatar {
   position: absolute;
-  left: 0;
-  top: 0;
+  left: 5px;
+  top: 5px;
   width: 32px;
   height: 32px;
   margin-right: 10px;
@@ -384,13 +387,13 @@ header .powered-by span {
   padding: 10px;
 }
 .new-reply p {
-  padding: 12px 20px;
+  padding: 7px 20px;
   position: relative;
   margin-bottom: 0;
   line-height: 15px;
 }
 .new-reply form {
-  padding: 0 140px 0 20px;
+  padding: 0 150px 0 15px;
   position: relative;
   margin-bottom: 0;
 }
@@ -403,7 +406,7 @@ header .powered-by span {
 .new-reply .btn {
   position: absolute;
   top: 0;
-  right: 10px;
+  right: 20px;
 }
 
 .btn-small {

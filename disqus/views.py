@@ -11,9 +11,10 @@ from disqus import db, publisher
 
 
 class View(object):
-    def __init__(self, redis, publisher, name):
-        self.ns = 'view:%s' % name
-        self.pns = 'channel:%s' % name
+    def __init__(self, redis, publisher, name, version=1):
+        self.version = version
+        self.ns = 'view:%d:%s' % (self.version, name)
+        self.pns = 'channel:%d: %s' % (self.version, name)
         self.redis = redis
 
     def add(self, data, score, _key=None, **kwargs):

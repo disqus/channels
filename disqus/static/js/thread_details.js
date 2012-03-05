@@ -230,7 +230,11 @@
 
     PostView.prototype.render = function() {
       this.$el.html(this.template(this.model.toJSON()));
-      if (this.model.mentions(the_user)) this.$el.addClass('highlight');
+      if (this.model.isAuthor(the_user)) {
+        this.$el.addClass('author');
+      } else if (this.model.mentions(the_user)) {
+        this.$el.addClass('highlight');
+      }
       return this;
     };
 
@@ -259,6 +263,11 @@
 
     Post.prototype.serialize = function() {
       return "message=" + this.get('message');
+    };
+
+    Post.prototype.isAuthor = function(user) {
+      if (the_user.isAnonymous()) return false;
+      return this.get("name") === user.get("name");
     };
 
     Post.prototype.mentions = function(user) {
