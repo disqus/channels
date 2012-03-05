@@ -71,7 +71,7 @@
             <a class="link" href="{{ pycon_session.url }}">pycon.org</a>
           </div>
           <div class="date">
-            {{ pycon_session.start|format_datetime(pycon_session.end) }}
+            {{ pycon_session.start.strftime('%A, %B %d at %I:%M %p') }}
             in {{ pycon_session.room }}
           </div>
 
@@ -113,7 +113,9 @@
     </ul>
   {#    <p>It seems no one is participating in this conversation yet.</p>#}
 </div>
+{% endblock %}
 
+{% block after_main %}
 <div class="row-fluid">
   <div class="new-reply span9">
     <div class="new-reply-inner">

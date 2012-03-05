@@ -2,41 +2,50 @@
 
 {% block nav_all_threads_active %} class="active"{% endblock %}
 
-{% block content %}
-  <div class="page-header">
-    <h1>All Conversations</h1>
-  </div>
-
-  {% if thread_list %}
-    <ul class="thread-list">
-      {% for thread in thread_list %}
-        {% include "includes/thread.html" %}
-      {% endfor %}
-    </ul>
-
-    <div class="pagination">
-      <ul>
-        <li class="previous{% if not prev_page %} disabled{% endif %}">
-          {% if prev_page %}
-            <a href="?page={{ prev_page }}">Previous Page</a>
-          {% else %}
-            <a>Previous Page</a>
-          {% endif %}
-        </li>
-        <li class="next{% if not next_page %} disabled{% endif %}">
-          {% if next_page %}
-            <a href="?page={{ next_page }}">Next Page</a>
-          {% else %}
-            <a>Next Page</a>
-          {% endif %}
-        </li>
+{% block main %}
+<div class="content">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="page-header">
+        <h1>Active Conversations</h1>
+      </div>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="{{ url_for('thread_list') }}">All Conversations</a></li>
+        <li><a href="{{ url_for('my_threads') }}">My Activity</a></li>
       </ul>
-    </div>
 
-  {% else %}
-    <div class="alert-message block-message info">
-      <p>There don't seem to be any active conversations.</p>
-    </div>
-  {% endif %}
+      {% if thread_list %}
+        <ul class="thread-list">
+          {% for thread in thread_list %}
+            {% include "includes/thread.html" %}
+          {% endfor %}
+        </ul>
 
+        <div class="pagination">
+          <ul>
+            <li class="previous{% if not prev_page %} disabled{% endif %}">
+              {% if prev_page %}
+                <a href="?page={{ prev_page }}">Previous Page</a>
+              {% else %}
+                <a>Previous Page</a>
+              {% endif %}
+            </li>
+            <li class="next{% if not next_page %} disabled{% endif %}">
+              {% if next_page %}
+                <a href="?page={{ next_page }}">Next Page</a>
+              {% else %}
+                <a>Next Page</a>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+
+      {% else %}
+        <div class="alert-message block-message info">
+          <p>There don't seem to be any active conversations.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
 {% endblock %}

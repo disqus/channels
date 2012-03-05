@@ -156,19 +156,27 @@ header .powered-by span {
   background: url('../img/logo_light_sm.png') 0 0 no-repeat;
 }
 
+.row-fluid .span3 {
+  margin-left: 0 !important;
+}
+.row-fluid .offset3,
+.row-fluid .span9 {
+  margin-left: 23.404255317% !important;
+}
+
 .content {
   position: relative !important;
 }
 
 .sidebar {
   position: fixed;
-  right: 0;
+  left: 0;
   bottom: 0;
   top: 84px;
-  overflow: hidden;
+  z-index: 100;
+  overflow: auto;
   background: #eae7df;
-  padding-right: 15px;
-  border-left: 1px solid #d5cebc;
+  border-right: 1px solid #d5cebc;
 }
 .sidebar-inner {
   padding: 0 20px;
@@ -280,12 +288,12 @@ header .powered-by span {
   padding: 0 0 5px;
   overflow: hidden;
   position: fixed;
-  left: 5px;
-  right: 0;
+  left: 20px;
+  right: 20px;
   margin-top: 1px;
 }
 .topic-inner {
-  margin: 0 10px;
+  margin: 0 0 0 0;
   padding: 10px 15px;
   background: #eae7df;
   border: 1px solid #d5cebc;
@@ -336,7 +344,7 @@ header .powered-by span {
 }
 .post-list {
   list-style: none;
-  margin-left: 0;
+  margin-left: 5px;
 }
 .post-list .post {
   margin-bottom: 0;
@@ -380,12 +388,16 @@ header .powered-by span {
 
 .new-reply {
   position: fixed;
-  left: 0;
+  right: 0;
   bottom: 0;
   border-top: 1px solid #d5cebc;
   background: #eae7df;
   overflow: hidden;
-  padding: 10px;
+  padding: 0 20px;
+}
+.new-reply-inner {
+  padding: 10px 0 10px 10px;
+  margin: 0 -20px;
 }
 .new-reply p {
   padding: 7px 20px;
