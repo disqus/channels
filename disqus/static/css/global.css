@@ -121,11 +121,11 @@ header .powered-by span {
 
 .row-fluid .span3 {
   margin-left: 0 !important;
-  width: 241px !important;
+  width: 251px !important;
 }
 .row-fluid .offset3,
 .row-fluid .span9 {
-  margin-left: 231px !important;
+  margin-left: 241px !important;
   width: auto;
   float: none;
 }
