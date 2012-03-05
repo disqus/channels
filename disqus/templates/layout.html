@@ -39,29 +39,6 @@
           {% endif %}
         </div>
         <a href="http://disqus.com/about" class="powered-by">Powered by <span>DISQUS</span></a>
-{#       <div class="navbar">
-        <div class="navbar-inner">
-          <div class="container">
-
-            <ul class="nav">
-              <li{% block nav_home_active %}{% endblock %}><a href="/">Home</a></li>
-              <li{% block nav_new_thread_active %}{% endblock %}><a href="{{ url_for('new_thread') }}">Start a Conversation</a></li>
-            </ul>
-            <ul class="pull-right nav">
-              {% if user %}
-                <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ user.username }} <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li{% block nav_my_threads_active %}{% endblock %}><a href="{{ url_for('my_threads') }}">My Threads</a></li>
-                  </ul>
-                </li>
-              {% else %}
-                <li><a href="#">Sign In</a></li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
-      </div> #}
     </header>
 
     <section id="main">
