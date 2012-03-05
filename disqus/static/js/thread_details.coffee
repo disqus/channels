@@ -70,6 +70,11 @@ $(document).ready () ->
     .done (script, status) ->
         socket = io.connect realtime_host
 
+        socket.on 'connect', () ->
+            socket.emit 'connect',
+                channels: _.values channels
+                user: the_user.toJSON()
+
         socket.on channels.posts, (data) ->
             payload = JSON.parse data
             p = new Post payload.data
@@ -102,11 +107,6 @@ $(document).ready () ->
                 my_threads_view.addThread t
             else
                 console.log payload
-
-        socket.on 'connect', () ->
-            socket.emit 'connect',
-                channels: _.values channels
-                user: the_user.toJSON()
 
         socket.on 'current_peers', (peers) ->
             console.log peers
