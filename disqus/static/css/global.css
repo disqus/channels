@@ -121,10 +121,13 @@ header .powered-by span {
 
 .row-fluid .span3 {
   margin-left: 0 !important;
+  width: 241px !important;
 }
 .row-fluid .offset3,
 .row-fluid .span9 {
-  margin-left: 23.404255317% !important;
+  margin-left: 231px !important;
+  width: auto;
+  float: none;
 }
 
 .content {
@@ -236,15 +239,15 @@ header .powered-by span {
 .topic {
   z-index: 100;
   margin: 1px 0 20px;
-  padding: 0 20px;
+  padding: 10px 20px;
   overflow: hidden;
   position: fixed;
   right: 0;
+  left: 0;
   background: #eae7df;
   border-bottom: 1px solid #d5cebc;
 }
 .topic-inner {
-  padding: 10px 15px;
 }
 .topic.collapsed {
 /*  height: 85px;*/
@@ -252,6 +255,7 @@ header .powered-by span {
 .topic .title h2 {
   font-size: 1.2em;
   margin: 0;
+  line-height: 1.4em;
 }
 .topic .author {
   height: 25px;
@@ -294,7 +298,7 @@ header .powered-by span {
 }
 .post-list {
   list-style: none;
-  margin-left: 5px;
+  margin-left: 0;
 }
 .post-list .post {
   margin-bottom: 0;
@@ -345,14 +349,13 @@ header .powered-by span {
   position: fixed;
   right: 0;
   bottom: 0;
+  left: 0;
   border-top: 1px solid #d5cebc;
   background: #eae7df;
   overflow: hidden;
-  padding: 0 20px;
+  padding: 10px 0 10px 10px;
 }
 .new-reply-inner {
-  padding: 10px 0 10px 10px;
-  margin: 0 -20px;
 }
 .new-reply p {
   padding: 7px 20px;
