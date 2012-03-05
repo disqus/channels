@@ -6,11 +6,10 @@ $(document).ready () ->
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
 
-    # TODO: Make shift+enter submit
-    # $('#message').keydown (e) =>
-    #     if e.which == 13 and not e.shiftKey
-    #         $('.new-reply form').submit()
-    #         false
+    $('#message').keydown (e) =>
+        if e.which == 13 and e.shiftKey
+            $('.new-reply form').submit()
+            false
 
     $('.new-reply form').submit () ->
         if $('textarea', this).val().length <= 2
