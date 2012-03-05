@@ -152,8 +152,12 @@ window.PostListView = class PostListView extends Backbone.View
         delete @timeouts[post.cid]
 
     commit: (post, serverPost) ->
-        if @hasPost serverPost
-            @removePost post
+        post.set message, serverPost.get "message"
+        post.id = serverPost.id
+
+        $('#' + post.eid() + ' .post-message')
+            .html post.get("message")
+
         @_clearTimeout post
 
     addTentatively: (post) ->
@@ -188,6 +192,7 @@ class PostView extends Backbone.View
         else if @model.mentions the_user
             @$el.addClass('highlight')
         @
+
 
 
 class PostList extends Backbone.Collection

@@ -80,12 +80,18 @@
     return $.getScript(realtime_host + '/socket.io/socket.io.js').done(function(script, status) {
       var socket;
       socket = io.connect(realtime_host);
+      socket.on('connect', function() {
+        return socket.emit('connect', {
+          channels: _.values(channels),
+          user: the_user.toJSON()
+        });
+      });
       socket.on(channels.posts, function(data) {
         var payload;
         payload = JSON.parse(data);
         p = new Post(payload.data);
         if (payload.event === 'add') {
-          if (!list_view.hasPost(p)) return list_view.addPost(p);
+          if (p.get("name" !== the_user.get("name"))) return list_view.addPost(p);
         } else {
           return console.log(payload);
         }
@@ -119,12 +125,6 @@
         } else {
           return console.log(payload);
         }
-      });
-      socket.on('connect', function() {
-        return socket.emit('connect', {
-          channels: _.values(channels),
-          user: the_user.toJSON()
-        });
       });
       socket.on('current_peers', function(peers) {
         var p, peer, _len5, _m, _results;

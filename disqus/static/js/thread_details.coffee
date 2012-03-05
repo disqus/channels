@@ -79,7 +79,7 @@ $(document).ready () ->
             payload = JSON.parse data
             p = new Post payload.data
             if payload.event == 'add'
-                if not list_view.hasPost p
+                if p.get "name" != the_user.get "name"
                     list_view.addPost p
             else
                 console.log payload
