@@ -311,6 +311,11 @@ header .powered-by span {
 .post.author .post-author {
   color: darkred;
 }
+
+.post-list .post:nth-child(odd) {
+    background: lightgray;
+}
+
 .post .post-avatar {
   position: absolute;
   left: 5px;
