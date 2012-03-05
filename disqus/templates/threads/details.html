@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
-{% block subheader %}
-  <h2>{{ thread.title }}</h2>
+{% block title %}
+  {{ thread.title[:60] }} | {{ super() }}
 {% endblock %}
 
 {% block head %}

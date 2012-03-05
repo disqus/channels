@@ -1,14 +1,3 @@
-@font-face {
-  font-family: 'LeagueGothicRegular';
-  src: url('https://us.pycon.org/2012/site_media/static/fonts/league_gothic-webfont.eot');
-  src: url('https://us.pycon.org/2012/site_media/static/fonts/league_gothic-webfont.eot?#iefix') format('embedded-opentype'),
-       url('https://us.pycon.org/2012/site_media/static/fonts/league_gothic-webfont.woff') format('woff'),
-       url('https://us.pycon.org/2012/site_media/static/fonts/league_gothic-webfont.ttf') format('truetype'),
-       url('https://us.pycon.org/2012/site_media/static/fonts/league_gothic-webfont.svg#LeagueGothicRegular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 body {
   background: #f9f9f9;
   color:#222;
@@ -29,31 +18,6 @@ h1, h2, h3, h4, h5, h6 {
   color: #333333;
   font-weight: normal;
   margin-bottom: 10px;
-}
-
-h1 {
-  font-size: 167%;
-  line-height: 1.4em;
-}
-
-h2 {
-  font-size: 153.9%;
-}
-
-h3 {
-  font-size: 131%;
-}
-
-h4 {
-  font-size: 123.1%;
-}
-
-h5 {
-  font-size: 116%;
-}
-
-h6 {
-  font-size: 108%;
 }
 
 .container, .container-fluid {
@@ -78,10 +42,10 @@ header #subhead {
   overflow: hidden;
 }
 header #subhead h2 {
-  font-family: LeagueGothicRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: #484746;
-  text-transform:uppercase;
   text-shadow: 0 1px 0 #f9f2e6;
+  overflow: hidden;
 }
 
 header .container,
@@ -107,7 +71,6 @@ header h1#logo a {
   padding-bottom: 12px;
   color:#fff;
   text-decoration:none;
-  font-size:123.1%;
   text-indent:-9999px;
 }
 header .nav {
@@ -188,26 +151,11 @@ header .powered-by span {
 }
 .page-header h1, .page-header h2,
 .page-header h3, .page-header h4 {
-  font-family: LeagueGothicRegular, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  text-transform:uppercase;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#484746;
   text-shadow: 0 1px 0 #f9f2e6;
   line-height:50px;
 }
-
-.pageheader h1 {
-    font-size:340%;
-}
-.page-header h2 {
-  font-size:240%;
-}
-.page-header h3 {
-  font-size:200%;
-}
-.page-header h4 {
-  font-size:160%;
-}
-
 
 .page-header h1 span, .page-header h2 span {
   color:#fcb500;
@@ -285,20 +233,17 @@ header .powered-by span {
 .topic {
   z-index: 100;
   margin-bottom: 20px;
-  padding: 0 0 5px;
+  padding: 0 20px;
   overflow: hidden;
   position: fixed;
-  left: 20px;
-  right: 20px;
+  right: 0;
   margin-top: 1px;
+  background: #eae7df;
+  border-bottom: 1px solid #d5cebc;
 }
 .topic-inner {
   margin: 0 0 0 0;
   padding: 10px 15px;
-  background: #eae7df;
-  border: 1px solid #d5cebc;
-  border-top: 0;
-  border-radius: 0 0 10px 10px;
 }
 .topic.collapsed {
 /*  height: 85px;*/
