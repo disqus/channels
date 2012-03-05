@@ -17,6 +17,12 @@
     window.my_threads_view = new ActiveThreadsView({
       id: 'my_thread_list'
     });
+    $('#message').keydown(function(e) {
+      if (e.which === 13 && e.shiftKey) {
+        $('.new-reply form').submit();
+        return false;
+      }
+    });
     $('.new-reply form').submit(function() {
       var post;
       if ($('textarea', this).val().length <= 2) return false;
@@ -98,9 +104,18 @@
         var payload, t;
         payload = JSON.parse(data);
         t = new Thread(payload.data);
-        console.log(payload);
         if (payload.event === 'add') {
           return threads_view.addThread(t);
+        } else {
+          return console.log(payload);
+        }
+      });
+      socket.on(channels.my_thread_list, function(data) {
+        var payload, t;
+        payload = JSON.parse(data);
+        t = new Thread(payload.data);
+        if (payload.event === 'add') {
+          return my_threads_view.addThread(t);
         } else {
           return console.log(payload);
         }
