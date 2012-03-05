@@ -1,4 +1,4 @@
-from fabric.api import env, cd, run, sudo
+from fabric.api import env, cd, run, sudo, local
 from os.path import expanduser
 
 
@@ -18,3 +18,11 @@ def deploy():
     #ln -s $INSTALL_DIR/local_settings.py disqus/local_settings.py
 
     sudo('supervisorctl restart all')
+
+
+def realtime():
+    local('./node_modules/.bin/coffee realtime/server.coffee')
+
+
+def web():
+    local('python manage.py runserver')
