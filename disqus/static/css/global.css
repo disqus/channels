@@ -206,6 +206,12 @@ header .powered-by span {
 .sidebar .page-header h4 {
   margin-bottom: 0;
 }
+.sidebar .thread-list .active {
+  background: #fff;
+}
+.sidebar .thread-list .active h3 {
+  font-weight: bold;
+}
 .sidebar .thread-title h3 {
   height: 20px;
   line-height: 20px;
@@ -227,7 +233,21 @@ header .powered-by span {
   display: inline-block;
   margin: 1px;
 }
-.sidebar .user-list li img {
+.sidebar .user-list li a {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  position: relative;
+  border: 1px solid #d5cebc;
+  padding: 1px;
+  border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.sidebar .user-list li a.online {
+  border-color: green;
+}
+.sidebar .user-list li a img {
   width: 24px;
   height: 24px;
   border-radius: 3px;
