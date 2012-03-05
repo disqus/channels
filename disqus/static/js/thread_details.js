@@ -272,18 +272,16 @@
 
     Post.prototype.mentions = function(user) {
       if (the_user.isAnonymous()) return false;
-      return this.get("name") !== user.get("name") && this.get("message").toLowerCase().indexOf(user.get("name").toLowerCase()) >= 0;
+      return this.get("message").toLowerCase().indexOf(user.get("name").toLowerCase()) >= 0;
+    };
+
+    Post.prototype.eid = function() {
+      return "post-" + this.cid;
     };
 
     return Post;
 
   })(Backbone.Model);
-
-  ({
-    eid: function() {
-      return "post-" + this.cid;
-    }
-  });
 
   PostList = (function(_super) {
 
