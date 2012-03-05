@@ -46,7 +46,6 @@ window.User = class User extends Backbone.Model
     defaults:
         name: null
         avatar: null
-        profileLink: null
 
     isAnonymous: ->
         not @id?
@@ -54,6 +53,58 @@ window.User = class User extends Backbone.Model
 class UserList extends Backbone.Collection
 
     model: User
+
+class ActiveThreadsView extends Backbone.View
+    el: '#thread-list'
+
+    initialize: ->
+
+        _.bindAll @
+
+        @collection = new ThreadList
+        @collection.bind 'add', @appendThread
+        @collection.bind 'remove', @clearThread
+
+    appendThread: (thread) ->
+        thread_view = new ThreadView model: thread
+
+        um = thread_view.render()
+        $('#' + @id).append um.el
+
+    addThread: (thread) ->
+        if not @hasThread thread
+            @collection.add thread
+
+    hasThread: (thread) ->
+        if @collection.get thread.id then true else false
+
+    removethread: (thread) ->
+        @collection.remove thread
+
+    clearthread: (thread) ->
+        $('li[data-thread="' + @id + '"]', el).remove()
+
+class ThreadView extends Backbone.View
+    tagName: 'li'
+    className: 'thread'
+    template: _.template $('#thread-template').html()
+
+    initialize: ->
+        _.bindAll @
+
+    render: ->
+        @$el.html @template @model.toJSON()
+        @
+
+window.Thread = class Thread extends Backbone.Model
+
+    defaults:
+        title: null
+        posts: null
+
+class ThreadList extends Backbone.Collection
+
+    model: Thread
 
 class ListView extends Backbone.View
     el: '.post-list'
@@ -190,7 +241,10 @@ $(document).ready () ->
     window.participants_view = new ParticipantsView id: 'participant-ul'
     window.ap_view = new ParticipantsView id: 'active-ul'
     window.the_user = new User current_user
+    window.threads_view = new ActiveThreadsView id: 'thread_list'
+    window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
 
+    # TODO: Make shift+enter submit
     # $('#message').keydown (e) =>
     #     if e.which == 13 and not e.shiftKey
     #         $('.new-reply form').submit()
@@ -229,6 +283,14 @@ $(document).ready () ->
     for user in initialParticipants
         p = new User user
         participants_view.addUser p
+
+    for thread in initialThreads
+        p = new Thread thread
+        threads_view.addThread p
+
+    for thread in initialMyThreads
+        p = new Thread thread
+        my_threads_view.addThread p
 
     $('.new-reply textarea').autoResize(
         maxHeight: 82

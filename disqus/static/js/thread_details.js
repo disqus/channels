@@ -1,5 +1,5 @@
 (function() {
-  var ListView, ParticipantsView, Post, PostList, PostView, User, UserList, UserView,
+  var ActiveThreadsView, ListView, ParticipantsView, Post, PostList, PostView, Thread, ThreadList, ThreadView, User, UserList, UserView,
     __hasProp = Object.prototype.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
@@ -89,8 +89,7 @@
 
     User.prototype.defaults = {
       name: null,
-      avatar: null,
-      profileLink: null
+      avatar: null
     };
 
     User.prototype.isAnonymous = function() {
@@ -112,6 +111,114 @@
     UserList.prototype.model = User;
 
     return UserList;
+
+  })(Backbone.Collection);
+
+  ActiveThreadsView = (function(_super) {
+
+    __extends(ActiveThreadsView, _super);
+
+    function ActiveThreadsView() {
+      ActiveThreadsView.__super__.constructor.apply(this, arguments);
+    }
+
+    ActiveThreadsView.prototype.el = '#thread-list';
+
+    ActiveThreadsView.prototype.initialize = function() {
+      _.bindAll(this);
+      this.collection = new ThreadList;
+      this.collection.bind('add', this.appendThread);
+      return this.collection.bind('remove', this.clearThread);
+    };
+
+    ActiveThreadsView.prototype.appendThread = function(thread) {
+      var thread_view, um;
+      thread_view = new ThreadView({
+        model: thread
+      });
+      um = thread_view.render();
+      return $('#' + this.id).append(um.el);
+    };
+
+    ActiveThreadsView.prototype.addThread = function(thread) {
+      if (!this.hasThread(thread)) return this.collection.add(thread);
+    };
+
+    ActiveThreadsView.prototype.hasThread = function(thread) {
+      if (this.collection.get(thread.id)) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+
+    ActiveThreadsView.prototype.removethread = function(thread) {
+      return this.collection.remove(thread);
+    };
+
+    ActiveThreadsView.prototype.clearthread = function(thread) {
+      return $('li[data-thread="' + this.id + '"]', el).remove();
+    };
+
+    return ActiveThreadsView;
+
+  })(Backbone.View);
+
+  ThreadView = (function(_super) {
+
+    __extends(ThreadView, _super);
+
+    function ThreadView() {
+      ThreadView.__super__.constructor.apply(this, arguments);
+    }
+
+    ThreadView.prototype.tagName = 'li';
+
+    ThreadView.prototype.className = 'thread';
+
+    ThreadView.prototype.template = _.template($('#thread-template').html());
+
+    ThreadView.prototype.initialize = function() {
+      return _.bindAll(this);
+    };
+
+    ThreadView.prototype.render = function() {
+      this.$el.html(this.template(this.model.toJSON()));
+      return this;
+    };
+
+    return ThreadView;
+
+  })(Backbone.View);
+
+  window.Thread = Thread = (function(_super) {
+
+    __extends(Thread, _super);
+
+    function Thread() {
+      Thread.__super__.constructor.apply(this, arguments);
+    }
+
+    Thread.prototype.defaults = {
+      title: null,
+      posts: null
+    };
+
+    return Thread;
+
+  })(Backbone.Model);
+
+  ThreadList = (function(_super) {
+
+    __extends(ThreadList, _super);
+
+    function ThreadList() {
+      ThreadList.__super__.constructor.apply(this, arguments);
+    }
+
+    ThreadList.prototype.model = Thread;
+
+    return ThreadList;
 
   })(Backbone.Collection);
 
@@ -316,7 +423,7 @@
   })(Backbone.Collection);
 
   $(document).ready(function() {
-    var p, post, user, _i, _j, _len, _len2,
+    var p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
       _this = this;
     window.list_view = new ListView;
     window.participants_view = new ParticipantsView({
@@ -326,6 +433,12 @@
       id: 'active-ul'
     });
     window.the_user = new User(current_user);
+    window.threads_view = new ActiveThreadsView({
+      id: 'thread_list'
+    });
+    window.my_threads_view = new ActiveThreadsView({
+      id: 'my_thread_list'
+    });
     $('.new-reply form').submit(function() {
       var post;
       if ($('textarea', this).val().length <= 2) return false;
@@ -360,6 +473,16 @@
       user = initialParticipants[_j];
       p = new User(user);
       participants_view.addUser(p);
+    }
+    for (_k = 0, _len3 = initialThreads.length; _k < _len3; _k++) {
+      thread = initialThreads[_k];
+      p = new Thread(thread);
+      threads_view.addThread(p);
+    }
+    for (_l = 0, _len4 = initialMyThreads.length; _l < _len4; _l++) {
+      thread = initialMyThreads[_l];
+      p = new Thread(thread);
+      my_threads_view.addThread(p);
     }
     $('.new-reply textarea').autoResize({
       maxHeight: 82,
@@ -406,11 +529,11 @@
         });
       });
       socket.on('current_peers', function(peers) {
-        var p, peer, _k, _len3, _results;
+        var p, peer, _len5, _m, _results;
         console.log(peers);
         _results = [];
-        for (_k = 0, _len3 = peers.length; _k < _len3; _k++) {
-          p = peers[_k];
+        for (_m = 0, _len5 = peers.length; _m < _len5; _m++) {
+          p = peers[_m];
           console.log(p);
           peer = new User(p);
           _results.push(ap_view.addUser(peer));

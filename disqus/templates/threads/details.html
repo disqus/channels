@@ -10,6 +10,8 @@
     var threadId = "{{ thread.id }}";
     var initialPosts = {{ post_list|as_json }};
     var current_user = {{ current_user|as_json }};
+    var initialThreads = {{ active_thread_list|as_json }};
+    var initialMyThreads = {{ my_thread_list|as_json }};
     var initialParticipants = {{ participant_list|as_json }};
     var channels = {{ channel_list|as_json }};
     var realtime_host = "{{ realtime_host }}";
@@ -31,32 +33,16 @@
   </div>
   <ul id="active-ul" class="user-list">
   </ul>
-  {% if active_talk_list %}
-    <div class="page-header">
-      <h4>Sessions</h4>
-    </div>
-    <ul class="thread-list">
-      {% for thread in active_talk_list %}
-        {% include "includes/thread.html" %}
-      {% endfor %}
-    </ul>
-  {% endif %}
   <div class="page-header">
     <h4>Active Conversations</h4>
   </div>
-  <ul class="thread-list">
-    {% for thread in active_thread_list %}
-      {% include "includes/thread.html" %}
-    {% endfor %}
+  <ul class="thread-list" id="thread_list">
   </ul>
   {% if my_thread_list %}
     <div class="page-header">
       <h4>Your Conversations</h4>
     </div>
-    <ul class="thread-list">
-      {% for thread in my_thread_list %}
-        {% include "includes/thread.html" %}
-      {% endfor %}
+    <ul class="thread-list" id="my_thread_list">
     </ul>
   {% endif %}
 {% endblock %}
@@ -112,6 +98,17 @@
           <img rel="tooltip" src="<%= avatar %>" title="<%= name %>">
       </a>
   </script>
+
+  <script id="thread-template" type="text/template">
+      <div class="thread-count">
+          <%= posts %>
+      </div>
+      <div class="thread-title">
+          <h3><a href="/threads/<%= id %>"><%= title %></a></h3>
+      </div>
+
+  </script>
+
 
   <div class="conversation has-topic">
     <ul class="post-list">
