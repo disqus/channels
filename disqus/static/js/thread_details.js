@@ -195,7 +195,7 @@
 
     ListView.prototype.addTentatively = function(post) {
       var _this = this;
-      console.log(post);
+      post.format();
       this.addPost(post);
       return this.timeouts[post.cid] = setTimeout(function() {
         return _this.error(post);
@@ -285,6 +285,12 @@
     Post.prototype.mentions = function(user) {
       if (the_user.isAnonymous()) return false;
       return this.get("message").toLowerCase().indexOf(user.get("name").toLowerCase()) >= 0;
+    };
+
+    Post.prototype.format = function() {
+      var new_text;
+      new_text = "<p>" + this.get("message").replace(/\n/g, "<br />") + "</p>";
+      return this.set("message", new_text);
     };
 
     Post.prototype.eid = function() {
