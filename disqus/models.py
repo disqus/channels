@@ -98,7 +98,7 @@ class Thread:
 
     @classmethod
     def list(cls, offset=0, limit=100):
-        result = threads.list(category_id=Category.get('General')['id'], offset=offset, limit=limit)
+        result = threads.list(offset=offset, limit=limit)
         if result is None:
             result = []
             for thread in disqusapi.threads.list(forum=app.config['DISQUS_FORUM'], category=Category.get('General')['id'], method='GET'):

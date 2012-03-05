@@ -127,7 +127,7 @@ def thread_details(thread_id):
     channel_list = {
         'posts': posts.get_channel_key(posts.get_key(thread_id=thread_id)),
         'participants': users.get_channel_key(users.get_key(thread_id=thread_id)),
-        'active_thread_list': threads.get_channel_key(threads.get_key(category_id=Category.get('General')['id'])),
+        'active_thread_list': threads.get_channel_key(threads.get_key()),
     }
 
     if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
@@ -153,8 +153,7 @@ def thread_details(thread_id):
         'pycon_session': pycon_session,
         'participant_list': User.list_by_thread(thread_id),
         'my_thread_list': my_threads,
-        'active_talk_list': Session.list_active(limit=5),
-        'active_thread_list': Thread.list(limit=5),
+        'active_thread_list': Thread.list(limit=10),
         'post_list': post_list,
         'channel_list': channel_list,
         'realtime_host': app.config.get('REALTIME_HOST'),
