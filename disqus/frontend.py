@@ -151,7 +151,7 @@ def thread_details(thread_id):
         'thread': thread,
         'form': form,
         'pycon_session': pycon_session,
-        'participant_list': User.list_by_thread(thread_id),
+        'participant_list': User.list_by_thread(thread_id) or [],
         'my_thread_list': my_threads,
         'active_thread_list': Thread.list(limit=10),
         'post_list': post_list,
