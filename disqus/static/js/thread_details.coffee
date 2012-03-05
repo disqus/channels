@@ -160,10 +160,9 @@ window.Post = class Post extends Backbone.Model
     mentions: (user) ->
         if the_user.isAnonymous()
             return false
-        @get("name") != user.get("name") and
-             @get("message").toLowerCase().indexOf(
-                 user.get("name").toLowerCase()
-             ) >= 0
+         @get("message").toLowerCase().indexOf(
+             user.get("name").toLowerCase()
+         ) >= 0
 
     eid: ->
         "post-" + @cid
@@ -203,6 +202,7 @@ $(document).ready () ->
             error: (jqxhr, status, error) ->
                 list_view.error(post)
             success: (jqxr, status) ->
+                # TODO: here just update the returned ID
                 list_view.commit(post)
 
         $(':input', this).not(':button, :submit, :reset, :hidden').val('')
