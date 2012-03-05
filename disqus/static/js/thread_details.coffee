@@ -203,6 +203,7 @@ $(document).ready () ->
             error: (jqxhr, status, error) ->
                 list_view.error(post)
             success: (jqxr, status) ->
+                # TODO: here just update the returned ID
                 list_view.commit(post)
 
         $(':input', this).not(':button, :submit, :reset, :hidden').val('')
