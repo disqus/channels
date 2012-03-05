@@ -65,10 +65,12 @@ class ListView extends Backbone.View
         @timeouts = {}
         @collection = new PostList
         @collection.bind 'add', @appendPost
+        @collection.bind 'remove', @clearPost
 
     appendPost: (post) ->
         post_view = new PostView
             model: post
+            id: post.eid()
 
         @$el.append post_view.render().el
 
@@ -95,8 +97,9 @@ class ListView extends Backbone.View
                 data: post.serialize()
                 error: (jqxr, status, error) =>
                     $('button', this).button 'reset'
-                success: (jqxr, status) =>
-                    that.commit post
+                success: (data, status, jqxhr) =>
+                    serverPost = new Post data.post
+                    that.commit post, serverPost
                     $('button', this).button 'done'
 
 
@@ -104,9 +107,12 @@ class ListView extends Backbone.View
         clearTimeout @timeouts[post.cid]
         delete @timeouts[post.cid]
 
-    commit: (post) ->
+    commit: (post, serverPost) ->
+
+        if @hasPost serverPost
+            @removePost post
         @_clearTimeout post
-        $('.post-resend', '#' + post.eid()).hide()
+        #$('.post-resend', '#' + post.eid()).hide()
 
     addTentatively: (post) ->
         console.log post
@@ -115,11 +121,14 @@ class ListView extends Backbone.View
             @error post
         , 10 * 1000
 
-    removePlaceholder: (post) ->
-        placeholder = @collection.find (p) ->
-            p.get("name") == post.get("name") and not p.id?
-        $('#' + placeholder.eid()).remove()
+    removePost: (post) ->
+        @collection.remove post
 
+    clearPost: (post) ->
+        $('#' + post.eid()).remove()
+
+    hasPost: (post) ->
+        if @collection.get post.id then true else false
 
 
 class PostView extends Backbone.View
@@ -200,9 +209,10 @@ $(document).ready () ->
             type: 'POST'
             error: (jqxhr, status, error) ->
                 list_view.error(post)
-            success: (jqxr, status) ->
+            success: (data, status, jqxhr) ->
                 # TODO: here just update the returned ID
-                list_view.commit(post)
+                serverPost = new Post data.post
+                list_view.commit post, serverPost
 
         $(':input', this).not(':button, :submit, :reset, :hidden').val('')
 
@@ -233,9 +243,8 @@ $(document).ready () ->
             payload = JSON.parse data
             p = new Post payload.data
             if payload.event == 'add'
-                if p.get("name") == the_user.get("name")
-                    list_view.removePlaceholder p
-                list_view.addPost p
+                if not list_view.hasPost p
+                    list_view.addPost p
             else
                 console.log payload
 

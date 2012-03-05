@@ -129,13 +129,15 @@
       _.bindAll(this);
       this.timeouts = {};
       this.collection = new PostList;
-      return this.collection.bind('add', this.appendPost);
+      this.collection.bind('add', this.appendPost);
+      return this.collection.bind('remove', this.clearPost);
     };
 
     ListView.prototype.appendPost = function(post) {
       var post_view;
       post_view = new PostView({
-        model: post
+        model: post,
+        id: post.eid()
       });
       return this.$el.append(post_view.render().el);
     };
@@ -171,8 +173,10 @@
           error: function(jqxr, status, error) {
             return $('button', _this).button('reset');
           },
-          success: function(jqxr, status) {
-            that.commit(post);
+          success: function(data, status, jqxhr) {
+            var serverPost;
+            serverPost = new Post(data.post);
+            that.commit(post, serverPost);
             return $('button', _this).button('done');
           }
         });
@@ -184,9 +188,9 @@
       return delete this.timeouts[post.cid];
     };
 
-    ListView.prototype.commit = function(post) {
-      this._clearTimeout(post);
-      return $('.post-resend', '#' + post.eid()).hide();
+    ListView.prototype.commit = function(post, serverPost) {
+      if (this.hasPost(serverPost)) this.removePost(post);
+      return this._clearTimeout(post);
     };
 
     ListView.prototype.addTentatively = function(post) {
@@ -198,12 +202,20 @@
       }, 10 * 1000);
     };
 
-    ListView.prototype.removePlaceholder = function(post) {
-      var placeholder;
-      placeholder = this.collection.find(function(p) {
-        return p.get("name") === post.get("name") && !(p.id != null);
-      });
-      return $('#' + placeholder.eid()).remove();
+    ListView.prototype.removePost = function(post) {
+      return this.collection.remove(post);
+    };
+
+    ListView.prototype.clearPost = function(post) {
+      return $('#' + post.eid()).remove();
+    };
+
+    ListView.prototype.hasPost = function(post) {
+      if (this.collection.get(post.id)) {
+        return true;
+      } else {
+        return false;
+      }
     };
 
     return ListView;
@@ -324,8 +336,10 @@
         error: function(jqxhr, status, error) {
           return list_view.error(post);
         },
-        success: function(jqxr, status) {
-          return list_view.commit(post);
+        success: function(data, status, jqxhr) {
+          var serverPost;
+          serverPost = new Post(data.post);
+          return list_view.commit(post, serverPost);
         }
       });
       $(':input', this).not(':button, :submit, :reset, :hidden').val('');
@@ -357,10 +371,7 @@
         payload = JSON.parse(data);
         p = new Post(payload.data);
         if (payload.event === 'add') {
-          if (p.get("name") === the_user.get("name")) {
-            list_view.removePlaceholder(p);
-          }
-          return list_view.addPost(p);
+          if (!list_view.hasPost(p)) return list_view.addPost(p);
         } else {
           return console.log(payload);
         }
