@@ -276,8 +276,11 @@ header .powered-by span {
   font-size: 1.2em;
   margin: 0;
   line-height: 1.4em;
+  overflow: hidden;
 }
 .topic .author {
+  white-space: nowrap;
+  overflow: hidden;
   height: 25px;
   line-height: 25px;
   display: inline-block;
@@ -292,14 +295,17 @@ header .powered-by span {
 }
 .topic .date {
   height: 25px;
+  overflow: hidden;
   line-height: 25px;
   font-size: 0.9em;
   font-weight: bold;
   float: right;
 }
 .topic .description {
+  clear: both;
   overflow: hidden;
   margin-top: 5px;
+  max-height: 90px;
 }
 .topic .description p {
   margin-bottom: 0;
