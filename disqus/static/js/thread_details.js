@@ -98,9 +98,18 @@
         var payload, t;
         payload = JSON.parse(data);
         t = new Thread(payload.data);
-        console.log(payload);
         if (payload.event === 'add') {
           return threads_view.addThread(t);
+        } else {
+          return console.log(payload);
+        }
+      });
+      socket.on(channels.my_thread_list, function(data) {
+        var payload, t;
+        payload = JSON.parse(data);
+        t = new Thread(payload.data);
+        if (payload.event === 'add') {
+          return my_threads_view.addThread(t);
         } else {
           return console.log(payload);
         }
