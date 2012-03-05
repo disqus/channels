@@ -15,6 +15,9 @@ from flask import make_response
 
 logger = logging.getLogger(__name__)
 
+def secure_avatar(avatar_url):
+    return avatar_url.replace('http://mediacdn', 'https://securecdn')
+
 
 def datestr_to_datetime(dt):
     return datetime.strptime(dt, '%Y-%m-%dT%H:%M:%S')
