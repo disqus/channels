@@ -15,7 +15,7 @@ from jinja2 import Markup
 
 from disqus import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
-from disqus.models import Thread, Post, Session, User, Category
+from disqus.models import Thread, Post, Session, User
 from disqus.oauth import login_required, api_call
 from disqus.utils import timesince, format_datetime, better_jsonify
 from disqus.views import posts, users, threads

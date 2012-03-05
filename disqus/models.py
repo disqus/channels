@@ -70,8 +70,7 @@ class Thread:
         result = cls.format(thread)
         score = dt.strftime('%s.%m')
         threads.add(result, score)
-        threads.add_to_set(result['id'], score, category_id=thread['category'])
-        threads.add_to_set(result['id'], thread['posts'], _key='posts', category_id=thread['category'])
+        threads.add_to_set(result['id'], thread['posts'], _key='posts')
         return result
 
     @classmethod
@@ -203,10 +202,12 @@ class Post:
 
         if incr_posts:
             threads.incr_counter(post['thread'], 'posts', 1)
-            threads.incr_in_set(post['thread'], 1, _key='posts', category_id=Thread.get(post['thread'])['category'])
+            threads.incr_in_set(post['thread'], 1, _key='posts')
+            threads.add_to_set(post['thread'], score)
 
         user = User.save(post['author'])
         users.add_to_set(user['id'], score, thread_id=post['thread'])
+        threads.add_to_set(post['thread'], score)
         threads.add_to_set(post['thread'], score, author_id=post['author'])
 
         return result
