@@ -61,11 +61,14 @@
   {% endif %}
 {% endblock %}
 
-{% block content %}
-  {% if pycon_session %}
-    <div class="row-fluid">
-      <div class="span9 topic collapsed">
-        <div class="topic-inner">
+{% block before_main %}
+  <div class="row-fluid">
+    <div class="span9 topic collapsed">
+      <div class="topic-inner">
+        <div class="title">
+          <h2>{{ thread.title }}</h2>
+        </div>
+        {% if pycon_session %}
           <div class="author">
             <h4><a href="#"><strong>{{ pycon_session.authors }}</strong></a></h4>
             <a class="link" href="{{ pycon_session.url }}">pycon.org</a>
@@ -78,11 +81,13 @@
           <div class="description">
             <p>{{ pycon_session.description }}</p>
           </div>
-        </div>
+        {% endif %}
       </div>
     </div>
-  {% endif %}
+  </div>
+{% endblock %}
 
+{% block content %}
   <script id="post-template" type="text/template">
     <img src="<%= avatar %>" class="post-avatar">
     <div class="post-meta">
@@ -108,7 +113,7 @@
       </a>
   </script>
 
-  <div class="conversation{% if pycon_session %} has-topic{% endif %}">
+  <div class="conversation has-topic">
     <ul class="post-list">
     </ul>
   {#    <p>It seems no one is participating in this conversation yet.</p>#}

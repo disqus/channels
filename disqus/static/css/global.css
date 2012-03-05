@@ -232,21 +232,23 @@ header .powered-by span {
 
 .topic {
   z-index: 100;
-  margin-bottom: 20px;
+  margin: 1px 0 20px;
   padding: 0 20px;
   overflow: hidden;
   position: fixed;
   right: 0;
-  margin-top: 1px;
   background: #eae7df;
   border-bottom: 1px solid #d5cebc;
 }
 .topic-inner {
-  margin: 0 0 0 0;
   padding: 10px 15px;
 }
 .topic.collapsed {
 /*  height: 85px;*/
+}
+.topic .title h2 {
+  font-size: 1.2em;
+  margin: 0;
 }
 .topic .author {
   height: 25px;
