@@ -115,7 +115,7 @@ class ListView extends Backbone.View
         #$('.post-resend', '#' + post.eid()).hide()
 
     addTentatively: (post) ->
-        console.log post
+        post.format()
         @addPost post
         @timeouts[post.cid] = setTimeout () =>
             @error post
@@ -171,6 +171,10 @@ window.Post = class Post extends Backbone.Model
             return false
         @get("message").toLowerCase()
             .indexOf(user.get("name").toLowerCase()) >= 0
+
+    format: ->
+        new_text = "<p>" + @get("message").replace(/\n/g, "<br />") + "</p>"
+        @set "message", new_text
 
     eid: ->
         "post-" + @cid
