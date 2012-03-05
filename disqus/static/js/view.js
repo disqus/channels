@@ -120,7 +120,13 @@
     };
 
     ActiveThreadsView.prototype.addThread = function(thread) {
-      if (!this.hasThread(thread)) return this.collection.add(thread);
+      var t;
+      if (!this.hasThread(thread)) {
+        return this.collection.add(thread);
+      } else {
+        t = this.collection.get(thread.id);
+        return t.set('posts', thread.posts);
+      }
     };
 
     ActiveThreadsView.prototype.hasThread = function(thread) {

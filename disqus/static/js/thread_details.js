@@ -88,17 +88,22 @@
         var payload, u;
         payload = JSON.parse(data);
         u = new User(payload.data);
-        console.log(u);
         if (payload.event === 'add') {
-          if (!participants_view.hasUser(u)) return participants_view.addUser(u);
+          return participants_view.addUser(u);
         } else {
           return console.log(payload);
         }
       });
       socket.on(channels.active_thread_list, function(data) {
-        var payload;
+        var payload, t;
         payload = JSON.parse(data);
-        return console.log(payload);
+        t = new Thread(payload.data);
+        console.log(payload);
+        if (payload.event === 'add') {
+          return threads_view.addThread(t);
+        } else {
+          return console.log(payload);
+        }
       });
       socket.on('connect', function() {
         return socket.emit('connect', {

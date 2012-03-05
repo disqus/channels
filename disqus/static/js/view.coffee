@@ -65,6 +65,9 @@ window.ActiveThreadsView = class ActiveThreadsView extends Backbone.View
     addThread: (thread) ->
         if not @hasThread thread
             @collection.add thread
+        else
+            t = @collection.get thread.id
+            t.set('posts', thread.posts)
 
     hasThread: (thread) ->
         if @collection.get thread.id then true else false

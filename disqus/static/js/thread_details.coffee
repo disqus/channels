@@ -82,18 +82,19 @@ $(document).ready () ->
         socket.on channels.participants, (data) ->
             payload = JSON.parse data
             u = new User payload.data
-            console.log u
             if payload.event == 'add'
-                if not participants_view.hasUser u
-                    participants_view.addUser u
+                participants_view.addUser u
             else
                 console.log payload
 
         socket.on channels.active_thread_list, (data) ->
             payload = JSON.parse data
-            #u = new User payload.data
-            # TODO
+            t = new Thread payload.data
             console.log payload
+            if payload.event == 'add'
+                threads_view.addThread t
+            else
+                console.log payload
 
         socket.on 'connect', () ->
             socket.emit 'connect',
