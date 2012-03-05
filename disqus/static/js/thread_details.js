@@ -275,15 +275,13 @@
       return this.get("message").toLowerCase().indexOf(user.get("name").toLowerCase()) >= 0;
     };
 
+    Post.prototype.eid = function() {
+      return "post-" + this.cid;
+    };
+
     return Post;
 
   })(Backbone.Model);
-
-  ({
-    eid: function() {
-      return "post-" + this.cid;
-    }
-  });
 
   PostList = (function(_super) {
 
