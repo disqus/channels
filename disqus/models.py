@@ -183,9 +183,12 @@ class Session:
 class Post:
     @classmethod
     def format(cls, post):
+        avatar = post['author']['avatar']['cache']
+        avatar = avatar.replace('http://mediacdn', 'https://securecdn')
+
         return {
             'id': post['id'],
-            'avatar': post['author']['avatar']['cache'],
+            'avatar': avatar,
             'name': post['author']['username'],
             'createdAtISO': post['createdAt'].isoformat(),
             'message': post['message']
