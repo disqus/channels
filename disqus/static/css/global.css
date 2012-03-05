@@ -313,7 +313,7 @@ header .powered-by span {
 }
 
 .post-list .post:nth-child(odd) {
-    background: lightgray;
+    background: #f3f3f3;
 }
 
 .post .post-avatar {
