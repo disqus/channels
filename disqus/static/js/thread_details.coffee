@@ -57,7 +57,8 @@ $(document).ready () ->
         maxHeight: 82
         minHeight: 82
         onAfterResize: () =>
-            $('.conversation').css('padding-bottom', $('.new-reply').outerHeight())
+            $('.conversation').css 'padding-bottom',
+                $('.new-reply').outerHeight()
     ).focus()
 
     $('.conversation').css('padding-top', $('.topic').outerHeight() + 10)
