@@ -368,7 +368,7 @@
         return $('.conversation').css('padding-bottom', $('.new-reply').outerHeight());
       }
     }).focus();
-    $('.conversation').css('padding-top', $('.topic').outerHeight() + 5);
+    $('.conversation').css('padding-top', $('.topic').outerHeight() + 10);
     setTimeout(list_view.scrollBottom, 500);
     return $.getScript(realtime_host + '/socket.io/socket.io.js').done(function(script, status) {
       var socket;

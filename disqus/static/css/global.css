@@ -144,6 +144,9 @@ header .powered-by span {
 .sidebar-inner {
   padding: 0 20px;
 }
+.sidebar h4 {
+  font-weight: bold;
+}
 
 .page-header {
   padding-bottom: 0;
