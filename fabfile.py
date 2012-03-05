@@ -1,5 +1,5 @@
-from fabric.api import env, local, cd, run, sudo
-from os.path import expanduser, join
+from fabric.api import env, cd, run, sudo
+from os.path import expanduser
 
 
 INSTALL_PATH = '/home/ec2-user/minisite/current'
@@ -18,6 +18,3 @@ def deploy():
     #ln -s $INSTALL_DIR/local_settings.py disqus/local_settings.py
 
     sudo('supervisorctl restart all')
-
-
- # ssh -i ~/.ssh/minisite.pem ec2-user@23.21.178.71
