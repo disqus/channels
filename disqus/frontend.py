@@ -53,11 +53,12 @@ app.template_filter('timesince')(timesince)
 app.template_filter('format_datetime')(format_datetime)
 app.template_filter('convert_pycon_dt')(convert_pycon_dt)
 
+
 @app.route('/', methods=['GET'])
 def landing_page():
     thread_list = Thread.list(limit=15)
 
-    session_list = Session.list_active(limit=10)
+    session_list = Session.list_upcoming(limit=10)
 
     return render_template('landing.html', **{
         'thread_list': thread_list,

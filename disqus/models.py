@@ -111,7 +111,7 @@ class Session:
     @classmethod
     def list(cls, offset=0, limit=100):
         thread_ids = []
-        for talk in sorted(schedule.itervalues(), key=lambda x: x['start']):
+        for talk in sorted(schedule.itervalues(), key=lambda x: (x['start'], x['room'])):
             thread_ids.append(talk['disqus:thread']['id'])
 
         if not thread_ids:
@@ -138,7 +138,7 @@ class Session:
         start = datetime.utcnow() - timedelta(minutes=10)
         end = start + timedelta(minutes=20)
         thread_ids = []
-        for talk in sorted(schedule.itervalues(), key=lambda x: x['start']):
+        for talk in sorted(schedule.itervalues(), key=lambda x: (x['start'], x['room'])):
             if talk['start'] > start and talk['start'] < end:
                 thread_ids.append(talk['disqus:thread']['id'])
 
@@ -154,16 +154,24 @@ class Session:
             for thread in thread_list:
                 result[thread['id']] = Thread.save(thread)
 
+        for thread in result.itervalues():
+            if not thread:
+                continue
+            thread['session'] = schedule.get(thread.get('link'))
+
         return [result[t] for t in thread_ids if result.get(t)]
 
     @classmethod
     def list_upcoming(cls, offset=0, limit=100):
-        start = datetime.utcnow() + timedelta(minutes=15)
+        start = datetime.utcnow() - timedelta(hours=1)
         # end = start + timedelta(minutes=30)
+        num = 0
         thread_ids = []
-        for talk in schedule.itervalues():
+        for talk in sorted(schedule.itervalues(), key=lambda x: (x['start'], x['room'])):
             if talk['start'] > start:  # and talk['start'] < end:
                 thread_ids.append(talk['disqus:thread']['id'])
+            if num > limit:
+                return
 
         if not thread_ids:
             return []
@@ -176,6 +184,11 @@ class Session:
             thread_list = disqusapi.threads.list(thread=missing_thread_ids, forum=app.config['DISQUS_FORUM'])
             for thread in thread_list:
                 result[thread['id']] = Thread.save(thread)
+
+        for thread in result.itervalues():
+            if not thread:
+                continue
+            thread['session'] = schedule.get(thread.get('link'))
 
         return [result[t] for t in thread_ids if result.get(t)]
 

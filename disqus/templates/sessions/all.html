@@ -11,7 +11,7 @@
     <h2>{{ date.strftime('%A, %B %d') }}</h2>
     <ul class="thread-list">
       {% for thread in session_list %}
-        {% include "includes/thread.html" %}
+        {% include "includes/session.html" %}
       {% endfor %}
     </ul>
   {% endfor %}

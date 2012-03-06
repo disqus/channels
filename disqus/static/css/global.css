@@ -189,6 +189,11 @@ footer .footer-inner {
 }
 .thread {
   margin-bottom: 10px;
+  padding-left: 35px;
+  position: relative;
+}
+.thread .thread-info {
+  font-size: 0.9em;
 }
 .thread .thread-title h3 {
   overflow: hidden;
@@ -198,7 +203,9 @@ footer .footer-inner {
 }
 .thread .thread-count {
   display: block;
-  float: left;
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 25px;
   height: 25px;
   background: #409cc1;
