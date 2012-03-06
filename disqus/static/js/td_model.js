@@ -55,13 +55,16 @@
 
     Post.prototype.defaults = {
       message: null,
-      createdAtISO: (new Date()).toISOString(),
+      createdAtISO: null,
       createdAtSince: "just now",
       name: null,
       avatar: null
     };
 
     Post.prototype.initialize = function() {
+      if (!this.get('createdAtISO')) {
+        this.set('createdAtISO', (new Date()).toISOString());
+      }
       return this.set('createdAtSince', Disqus.prettyDate(this.get('createdAtISO')));
     };
 
