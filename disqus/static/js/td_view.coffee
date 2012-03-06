@@ -41,6 +41,13 @@ window.ParticipantsView = class ParticipantsView extends Backbone.View
         @collection.map (user) ->
             user.get "name"
 
+    addTestData: ->
+        _.each ['matt', 'maybe', 'mell', 'martha'], (n) =>
+            @addUser new User
+                name: n
+                id: n + '1'
+                avatar: 'https://securecdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330749766'
+
 
 UserView = class UserView extends Backbone.View
     tagName: 'li'

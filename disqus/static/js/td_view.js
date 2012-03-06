@@ -65,6 +65,17 @@
       });
     };
 
+    ParticipantsView.prototype.addTestData = function() {
+      var _this = this;
+      return _.each(['matt', 'maybe', 'mell', 'martha'], function(n) {
+        return _this.addUser(new User({
+          name: n,
+          id: n + '1',
+          avatar: 'https://securecdn.disqus.com/uploads/users/843/7354/avatar92.jpg?1330749766'
+        }));
+      });
+    };
+
     return ParticipantsView;
 
   })(Backbone.View);
