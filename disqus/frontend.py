@@ -89,7 +89,7 @@ def my_threads():
 @app.route('/threads/all', methods=['GET', 'POST'])
 def thread_list():
     try:
-        page = int(request.args.get('p', 1)) - 1
+        page = int(request.args.get('page', 1)) - 1
     except (TypeError, ValueError):
         return redirect(url_for('thread_list'))
 
