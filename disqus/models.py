@@ -10,6 +10,7 @@ from disqusapi import Paginator
 from flask import session
 
 from disqus.app import app, disqusapi, schedule
+from disqus.oauth import api_call
 from disqus.utils import datestr_to_datetime, from_cache, secure_avatar
 from disqus.views import threads, posts, users
 
@@ -86,7 +87,7 @@ class Thread:
         result = threads.list(author_id=author_id, offset=offset, limit=limit)
         if result is None:
             result = []
-            for thread in disqusapi.users.listActiveThreads(forum=app.config['DISQUS_FORUM'], method='GET'):
+            for thread in api_call(disqusapi.users.listActiveThreads, forum=app.config['DISQUS_FORUM'], method='GET'):
                 result.append(Thread.save(thread))
                 score = thread['createdAt'].strftime('%s.%m')
                 threads.add_to_set(thread['id'], score, author_id=author_id)
