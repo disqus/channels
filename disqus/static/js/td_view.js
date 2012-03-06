@@ -362,7 +362,7 @@
         this.$el.addClass('author');
       } else if (this.model.mentions(window.the_user)) {
         if ((typeof ding !== "undefined" && ding !== null) && (ding.play != null)) {
-          ding.play;
+          ding.play();
         }
         this.$el.addClass('highlight');
       }
