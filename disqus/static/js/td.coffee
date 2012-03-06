@@ -10,7 +10,12 @@ $(document).ready () ->
         if e.which == 13 and e.shiftKey
             $('.new-reply form').submit()
             false
-    .typeahead source: ap_view.usernameList()
+
+    doTypeahead = () ->
+        $('#message').typeahead source: ap_view.usernameList()
+
+    ap_view.collection.bind "add", doTypeahead
+    ap_view.collection.bind "remove", doTypeahead
 
     $('.new-reply form').submit () ->
         ta = $('textarea', this)

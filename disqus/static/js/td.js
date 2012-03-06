@@ -1,7 +1,7 @@
 (function() {
 
   $(document).ready(function() {
-    var p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
+    var doTypeahead, p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
       _this = this;
     window.the_user = new User(current_user);
     window.list_view = new PostListView;
@@ -22,9 +22,14 @@
         $('.new-reply form').submit();
         return false;
       }
-    }).typeahead({
-      source: ap_view.usernameList()
     });
+    doTypeahead = function() {
+      return $('#message').typeahead({
+        source: ap_view.usernameList()
+      });
+    };
+    ap_view.collection.bind("add", doTypeahead);
+    ap_view.collection.bind("remove", doTypeahead);
     $('.new-reply form').submit(function() {
       var post, ta;
       ta = $('textarea', this);
