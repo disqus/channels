@@ -13,6 +13,7 @@ $(document).ready () ->
 
     doTypeahead = () ->
         $('#message').typeahead source: ap_view.usernameList()
+    ap_view.on "membership change", doTypeahead
 
     $('.new-reply form').submit () ->
         ta = $('textarea', this)

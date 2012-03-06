@@ -28,6 +28,7 @@
         source: ap_view.usernameList()
       });
     };
+    ap_view.on("membership change", doTypeahead);
     $('.new-reply form').submit(function() {
       var post, ta;
       ta = $('textarea', this);
