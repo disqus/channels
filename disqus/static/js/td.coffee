@@ -1,3 +1,24 @@
+class Autocomplete
+
+    constructor: (@source_cb) ->
+        @lastMatch = null
+        @matches = null
+        @i = null
+
+    _next: ->
+        if @i == @matches.length
+            @i = 0
+        @matches[@i++]
+
+    next: (text) ->
+        if text != @lastMatch
+            @i = 0
+            @matches = _.filter ap_view.usernameList(), (name) =>
+                name.toLowerCase().indexOf(text.toLowerCase()) == 0
+
+        return @lastMatch = @_next()
+
+
 $(document).ready () ->
     window.the_user = new User current_user
     window.list_view = new PostListView
@@ -6,15 +27,15 @@ $(document).ready () ->
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
 
+    ac = new Autocomplete ap_view.usernameList
+
     $('#message').keydown (e) ->
         if e.which == 13 and e.shiftKey
             $('.new-reply form').submit()
             return false
 
         if e.which == 9 and $(this).val().indexOf(' ') < 0
-            match = _.find ap_view.usernameList(), (name) =>
-                name.toLowerCase().indexOf($(this).val().toLowerCase()) == 0
-
+            match = ac.next $(this).val()
             if match?
                 $(this).val(match)
 

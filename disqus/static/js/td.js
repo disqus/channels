@@ -1,7 +1,37 @@
 (function() {
+  var Autocomplete;
+
+  Autocomplete = (function() {
+
+    function Autocomplete(source_cb) {
+      this.source_cb = source_cb;
+      this.lastMatch = null;
+      this.matches = null;
+      this.i = null;
+    }
+
+    Autocomplete.prototype._next = function() {
+      if (this.i === this.matches.length) this.i = 0;
+      return this.matches[this.i++];
+    };
+
+    Autocomplete.prototype.next = function(text) {
+      var _this = this;
+      if (text !== this.lastMatch) {
+        this.i = 0;
+        this.matches = _.filter(ap_view.usernameList(), function(name) {
+          return name.toLowerCase().indexOf(text.toLowerCase()) === 0;
+        });
+      }
+      return this.lastMatch = this._next();
+    };
+
+    return Autocomplete;
+
+  })();
 
   $(document).ready(function() {
-    var p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
+    var ac, p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
       _this = this;
     window.the_user = new User(current_user);
     window.list_view = new PostListView;
@@ -17,17 +47,15 @@
     window.my_threads_view = new ActiveThreadsView({
       id: 'my_thread_list'
     });
+    ac = new Autocomplete(ap_view.usernameList);
     $('#message').keydown(function(e) {
-      var match,
-        _this = this;
+      var match;
       if (e.which === 13 && e.shiftKey) {
         $('.new-reply form').submit();
         return false;
       }
       if (e.which === 9 && $(this).val().indexOf(' ') < 0) {
-        match = _.find(ap_view.usernameList(), function(name) {
-          return name.toLowerCase().indexOf($(_this).val().toLowerCase()) === 0;
-        });
+        match = ac.next($(this).val());
         if (match != null) $(this).val(match);
         return false;
       }
