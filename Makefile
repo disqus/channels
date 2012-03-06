@@ -8,3 +8,7 @@ realtime:
 
 compile_cs:
 	python -mdisqus.coffee
+
+install_hook:
+	chmod u+x pre-commit
+	cp pre-commit .git/hooks/
