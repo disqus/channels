@@ -93,7 +93,7 @@ def thread_list():
     except (TypeError, ValueError):
         return redirect(url_for('thread_list'))
 
-    thread_list = Thread.list(offset=page * 50, limit=50 + 1)
+    thread_list = Thread.list(offset=page * 50, limit=50 + (page * 1))
     has_next = len(thread_list) > 50
     has_prev = page > 1
 
