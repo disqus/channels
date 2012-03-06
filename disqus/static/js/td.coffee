@@ -12,11 +12,12 @@ $(document).ready () ->
             false
 
     $('.new-reply form').submit () ->
-        if $('textarea', this).val().length <= 2
-            return false
+        ta = $('textarea', this)
+        if ta.val().length <= 2
+            ta.val(ta.val() + '&nbsp;')
 
         post = new Post
-            message: $('#message', this).val()
+            message: ta.val()
             name: the_user.get 'name'
             avatar: the_user.get 'avatar'
 

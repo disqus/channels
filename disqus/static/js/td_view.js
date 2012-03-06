@@ -148,6 +148,12 @@
       return $('li[data-thread="' + this.id + '"]', el).remove();
     };
 
+    ActiveThreadsView.prototype.usernameList = function() {
+      return this.collection.map(function(user) {
+        return user.get("name");
+      });
+    };
+
     return ActiveThreadsView;
 
   })(Backbone.View);
