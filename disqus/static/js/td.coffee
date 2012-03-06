@@ -1,8 +1,8 @@
 $(document).ready () ->
+    window.the_user = new User current_user
     window.list_view = new PostListView
     window.participants_view = new ParticipantsView id: 'participant_list'
     window.ap_view = new ParticipantsView id: 'active_participant_list'
-    window.the_user = new User current_user
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
 
@@ -115,11 +115,8 @@ $(document).ready () ->
 
         socket.on 'peer_disconnect', (peer) ->
             u = new User peer
-            if not u.isUser(the_user)
-                ap_view.removeUser u
+            ap_view.removeUser u
 
         socket.on 'peer_connect', (peer) ->
             u = new User peer
-            console.log "peer_connect"
-            console.log u
             ap_view.addUser u

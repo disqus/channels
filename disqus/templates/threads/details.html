@@ -21,9 +21,9 @@
 {% endblock %}
 
 {% block footer %}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/td.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/td_model.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/td_view.js') }}"></script>
-  <script type="text/javascript" src="{{ url_for('static', filename='js/td.js') }}"></script>
 {% endblock %}
 
 {% block before_main %}

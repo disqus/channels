@@ -3,6 +3,7 @@
   $(document).ready(function() {
     var p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
       _this = this;
+    window.the_user = new User(current_user);
     window.list_view = new PostListView;
     window.participants_view = new ParticipantsView({
       id: 'participant_list'
@@ -10,7 +11,6 @@
     window.ap_view = new ParticipantsView({
       id: 'active_participant_list'
     });
-    window.the_user = new User(current_user);
     window.threads_view = new ActiveThreadsView({
       id: 'thread_list'
     });
@@ -139,13 +139,11 @@
       socket.on('peer_disconnect', function(peer) {
         var u;
         u = new User(peer);
-        if (!u.isUser(the_user)) return ap_view.removeUser(u);
+        return ap_view.removeUser(u);
       });
       return socket.on('peer_connect', function(peer) {
         var u;
         u = new User(peer);
-        console.log("peer_connect");
-        console.log(u);
         return ap_view.addUser(u);
       });
     });
