@@ -139,7 +139,7 @@ def thread_details(thread_id):
         my_threads = Thread.list_by_author(author_id=session['auth']['user_id'])[:5]
         channel_list['my_thread_list'] = threads.get_channel_key(threads.get_key(author_id=thread_id))
     else:
-        my_threads = None
+        my_threads = []
 
     post_list = Post.list_by_thread(thread_id)[::-1]
     if 'auth' in session:

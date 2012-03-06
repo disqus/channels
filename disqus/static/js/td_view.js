@@ -264,7 +264,9 @@
     };
 
     PostListView.prototype.commit = function(post, serverPost) {
-      if (this.hasPost(serverPost)) this.removePost(post);
+      post.set(message, serverPost.get("message"));
+      post.id = serverPost.id;
+      $('#' + post.eid() + ' .post-message').html(post.get("message"));
       return this._clearTimeout(post);
     };
 

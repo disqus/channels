@@ -11,7 +11,7 @@ from flask import session
 
 from disqus import app, disqusapi, schedule
 from disqus.oauth import api_call
-from disqus.utils import datestr_to_datetime, from_cache
+from disqus.utils import datestr_to_datetime, from_cache, secure_avatar
 from disqus.views import threads, posts, users
 
 
@@ -20,7 +20,7 @@ class User:
     def format(cls, user):
         return {
             'id': user['id'],
-            'avatar': user['avatar']['cache'],
+            'avatar': secure_avatar(user['avatar']['cache']),
             'name': user['username'],
         }
 
@@ -183,9 +183,11 @@ class Session:
 class Post:
     @classmethod
     def format(cls, post):
+        avatar = secure_avatar(post['author']['avatar']['cache'])
+
         return {
             'id': post['id'],
-            'avatar': post['author']['avatar']['cache'],
+            'avatar': avatar,
             'name': post['author']['username'],
             'createdAtISO': post['createdAt'].isoformat(),
             'message': post['message']

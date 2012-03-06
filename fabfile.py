@@ -15,14 +15,16 @@ def deploy():
 
         run('../venv/bin/pip install -e .')
 
-    #ln -s $INSTALL_DIR/local_settings.py disqus/local_settings.py
+    bounce()
 
+def flushredis():
+    sudo('redis-cli flushall')
+
+def bounce():
     sudo('supervisorctl restart all')
-
 
 def realtime():
     local('./node_modules/.bin/coffee realtime/server.coffee')
-
 
 def web():
     local('python manage.py runserver')

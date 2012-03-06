@@ -27,7 +27,8 @@ window.ParticipantsView = class ParticipantsView extends Backbone.View
         @collection.remove user
 
     clearUser: (user) ->
-        $('#' + @id + ' li:has(img[src="' + user.get("avatar") + '"])').remove()
+        $('#' + @id + ' li:has(img[src="' + user.get("avatar") + '"])')
+            .remove()
 
 
 UserView = class UserView extends Backbone.View
@@ -41,9 +42,11 @@ UserView = class UserView extends Backbone.View
         @$el.html @template @model.toJSON()
         @
 
+
 class UserList extends Backbone.Collection
 
     model: User
+
 
 window.ActiveThreadsView = class ActiveThreadsView extends Backbone.View
     el: '#thread-list'
@@ -78,6 +81,7 @@ window.ActiveThreadsView = class ActiveThreadsView extends Backbone.View
     clearthread: (thread) ->
         $('li[data-thread="' + @id + '"]', el).remove()
 
+
 class ThreadView extends Backbone.View
     tagName: 'li'
     className: 'thread'
@@ -90,9 +94,11 @@ class ThreadView extends Backbone.View
         @$el.html @template @model.toJSON()
         @
 
+
 class ThreadList extends Backbone.Collection
 
     model: Thread
+
 
 window.PostListView = class PostListView extends Backbone.View
     el: '.post-list'
@@ -129,7 +135,7 @@ window.PostListView = class PostListView extends Backbone.View
         @_clearTimeout post
         that = @
         $('#' + post.eid() + ' .post-resend').show().click () ->
-            $('button', this).button('loading')
+            $('button', this).button 'loading'
             $.ajax
                 url: $('form').attr 'action'
                 type: 'POST'
@@ -141,17 +147,18 @@ window.PostListView = class PostListView extends Backbone.View
                     that.commit post, serverPost
                     $('button', this).button 'done'
 
-
     _clearTimeout: (post) ->
         clearTimeout @timeouts[post.cid]
         delete @timeouts[post.cid]
 
     commit: (post, serverPost) ->
+        post.set message, serverPost.get "message"
+        post.id = serverPost.id
 
-        if @hasPost serverPost
-            @removePost post
+        $('#' + post.eid() + ' .post-message')
+            .html post.get("message")
+
         @_clearTimeout post
-        #$('.post-resend', '#' + post.eid()).hide()
 
     addTentatively: (post) ->
         post.format()
@@ -185,6 +192,7 @@ class PostView extends Backbone.View
         else if @model.mentions the_user
             @$el.addClass('highlight')
         @
+
 
 
 class PostList extends Backbone.Collection

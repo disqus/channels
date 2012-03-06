@@ -57,7 +57,8 @@ $(document).ready () ->
         maxHeight: 82
         minHeight: 82
         onAfterResize: () =>
-            $('.conversation').css('padding-bottom', $('.new-reply').outerHeight())
+            $('.conversation').css 'padding-bottom',
+                $('.new-reply').outerHeight()
     ).focus()
 
     $('.conversation').css('padding-top', $('.topic').outerHeight() + 10)
@@ -69,11 +70,16 @@ $(document).ready () ->
     .done (script, status) ->
         socket = io.connect realtime_host
 
+        socket.on 'connect', () ->
+            socket.emit 'connect',
+                channels: _.values channels
+                user: the_user.toJSON()
+
         socket.on channels.posts, (data) ->
             payload = JSON.parse data
             p = new Post payload.data
             if payload.event == 'add'
-                if not list_view.hasPost p
+                if p.get "name" != the_user.get "name"
                     list_view.addPost p
             else
                 console.log payload
@@ -101,11 +107,6 @@ $(document).ready () ->
                 my_threads_view.addThread t
             else
                 console.log payload
-
-        socket.on 'connect', () ->
-            socket.emit 'connect',
-                channels: _.values channels
-                user: the_user.toJSON()
 
         socket.on 'current_peers', (peers) ->
             console.log peers
