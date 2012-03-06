@@ -19,7 +19,7 @@
       var _this = this;
       if (text !== this.lastMatch) {
         this.i = 0;
-        this.matches = _.filter(ap_view.usernameList(), function(name) {
+        this.matches = _.filter(this.source_cb(), function(name) {
           return name.toLowerCase().indexOf(text.toLowerCase()) === 0;
         });
       }
@@ -47,7 +47,7 @@
     window.my_threads_view = new ActiveThreadsView({
       id: 'my_thread_list'
     });
-    ac = new Autocomplete(ap_view.usernameList);
+    ac = new Autocomplete(participants_view.usernameList);
     $('#message').keydown(function(e) {
       var match;
       if (e.which === 13 && e.shiftKey) {

@@ -13,7 +13,7 @@ class Autocomplete
     next: (text) ->
         if text != @lastMatch
             @i = 0
-            @matches = _.filter ap_view.usernameList(), (name) =>
+            @matches = _.filter @source_cb(), (name) =>
                 name.toLowerCase().indexOf(text.toLowerCase()) == 0
 
         return @lastMatch = @_next()
@@ -27,7 +27,7 @@ $(document).ready () ->
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
 
-    ac = new Autocomplete ap_view.usernameList
+    ac = new Autocomplete participants_view.usernameList
 
     $('#message').keydown (e) ->
         if e.which == 13 and e.shiftKey
