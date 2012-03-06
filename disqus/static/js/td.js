@@ -28,7 +28,11 @@
     $('.new-reply form').submit(function() {
       var post, ta;
       ta = $('textarea', this);
-      if (ta.val().length <= 2) ta.val(ta.val() + '&nbsp;');
+      if (ta.val().length < 1) {
+        return false;
+      } else if (ta.val().length <= 2) {
+        ta.val(ta.val() + '&nbsp;');
+      }
       post = new Post({
         message: ta.val(),
         name: the_user.get('name'),

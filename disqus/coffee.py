@@ -9,11 +9,7 @@ import os
 import subprocess
 
 
-def compile():
-    try:
-        static_dir = app.root_path + app.static_url_path
-    except AttributeError:
-        static_dir = app.root_path + app.static_path  # < version 0.7
+def compile(static_dir):
 
     coffee_paths = []
     for path, subdirs, filenames in os.walk(static_dir):
@@ -35,4 +31,18 @@ def compile():
 def coffee(app):
     @app.before_request
     def _render_coffee():
-        compile()
+        try:
+            static_dir = app.root_path + app.static_url_path
+        except AttributeError:
+            static_dir = app.root_path + app.static_path  # < version 0.7
+        compile(static_dir)
+
+if __name__ == '__main__':
+    import sys
+    if len(sys.argv) > 1:
+        static_dir = sys.argv[1]
+    else:
+        import os.path
+        static_dir = os.path.join(os.path.dirname(sys.argv[0]), 'static', 'js')
+
+    compile(static_dir)
