@@ -18,7 +18,7 @@ window.ParticipantsView = class ParticipantsView extends Backbone.View
         $('img', um.$el).tooltip()
 
     addUser: (user) ->
-        if not @hasUser user
+        if not @hasUser(user) and not user.isAnonymous()
             @collection.add user
 
     hasUser: (user) ->
@@ -194,7 +194,6 @@ class PostView extends Backbone.View
         else if @model.mentions window.the_user
             @$el.addClass('highlight')
         @
-
 
 
 class PostList extends Backbone.Collection

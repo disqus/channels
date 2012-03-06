@@ -32,7 +32,9 @@
     };
 
     ParticipantsView.prototype.addUser = function(user) {
-      if (!this.hasUser(user)) return this.collection.add(user);
+      if (!this.hasUser(user) && !user.isAnonymous()) {
+        return this.collection.add(user);
+      }
     };
 
     ParticipantsView.prototype.hasUser = function(user) {
