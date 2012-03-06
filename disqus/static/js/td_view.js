@@ -128,7 +128,8 @@
     ActiveThreadsView.prototype.appendThread = function(thread) {
       var thread_view, um;
       thread_view = new ThreadView({
-        model: thread
+        model: thread,
+        id: this.id + thread.id
       });
       um = thread_view.render();
       return $('#' + this.id).append(um.el);
@@ -140,7 +141,7 @@
         return this.collection.add(thread);
       } else {
         t = this.collection.get(thread.id);
-        return t.set('posts', thread.posts);
+        return t.set('posts', thread.get("posts"));
       }
     };
 
@@ -183,8 +184,8 @@
       return this.model.on("change:posts", this.updatePosts);
     };
 
-    ThreadView.prototype.updatePosts = function(thread) {
-      return console.log("TODO: updatePosts");
+    ThreadView.prototype.updatePosts = function(p) {
+      return $('.thread-count', this.$el).text(this.model.get("posts"));
     };
 
     ThreadView.prototype.render = function() {

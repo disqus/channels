@@ -71,7 +71,9 @@ window.ActiveThreadsView = class ActiveThreadsView extends Backbone.View
         @collection.on 'remove', @clearThread
 
     appendThread: (thread) ->
-        thread_view = new ThreadView model: thread
+        thread_view = new ThreadView
+            model: thread
+            id: @id + thread.id
 
         um = thread_view.render()
         $('#' + @id).append um.el
@@ -81,7 +83,7 @@ window.ActiveThreadsView = class ActiveThreadsView extends Backbone.View
             @collection.add thread
         else
             t = @collection.get thread.id
-            t.set('posts', thread.posts)
+            t.set('posts', thread.get "posts")
 
     hasThread: (thread) ->
         if @collection.get thread.id then true else false
@@ -102,8 +104,8 @@ class ThreadView extends Backbone.View
         _.bindAll @
         @model.on "change:posts", @updatePosts
 
-    updatePosts: (thread) ->
-        console.log "TODO: updatePosts"
+    updatePosts: (p) ->
+        $('.thread-count', this.$el).text @model.get("posts")
 
     render: ->
         @$el.html @template @model.toJSON()
