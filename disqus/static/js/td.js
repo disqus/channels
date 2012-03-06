@@ -30,18 +30,13 @@
     };
     ap_view.on("membership change", doTypeahead);
     $('.new-reply form').submit(function() {
-      var post, ta;
-      ta = $('textarea', this);
-      if (ta.val().length < 1) {
-        return false;
-      } else if (ta.val().length <= 2) {
-        ta.val(ta.val() + '&nbsp;');
-      }
+      var post;
       post = new Post({
-        message: ta.val(),
+        message: $('textarea', this).val(),
         name: the_user.get('name'),
         avatar: the_user.get('avatar')
       });
+      if (!post.isValid()) return false;
       list_view.addTentatively(post);
       $.ajax({
         url: $(this).attr('action'),

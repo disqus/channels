@@ -88,6 +88,15 @@
       return "post-" + this.cid;
     };
 
+    Post.prototype.validate = function() {
+      var msg;
+      msg = this.get("message");
+      if (msg.replace(/\s/g, '').length < 3) return "Message too short";
+      if (msg.split(/\s/g).length - 1 === msg.length) {
+        return "Will not accept blank message.";
+      }
+    };
+
     return Post;
 
   })(Backbone.Model);

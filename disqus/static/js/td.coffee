@@ -17,16 +17,14 @@ $(document).ready () ->
     ap_view.on "membership change", doTypeahead
 
     $('.new-reply form').submit () ->
-        ta = $('textarea', this)
-        if ta.val().length < 1
-            return false
-        else if ta.val().length <= 2
-            ta.val(ta.val() + '&nbsp;')
 
         post = new Post
-            message: ta.val()
+            message: $('textarea', this).val()
             name: the_user.get 'name'
             avatar: the_user.get 'avatar'
+
+        if not post.isValid()
+            return false
 
         list_view.addTentatively post
 
