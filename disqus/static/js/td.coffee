@@ -14,7 +14,9 @@ $(document).ready () ->
 
     $('.new-reply form').submit () ->
         ta = $('textarea', this)
-        if ta.val().length <= 2
+        if ta.val().length < 1
+            return false
+        else if ta.val().length <= 2
             ta.val(ta.val() + '&nbsp;')
 
         post = new Post
