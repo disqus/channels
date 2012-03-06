@@ -2,23 +2,17 @@
 
 {% block nav_all_threads_active %} class="active"{% endblock %}
 
-{% block main %}
-<div class="content">
-  <div class="row-fluid">
-    <div class="span12">
-      <div class="page-header">
-        <h1>Sessions</h1>
-      </div>
-
-      {% for date, session_list in sessions_by_date %}
-        <h2>{{ date.strftime('%A, %B %d') }}</h2>
-        <ul class="thread-list">
-          {% for thread in session_list %}
-            {% include "includes/thread.html" %}
-          {% endfor %}
-        </ul>
-      {% endfor %}
-    </div>
+{% block content %}
+  <div class="page-header">
+    <h1>Sessions</h1>
   </div>
-</div>
+
+  {% for date, session_list in sessions_by_date %}
+    <h2>{{ date.strftime('%A, %B %d') }}</h2>
+    <ul class="thread-list">
+      {% for thread in session_list %}
+        {% include "includes/thread.html" %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
 {% endblock %}

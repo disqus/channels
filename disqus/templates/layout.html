@@ -22,7 +22,7 @@
     {% block head %}{% endblock %}
   </head>
 
-  <body>
+  <body class="{% block body_class %}{% endblock %}">
 
     <header>
       <div class="container-fluid">
@@ -46,21 +46,27 @@
         {% block before_main %}
         {% endblock %}
         {% block main %}
-        <div class="row-fluid">
-          <div class="content span9 offset3">
-            {% block content %}{% endblock %}
-          </div>
-          <div class="sidebar span3">
-            <div class="sidebar-inner">
-              {% block sidebar %}{% endblock %}
+          <div class="content">
+            <div class="row-fluid">
+              <div class="span12">
+                {% block content %}{% endblock %}
+              </div>
             </div>
           </div>
-        </div>
         {% endblock %}
         {% block after_main %}
         {% endblock %}
       </div>
     </section>
-    {% block foot %}{% endblock %}
+
+    {% block footer %}
+      <footer>
+        <div class="container-fluid">
+          <div class="footer-inner">
+            <p>This website was built by <a href="http://disqus.com/about">DISQUS</a> for the <a href="http://us.pycon.org">PyCon 2012 conference</a>. &copy; 2012 DISQUS</p>
+          </div>
+        </div>
+      </footer>
+    {% endblock %}
   </body>
 </html>

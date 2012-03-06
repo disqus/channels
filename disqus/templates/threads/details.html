@@ -4,48 +4,26 @@
   {{ thread.title[:60] }} | {{ super() }}
 {% endblock %}
 
+{% block body_class %} fixed{% endblock %}
+
 {% block head %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.autoresize.js') }}"></script>
-<script type="text/javascript">
-    var threadId = "{{ thread.id }}";
-    var initialPosts = {{ post_list|as_json }};
-    var current_user = {{ current_user|as_json }};
-    var initialThreads = {{ active_thread_list|as_json }};
-    var initialMyThreads = {{ my_thread_list|as_json }};
-    var initialParticipants = {{ participant_list|as_json }};
-    var channels = {{ channel_list|as_json }};
-    var realtime_host = "{{ realtime_host }}";
-</script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.autoresize.js') }}"></script>
+  <script type="text/javascript">
+      var threadId = "{{ thread.id }}";
+      var initialPosts = {{ post_list|as_json }};
+      var current_user = {{ current_user|as_json }};
+      var initialThreads = {{ active_thread_list|as_json }};
+      var initialMyThreads = {{ my_thread_list|as_json }};
+      var initialParticipants = {{ participant_list|as_json }};
+      var channels = {{ channel_list|as_json }};
+      var realtime_host = "{{ realtime_host }}";
+  </script>
 {% endblock %}
 
-{% block foot %}
-<script type="text/javascript" src="{{ url_for('static', filename='js/td_model.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/td_view.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='js/td.js') }}"></script>
-{% endblock %}
-
-{% block sidebar %}
-  <div class="page-header">
-    <h4>Participants</h4>
-  </div>
-  <ul class="user-list" id="participant_list"></ul>
-
-  <div class="page-header">
-    <h4>Active Participants</h4>
-  </div>
-  <ul class="user-list" id="active_participant_list"></ul>
-
-  <div class="page-header">
-    <h4>Active Conversations</h4>
-  </div>
-  <ul class="thread-list" id="thread_list"></ul>
-
-  {% if my_thread_list %}
-    <div class="page-header">
-      <h4>Your Conversations</h4>
-    </div>
-    <ul class="thread-list" id="my_thread_list"></ul>
-  {% endif %}
+{% block footer %}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/td_model.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/td_view.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/td.js') }}"></script>
 {% endblock %}
 
 {% block before_main %}
@@ -74,48 +52,80 @@
   </div>
 {% endblock %}
 
-{% block content %}
-  <script id="post-template" type="text/template">
-    <img src="<%= avatar %>" class="post-avatar">
-    <div class="post-meta">
-      <span class="post-author">
-        <%= name %>
-      </span>
-      &middot;
-      <span class="post-datetime pretty-date" title="<%= createdAtISO %>Z">
-        <%= createdAtSince %>
-      </span>
-        <div class="post-resend" style="display: none;">
-          <button class="btn btn-warning" data-loading-text="Resending">Resend</button>
+{% block main %}
+    <div class="row-fluid">
+      <div class="content span9 offset3">
+
+        <script id="post-template" type="text/template">
+          <img src="<%= avatar %>" class="post-avatar">
+          <div class="post-meta">
+            <span class="post-author">
+              <%= name %>
+            </span>
+            &middot;
+            <span class="post-datetime pretty-date" title="<%= createdAtISO %>Z">
+              <%= createdAtSince %>
+            </span>
+              <div class="post-resend" style="display: none;">
+                <button class="btn btn-warning" data-loading-text="Resending">Resend</button>
+              </div>
+          </div>
+          <div class="post-message">
+            <%= message %>
+          </div>
+        </script>
+
+        <script id="participant-template" type="text/template">
+            <a href="http://disqus.com/<%= name %>">
+                <img rel="tooltip" src="<%= avatar %>" title="<%= name %>">
+            </a>
+        </script>
+
+        <script id="thread-template" type="text/template">
+            <div class="thread-count">
+                <%= posts %>
+            </div>
+            <div class="thread-title">
+                <h3><a href="/threads/<%= id %>"><%= title %></a></h3>
+            </div>
+        </script>
+
+        <div class="conversation has-topic">
+          <ul class="post-list">
+          </ul>
+        {#    <p>It seems no one is participating in this conversation yet.</p>#}
+      </div>
+
+      </div>
+      <div class="sidebar span3">
+        <div class="sidebar-inner">
+
+          <div class="page-header">
+            <h4>Participants</h4>
+          </div>
+          <ul class="user-list" id="participant_list"></ul>
+
+          <div class="page-header">
+            <h4>Active Participants</h4>
+          </div>
+          <ul class="user-list" id="active_participant_list"></ul>
+
+          <div class="page-header">
+            <h4>Active Conversations</h4>
+          </div>
+          <ul class="thread-list" id="thread_list"></ul>
+
+          {% if my_thread_list %}
+            <div class="page-header">
+              <h4>Your Conversations</h4>
+            </div>
+            <ul class="thread-list" id="my_thread_list"></ul>
+          {% endif %}
+
         </div>
-    </div>
-    <div class="post-message">
-      <%= message %>
-    </div>
-  </script>
-
-  <script id="participant-template" type="text/template">
-      <a href="http://disqus.com/<%= name %>">
-          <img rel="tooltip" src="<%= avatar %>" title="<%= name %>">
-      </a>
-  </script>
-
-  <script id="thread-template" type="text/template">
-      <div class="thread-count">
-          <%= posts %>
       </div>
-      <div class="thread-title">
-          <h3><a href="/threads/<%= id %>"><%= title %></a></h3>
-      </div>
+    </div>
 
-  </script>
-
-
-  <div class="conversation has-topic">
-    <ul class="post-list">
-    </ul>
-  {#    <p>It seems no one is participating in this conversation yet.</p>#}
-</div>
 {% endblock %}
 
 {% block after_main %}

@@ -2,30 +2,24 @@
 
 {% block nav_my_threads_active %} class="active"{% endblock %}
 
-{% block main %}
-<div class="content">
-  <div class="row-fluid">
-    <div class="span12">
-      <div class="page-header">
-        <h1>My Conversations</h1>
-      </div>
-      <ul class="nav nav-tabs">
-        <li><a href="{{ url_for('thread_list') }}">All Conversations</a></li>
-        <li class="active"><a href="{{ url_for('my_threads') }}">My Activity</a></li>
-      </ul>
-
-      {% if thread_list %}
-        <ul class="thread-list">
-          {% for thread in thread_list %}
-            {% include "includes/thread.html" %}
-          {% endfor %}
-        </ul>
-      {% else %}
-        <div class="alert-message block-message info">
-          <p>You haven't participated in any conversations yet.</p>
-        </div>
-      {% endif %}
-    </div>
+{% block content %}
+  <div class="page-header">
+    <h1>My Conversations</h1>
   </div>
-</div>
+  <ul class="nav nav-tabs">
+    <li><a href="{{ url_for('thread_list') }}">All Conversations</a></li>
+    <li class="active"><a href="{{ url_for('my_threads') }}">My Activity</a></li>
+  </ul>
+
+  {% if thread_list %}
+    <ul class="thread-list">
+      {% for thread in thread_list %}
+        {% include "includes/thread.html" %}
+      {% endfor %}
+    </ul>
+  {% else %}
+    <div class="alert-message block-message info">
+      <p>You haven't participated in any conversations yet.</p>
+    </div>
+  {% endif %}
 {% endblock %}

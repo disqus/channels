@@ -26,12 +26,15 @@ h1, h2, h3, h4, h5, h6 {
 
 header {
   z-index: 100;
-  position: fixed;
+  position: absolute;
   height: 68px;
   left: 0;
   right: 0;
   top: 0;
   background: #eae7df;
+}
+body.fixed header {
+  position: fixed;
 }
 
 header #subhead {
@@ -117,6 +120,15 @@ header .powered-by span {
   width: 104px;
   height: 20px;
   background: url('../img/logo_light_sm.png') 0 0 no-repeat;
+}
+footer {
+  border-top: 1px solid #d5cebc;
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  font-size: 0.8em;
+}
+footer .footer-inner {
 }
 
 .row-fluid .span3 {
