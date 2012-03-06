@@ -81,8 +81,8 @@
       var socket;
       socket = io.connect(realtime_host);
       socket.on('connect', function() {
-        return socket.emit('connect', {
-          channels: _.values(channels),
+        return socket.emit('hello', {
+          channels: channels,
           user: the_user.toJSON()
         });
       });
@@ -91,7 +91,7 @@
         payload = JSON.parse(data);
         p = new Post(payload.data);
         if (payload.event === 'add') {
-          if (p.get("name" !== the_user.get("name"))) return list_view.addPost(p);
+          if (p.get("name") !== the_user.get("name")) return list_view.addPost(p);
         } else {
           return console.log(payload);
         }

@@ -71,15 +71,15 @@ $(document).ready () ->
         socket = io.connect realtime_host
 
         socket.on 'connect', () ->
-            socket.emit 'connect',
-                channels: _.values channels
+            socket.emit 'hello',
+                channels: channels
                 user: the_user.toJSON()
 
         socket.on channels.posts, (data) ->
             payload = JSON.parse data
             p = new Post payload.data
             if payload.event == 'add'
-                if p.get "name" != the_user.get "name"
+                if p.get("name") != the_user.get("name")
                     list_view.addPost p
             else
                 console.log payload
