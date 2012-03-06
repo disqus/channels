@@ -221,6 +221,8 @@ class Post:
             result = []
             paginator = Paginator(disqusapi.threads.listPosts, thread=thread_id)
             for post in paginator:
+                if post['author']['isAnonymous']:
+                    continue
                 result.append(cls.save(post, incr_posts=False))
 
         return result
