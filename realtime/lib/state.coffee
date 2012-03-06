@@ -42,7 +42,7 @@ exports.SubscriberState = class
     listeners: (channel) ->
         @subscribers[channel]
 
-    peers: (socket) ->
+    peers: (socket, channel) ->
         p = []
         for channel in @id2channel[socket.id]
             if _.isUndefined @listeners channel

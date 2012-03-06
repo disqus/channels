@@ -3,6 +3,7 @@
   $(document).ready(function() {
     var p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
       _this = this;
+    window.the_user = new User(current_user);
     window.list_view = new PostListView;
     window.participants_view = new ParticipantsView({
       id: 'participant_list'
@@ -10,7 +11,6 @@
     window.ap_view = new ParticipantsView({
       id: 'active_participant_list'
     });
-    window.the_user = new User(current_user);
     window.threads_view = new ActiveThreadsView({
       id: 'thread_list'
     });
@@ -81,8 +81,8 @@
       var socket;
       socket = io.connect(realtime_host);
       socket.on('connect', function() {
-        return socket.emit('connect', {
-          channels: _.values(channels),
+        return socket.emit('hello', {
+          channels: channels,
           user: the_user.toJSON()
         });
       });
@@ -91,7 +91,7 @@
         payload = JSON.parse(data);
         p = new Post(payload.data);
         if (payload.event === 'add') {
-          if (p.get("name" !== the_user.get("name"))) return list_view.addPost(p);
+          if (!p.isAuthor(the_user)) return list_view.addPost(p);
         } else {
           return console.log(payload);
         }
@@ -128,11 +128,9 @@
       });
       socket.on('current_peers', function(peers) {
         var p, peer, _len5, _m, _results;
-        console.log(peers);
         _results = [];
         for (_m = 0, _len5 = peers.length; _m < _len5; _m++) {
           p = peers[_m];
-          console.log(p);
           peer = new User(p);
           _results.push(ap_view.addUser(peer));
         }

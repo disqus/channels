@@ -8,6 +8,7 @@ window.ParticipantsView = class ParticipantsView extends Backbone.View
         @collection = new UserList
         @collection.bind 'add', @appendUser
         @collection.bind 'remove', @clearUser
+        @addUser window.the_user
 
     appendUser: (user) ->
         user_view = new UserView model: user
@@ -17,14 +18,15 @@ window.ParticipantsView = class ParticipantsView extends Backbone.View
         $('img', um.$el).tooltip()
 
     addUser: (user) ->
-        if not @hasUser user
+        if not @hasUser(user) and not user.isAnonymous()
             @collection.add user
 
     hasUser: (user) ->
         if @collection.get user.id then true else false
 
     removeUser: (user) ->
-        @collection.remove user
+        if not user.isUser(window.the_user)
+            @collection.remove user
 
     clearUser: (user) ->
         $('#' + @id + ' li:has(img[src="' + user.get("avatar") + '"])')
@@ -187,12 +189,11 @@ class PostView extends Backbone.View
 
     render: ->
         @$el.html @template @model.toJSON()
-        if @model.isAuthor the_user
+        if @model.isAuthor window.the_user
             @$el.addClass('author')
-        else if @model.mentions the_user
+        else if @model.mentions window.the_user
             @$el.addClass('highlight')
         @
-
 
 
 class PostList extends Backbone.Collection

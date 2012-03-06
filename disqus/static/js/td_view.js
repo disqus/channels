@@ -17,7 +17,8 @@
       _.bindAll(this);
       this.collection = new UserList;
       this.collection.bind('add', this.appendUser);
-      return this.collection.bind('remove', this.clearUser);
+      this.collection.bind('remove', this.clearUser);
+      return this.addUser(window.the_user);
     };
 
     ParticipantsView.prototype.appendUser = function(user) {
@@ -31,7 +32,9 @@
     };
 
     ParticipantsView.prototype.addUser = function(user) {
-      if (!this.hasUser(user)) return this.collection.add(user);
+      if (!this.hasUser(user) && !user.isAnonymous()) {
+        return this.collection.add(user);
+      }
     };
 
     ParticipantsView.prototype.hasUser = function(user) {
@@ -43,7 +46,7 @@
     };
 
     ParticipantsView.prototype.removeUser = function(user) {
-      return this.collection.remove(user);
+      if (!user.isUser(window.the_user)) return this.collection.remove(user);
     };
 
     ParticipantsView.prototype.clearUser = function(user) {
@@ -319,9 +322,9 @@
 
     PostView.prototype.render = function() {
       this.$el.html(this.template(this.model.toJSON()));
-      if (this.model.isAuthor(the_user)) {
+      if (this.model.isAuthor(window.the_user)) {
         this.$el.addClass('author');
-      } else if (this.model.mentions(the_user)) {
+      } else if (this.model.mentions(window.the_user)) {
         this.$el.addClass('highlight');
       }
       return this;

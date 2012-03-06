@@ -20,6 +20,10 @@
       return !(this.id != null);
     };
 
+    User.prototype.isUser = function(user) {
+      return this.id === user.id;
+    };
+
     return User;
 
   })(Backbone.Model);

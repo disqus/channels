@@ -20,33 +20,37 @@ io.configure () ->
 
 r.on 'message', (channel, message) ->
     _.each substate.listeners(channel), (socket) ->
-        socket.emit channel,
-            message
+        socket.emit channel, message
 
 socket2user = {}
 
-io.sockets.on 'connection', (socket) ->
-    socket.on 'connect', (message) ->
-        for channel in message.channels
-            do (channel) ->
-                console.log "client connected: " + socket.id
-                substate.subscribe socket, channel
+hello = (socket, message) ->
 
-        if message.user.id?
-            socket2user[socket.id] = message.user
+    for channel in _.values message.channels
+        do (channel) ->
+            console.log "client connected: " + socket.id
+            substate.subscribe socket, channel
 
-            _.each substate.peers(socket), (ps) ->
-                ps.emit 'peer_connect', socket2user[socket.id]
+    postChan = message.channels.posts
 
-        ids = (ps.id for ps in substate.peers socket)
-        socket.emit 'current_peers',
-            (socket2user[id] for id in _.unique ids when socket2user[id]?)
+    if message.user.id?
+        socket2user[socket.id] = message.user
+
+        _.each substate.listeners(postChan), (ls) ->
+            ls.emit 'peer_connect', socket2user[socket.id]
+
+    socket.emit 'current_peers',
+        (socket2user[ls.id] for ls in substate.listeners postChan when socket2user[ls.id]?)
 
 
     socket.on 'disconnect', () ->
         console.log "disconnect: " + socket.id
         # here we can actively disconnect people.
-        _.each substate.peers(socket), (ps) ->
+        _.each substate.peers(socket, postChan), (ps) ->
             ps.emit 'peer_disconnect', socket2user[socket.id]
         substate.unsubscribe socket
         delete socket2user[socket.id]
+
+io.sockets.on 'connection', (socket) ->
+    socket.on 'hello', (message) ->
+        hello socket, message

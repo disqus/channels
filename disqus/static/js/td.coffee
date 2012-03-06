@@ -1,8 +1,8 @@
 $(document).ready () ->
+    window.the_user = new User current_user
     window.list_view = new PostListView
     window.participants_view = new ParticipantsView id: 'participant_list'
     window.ap_view = new ParticipantsView id: 'active_participant_list'
-    window.the_user = new User current_user
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
 
@@ -71,15 +71,15 @@ $(document).ready () ->
         socket = io.connect realtime_host
 
         socket.on 'connect', () ->
-            socket.emit 'connect',
-                channels: _.values channels
+            socket.emit 'hello',
+                channels: channels
                 user: the_user.toJSON()
 
         socket.on channels.posts, (data) ->
             payload = JSON.parse data
             p = new Post payload.data
             if payload.event == 'add'
-                if p.get "name" != the_user.get "name"
+                if not p.isAuthor(the_user)
                     list_view.addPost p
             else
                 console.log payload
@@ -109,9 +109,7 @@ $(document).ready () ->
                 console.log payload
 
         socket.on 'current_peers', (peers) ->
-            console.log peers
             for p in peers
-                console.log p
                 peer = new User p
                 ap_view.addUser peer
 
