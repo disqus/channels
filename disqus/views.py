@@ -144,7 +144,7 @@ class View(object):
             func = self.redis.zrange
 
         key = self.get_key(_key, **kwargs)
-        id_list = func(key, offset, limit)
+        id_list = func(key, offset, offset + limit)
 
         if not id_list:
             if not self.redis.exists(key):
