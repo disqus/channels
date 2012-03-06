@@ -275,7 +275,6 @@
     PostListView.prototype.commit = function(post, serverPost) {
       post.set(message, serverPost.get("message"));
       post.id = serverPost.id;
-      $('#' + post.eid() + ' .post-message').html(post.get("message"));
       return this._clearTimeout(post);
     };
 
@@ -323,7 +322,12 @@
     PostView.prototype.template = _.template($('#post-template').html());
 
     PostView.prototype.initialize = function() {
-      return _.bindAll(this);
+      _.bindAll(this);
+      return this.model.on('change:message', this.updateMessage);
+    };
+
+    PostView.prototype.updateMessage = function(post) {
+      return $('#' + this.eid() + ' .post-message').html(this.get("message"));
     };
 
     PostView.prototype.render = function() {

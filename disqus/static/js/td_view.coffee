@@ -126,6 +126,7 @@ window.PostListView = class PostListView extends Backbone.View
         @$el.append post_view.render().el
 
     addPost: (post) ->
+        # TODO: doesn't this scrolly businees belong at the end of appendPost?
         scrolled = @isAtBottom()
         @collection.add post
         if scrolled
@@ -161,9 +162,6 @@ window.PostListView = class PostListView extends Backbone.View
         post.set message, serverPost.get "message"
         post.id = serverPost.id
 
-        $('#' + post.eid() + ' .post-message')
-            .html post.get("message")
-
         @_clearTimeout post
 
     addTentatively: (post) ->
@@ -190,6 +188,11 @@ class PostView extends Backbone.View
 
     initialize: ->
         _.bindAll @
+        @model.on 'change:message', @updateMessage
+
+    updateMessage: (post) ->
+        $('#' + @eid() + ' .post-message')
+            .html @get("message")
 
     render: ->
         @$el.html @template @model.toJSON()
