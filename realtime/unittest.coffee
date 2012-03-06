@@ -82,9 +82,12 @@ exports.testListeners = (test) ->
     channel1 = 'testchannel'
     channel2 = 'testchannel2'
     channel3 = 'testchannel3'
+    channel4 = 'testchannel4'
     s.subscribe id: 123, channel1
     s.subscribe id: 123, channel2
+    s.subscribe id: 123, channel4
     s.subscribe id: 456, channel2
+    s.subscribe id: 456, channel4
     s.subscribe id: 456, channel3
 
     test.ok s.listeners(channel1).length == 1, "[id: 123]"
