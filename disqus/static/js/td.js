@@ -47,6 +47,7 @@
     window.my_threads_view = new ActiveThreadsView({
       id: 'my_thread_list'
     });
+    window.player = $('#dplayer embed')[0];
     ac = new Autocomplete(participants_view.usernameList);
     $('#message').keydown(function(e) {
       var match;

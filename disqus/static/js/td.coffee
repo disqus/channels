@@ -26,6 +26,8 @@ $(document).ready () ->
     window.ap_view = new ParticipantsView id: 'active_participant_list'
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
+    window.player = $('#dplayer embed')[0]
+
 
     ac = new Autocomplete participants_view.usernameList
 
@@ -150,3 +152,4 @@ $(document).ready () ->
         socket.on 'peer_connect', (peer) ->
             u = new User peer
             ap_view.addUser u
+

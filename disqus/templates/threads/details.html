@@ -17,6 +17,7 @@
       var initialParticipants = {{ participant_list|as_json }};
       var channels = {{ channel_list|as_json }};
       var realtime_host = "{{ realtime_host }}";
+      var dingfn = "{{ url_for('static', filename='ding.wav') }}";
   </script>
 {% endblock %}
 
@@ -24,6 +25,20 @@
   <script type="text/javascript" src="{{ url_for('static', filename='js/td.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/td_model.js') }}"></script>
   <script type="text/javascript" src="{{ url_for('static', filename='js/td_view.js') }}"></script>
+  <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000"
+    width="0"
+    height="0"
+    id="dplayer"
+    style="position: fixed;">
+    <embed src="{{ url_for('static', filename='wavplayer.swf') }}?h=1&w=1"
+      bgcolor="#ffffff"
+      width="0"
+      height="0"
+      allowScriptAccess="always"
+      type="application/x-shockwave-flash"
+      pluginspage="http://www.macromedia.com/go/getflashplayer"
+    />
+    </object>
 {% endblock %}
 
 {% block before_main %}
