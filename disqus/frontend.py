@@ -101,8 +101,8 @@ def thread_list():
 
     return render_template('threads/all.html', **{
         'thread_list': thread_list,
-        'next_page': (page + 1) if has_next else None,
-        'prev_page': (page - 1) if has_prev else None,
+        'next_page': (page + 2) if has_next else None,
+        'prev_page': (page) if has_prev else None,
     })
 
 
