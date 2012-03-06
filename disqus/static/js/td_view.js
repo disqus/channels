@@ -53,6 +53,12 @@
       return $('#' + this.id + ' li:has(img[src="' + user.get("avatar") + '"])').remove();
     };
 
+    ParticipantsView.prototype.usernameList = function() {
+      return this.collection.map(function(user) {
+        return user.get("name");
+      });
+    };
+
     return ParticipantsView;
 
   })(Backbone.View);
@@ -146,12 +152,6 @@
 
     ActiveThreadsView.prototype.clearthread = function(thread) {
       return $('li[data-thread="' + this.id + '"]', el).remove();
-    };
-
-    ActiveThreadsView.prototype.usernameList = function() {
-      return this.collection.map(function(user) {
-        return user.get("name");
-      });
     };
 
     return ActiveThreadsView;

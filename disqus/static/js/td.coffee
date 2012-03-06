@@ -6,10 +6,11 @@ $(document).ready () ->
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
 
-    $('#message').keydown (e) =>
+    $('#message').keydown (e) ->
         if e.which == 13 and e.shiftKey
             $('.new-reply form').submit()
             false
+    .typeahead source: ap_view.usernameList()
 
     $('.new-reply form').submit () ->
         ta = $('textarea', this)

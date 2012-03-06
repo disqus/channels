@@ -32,6 +32,10 @@ window.ParticipantsView = class ParticipantsView extends Backbone.View
         $('#' + @id + ' li:has(img[src="' + user.get("avatar") + '"])')
             .remove()
 
+    usernameList: ->
+        @collection.map (user) ->
+            user.get "name"
+
 
 UserView = class UserView extends Backbone.View
     tagName: 'li'
@@ -82,10 +86,6 @@ window.ActiveThreadsView = class ActiveThreadsView extends Backbone.View
 
     clearthread: (thread) ->
         $('li[data-thread="' + @id + '"]', el).remove()
-
-    usernameList: ->
-        @collection.map (user) ->
-            user.get "name"
 
 
 class ThreadView extends Backbone.View

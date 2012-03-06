@@ -20,8 +20,11 @@
     $('#message').keydown(function(e) {
       if (e.which === 13 && e.shiftKey) {
         $('.new-reply form').submit();
-        return false;
+        false;
       }
+      if (e.which === 9 && $(this).val().indexOf(' ') < 0) return false;
+    }).typeahead({
+      source: ap_view.usernameList()
     });
     $('.new-reply form').submit(function() {
       var post, ta;
