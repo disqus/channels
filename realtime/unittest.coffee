@@ -69,11 +69,10 @@ exports.testPeers = (test) ->
     s.subscribe id: 123, channel2
     s.subscribe id: 456, channel2
     s.subscribe id: 456, channel3
+    s.subscribe id: 789, channel3
 
     res = s.peers id: 123
-    console.log res
-    test.ok res.length == 1
-    test.ok res[0].id == 456
+    test.ok res.length == 2
 
     test.done()
 
@@ -88,8 +87,8 @@ exports.testListeners = (test) ->
     s.subscribe id: 456, channel2
     s.subscribe id: 456, channel3
 
-    test.ok s.listeners(channel1).length == 1 #[id: 123]
-    test.ok s.listeners(channel2).length == 2 #[id: 123, id: 456]
-    test.ok s.listeners(channel3).length == 1 #[id: 456]
+    test.ok s.listeners(channel1).length == 1, "[id: 123]"
+    test.ok s.listeners(channel2).length == 2, "[id: 123, id: 456]"
+    test.ok s.listeners(channel3).length == 1, "[id: 456]"
 
     test.done()
