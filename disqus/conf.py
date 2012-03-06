@@ -30,3 +30,4 @@ class DefaultConfig(object):
     TALK_CATEGORY_ID = 1330567
     CSRF_ENABLED = False
     REALTIME_HOST = 'http://localhost:3000'
+    USE_MARKDOWN = True

@@ -1,7 +1,7 @@
 (function() {
 
   $(document).ready(function() {
-    var doTypeahead, p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
+    var p, post, thread, user, _i, _j, _k, _l, _len, _len2, _len3, _len4,
       _this = this;
     window.the_user = new User(current_user);
     window.list_view = new PostListView;
@@ -18,17 +18,20 @@
       id: 'my_thread_list'
     });
     $('#message').keydown(function(e) {
+      var match,
+        _this = this;
       if (e.which === 13 && e.shiftKey) {
         $('.new-reply form').submit();
         return false;
       }
+      if (e.which === 9 && $(this).val().indexOf(' ') < 0) {
+        match = _.find(ap_view.usernameList(), function(name) {
+          return name.toLowerCase().indexOf($(_this).val().toLowerCase()) === 0;
+        });
+        if (match != null) $(this).val(match);
+        return false;
+      }
     });
-    doTypeahead = function() {
-      return $('#message').typeahead({
-        source: ap_view.usernameList()
-      });
-    };
-    ap_view.on("membership", doTypeahead);
     $('.new-reply form').submit(function() {
       var post;
       post = new Post({

@@ -9,13 +9,16 @@ $(document).ready () ->
     $('#message').keydown (e) ->
         if e.which == 13 and e.shiftKey
             $('.new-reply form').submit()
-            false
+            return false
 
-    doTypeahead = () ->
-        $('#message').typeahead source: ap_view.usernameList()
+        if e.which == 9 and $(this).val().indexOf(' ') < 0
+            match = _.find ap_view.usernameList(), (name) =>
+                name.toLowerCase().indexOf($(this).val().toLowerCase()) == 0
 
-    #TODO check that this works.
-    ap_view.on "membership", doTypeahead
+            if match?
+                $(this).val(match)
+
+            return false
 
     $('.new-reply form').submit () ->
 
