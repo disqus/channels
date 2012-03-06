@@ -9,7 +9,7 @@ import simplejson
 import time
 
 
-from disqus import db, publisher
+from disqus.app import db, publisher
 from disqus.contrib.lrucache import LRUCache
 
 

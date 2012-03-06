@@ -14,7 +14,7 @@ import urllib2
 from disqusapi import InvalidAccessToken
 from flask import url_for, request, redirect, session
 
-from disqus import app, disqusapi
+from disqus.app import app, disqusapi
 
 
 class Logout(Exception):

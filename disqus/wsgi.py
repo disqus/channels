@@ -6,6 +6,6 @@ disqus.wsgi
 :license: Apache License 2.0, see LICENSE for more details.
 """
 
-from disqus import app
+from disqus.app import app
 
 application = app

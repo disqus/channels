@@ -9,7 +9,7 @@ from datetime import datetime, timedelta
 from disqusapi import Paginator
 from flask import session
 
-from disqus import app, disqusapi, schedule
+from disqus.app import app, disqusapi, schedule
 from disqus.oauth import api_call
 from disqus.utils import datestr_to_datetime, from_cache, secure_avatar
 from disqus.views import threads, posts, users

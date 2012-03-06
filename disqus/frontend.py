@@ -13,7 +13,7 @@ from datetime import datetime, timedelta
 from flask import request, session, render_template, redirect, url_for, jsonify
 from jinja2 import Markup
 
-from disqus import app, disqusapi, schedule
+from disqus.app import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
 from disqus.models import Thread, Post, Session, User
 from disqus.oauth import login_required, api_call

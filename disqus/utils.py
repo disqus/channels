@@ -10,7 +10,7 @@ import logging
 import pytz
 import json
 from datetime import datetime, timedelta
-from disqus import db
+from disqus.app import db
 from flask import make_response
 
 logger = logging.getLogger(__name__)
