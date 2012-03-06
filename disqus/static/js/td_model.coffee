@@ -7,6 +7,9 @@ window.User = class User extends Backbone.Model
     isAnonymous: ->
         not @id?
 
+    isUser: (user) ->
+        @id == user.id
+
 window.Thread = class Thread extends Backbone.Model
 
     defaults:

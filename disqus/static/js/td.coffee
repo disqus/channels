@@ -79,7 +79,7 @@ $(document).ready () ->
             payload = JSON.parse data
             p = new Post payload.data
             if payload.event == 'add'
-                if p.get("name") != the_user.get("name")
+                if not p.isAuthor(the_user)
                     list_view.addPost p
             else
                 console.log payload
@@ -109,16 +109,17 @@ $(document).ready () ->
                 console.log payload
 
         socket.on 'current_peers', (peers) ->
-            console.log peers
             for p in peers
-                console.log p
                 peer = new User p
                 ap_view.addUser peer
 
         socket.on 'peer_disconnect', (peer) ->
             u = new User peer
-            ap_view.removeUser u
+            if not u.isUser(the_user)
+                ap_view.removeUser u
 
         socket.on 'peer_connect', (peer) ->
             u = new User peer
+            console.log "peer_connect"
+            console.log u
             ap_view.addUser u

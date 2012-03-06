@@ -91,7 +91,7 @@
         payload = JSON.parse(data);
         p = new Post(payload.data);
         if (payload.event === 'add') {
-          if (p.get("name") !== the_user.get("name")) return list_view.addPost(p);
+          if (!p.isAuthor(the_user)) return list_view.addPost(p);
         } else {
           return console.log(payload);
         }
@@ -128,11 +128,9 @@
       });
       socket.on('current_peers', function(peers) {
         var p, peer, _len5, _m, _results;
-        console.log(peers);
         _results = [];
         for (_m = 0, _len5 = peers.length; _m < _len5; _m++) {
           p = peers[_m];
-          console.log(p);
           peer = new User(p);
           _results.push(ap_view.addUser(peer));
         }
@@ -141,11 +139,13 @@
       socket.on('peer_disconnect', function(peer) {
         var u;
         u = new User(peer);
-        return ap_view.removeUser(u);
+        if (!u.isUser(the_user)) return ap_view.removeUser(u);
       });
       return socket.on('peer_connect', function(peer) {
         var u;
         u = new User(peer);
+        console.log("peer_connect");
+        console.log(u);
         return ap_view.addUser(u);
       });
     });
