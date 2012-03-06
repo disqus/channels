@@ -6,8 +6,8 @@ window.ParticipantsView = class ParticipantsView extends Backbone.View
         _.bindAll @
 
         @collection = new UserList
-        @collection.bind 'add', @appendUser
-        @collection.bind 'remove', @clearUser
+        @collection.on 'add', @appendUser
+        @collection.on 'remove', @clearUser
         @addUser window.the_user
 
     appendUser: (user) ->
@@ -62,8 +62,8 @@ window.ActiveThreadsView = class ActiveThreadsView extends Backbone.View
         _.bindAll @
 
         @collection = new ThreadList
-        @collection.bind 'add', @appendThread
-        @collection.bind 'remove', @clearThread
+        @collection.on 'add', @appendThread
+        @collection.on 'remove', @clearThread
 
     appendThread: (thread) ->
         thread_view = new ThreadView model: thread
@@ -119,8 +119,8 @@ window.PostListView = class PostListView extends Backbone.View
 
         @timeouts = {}
         @collection = new PostList
-        @collection.bind 'add', @appendPost
-        @collection.bind 'remove', @clearPost
+        @collection.on 'add', @appendPost
+        @collection.on 'remove', @clearPost
 
     appendPost: (post) ->
         post_view = new PostView

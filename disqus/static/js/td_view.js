@@ -16,8 +16,8 @@
     ParticipantsView.prototype.initialize = function() {
       _.bindAll(this);
       this.collection = new UserList;
-      this.collection.bind('add', this.appendUser);
-      this.collection.bind('remove', this.clearUser);
+      this.collection.on('add', this.appendUser);
+      this.collection.on('remove', this.clearUser);
       return this.addUser(window.the_user);
     };
 
@@ -115,8 +115,8 @@
     ActiveThreadsView.prototype.initialize = function() {
       _.bindAll(this);
       this.collection = new ThreadList;
-      this.collection.bind('add', this.appendThread);
-      return this.collection.bind('remove', this.clearThread);
+      this.collection.on('add', this.appendThread);
+      return this.collection.on('remove', this.clearThread);
     };
 
     ActiveThreadsView.prototype.appendThread = function(thread) {
@@ -218,8 +218,8 @@
       _.bindAll(this);
       this.timeouts = {};
       this.collection = new PostList;
-      this.collection.bind('add', this.appendPost);
-      return this.collection.bind('remove', this.clearPost);
+      this.collection.on('add', this.appendPost);
+      return this.collection.on('remove', this.clearPost);
     };
 
     PostListView.prototype.appendPost = function(post) {

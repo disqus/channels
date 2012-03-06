@@ -28,8 +28,8 @@
         source: ap_view.usernameList()
       });
     };
-    ap_view.collection.bind("add", doTypeahead);
-    ap_view.collection.bind("remove", doTypeahead);
+    ap_view.collection.on("add", doTypeahead);
+    ap_view.collection.on("remove", doTypeahead);
     $('.new-reply form').submit(function() {
       var post, ta;
       ta = $('textarea', this);
