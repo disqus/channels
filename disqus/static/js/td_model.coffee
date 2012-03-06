@@ -20,7 +20,9 @@ window.Post = class Post extends Backbone.Model
 
     defaults:
         message: null
+        # TODO: make this update
         createdAtISO: (new Date()).toISOString()
+        createdAtSince: "just now"
         name: null
         avatar: null
 
@@ -41,11 +43,10 @@ window.Post = class Post extends Backbone.Model
         @get("message").toLowerCase()
             .indexOf(user.get("name").toLowerCase()) >= 0
 
-    format: ->
-        new_text = "<p>" + @get("message")
+    formattedMsg: ->
+        "<p>" + @get("message")
             .replace(/\n\n/g, "</p><p>")
             .replace(/\n/g, "<br/>") + "</p>"
-        @set "message", new_text
 
     eid: ->
         "post-" + @cid

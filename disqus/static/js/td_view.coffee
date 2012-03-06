@@ -140,14 +140,13 @@ window.PostListView = class PostListView extends Backbone.View
             model: post
             id: post.eid()
 
-        @$el.append post_view.render().el
-
-    addPost: (post) ->
-        # TODO: doesn't this scrolly businees belong at the end of appendPost?
         scrolled = @isAtBottom()
-        @collection.add post
+        @$el.append post_view.render(post.isNew()).el
         if scrolled
             @scrollBottom()
+
+    addPost: (post) ->
+        @collection.add post
 
     scrollBottom: ->
         $('body').animate scrollTop: $(document).height(), 0
@@ -176,13 +175,15 @@ window.PostListView = class PostListView extends Backbone.View
         delete @timeouts[post.cid]
 
     commit: (post, serverPost) ->
-        post.set message, serverPost.get "message"
+        scrolled = @isAtBottom()
+        post.set "message", serverPost.get "message"
+        if scrolled
+            @scrollBottom()
         post.id = serverPost.id
 
         @_clearTimeout post
 
     addTentatively: (post) ->
-        post.format()
         @addPost post
         @timeouts[post.cid] = setTimeout () =>
             @error post
@@ -208,11 +209,14 @@ class PostView extends Backbone.View
         @model.on 'change:message', @updateMessage
 
     updateMessage: (post) ->
-        $('#' + @eid() + ' .post-message')
-            .html @get("message")
+        $('#' + @model.eid() + ' .post-message')
+            .html @model.get("message")
 
-    render: ->
-        @$el.html @template @model.toJSON()
+    render: (format) ->
+        obj = @model.toJSON()
+        if format?
+            obj.message = @model.formattedMsg()
+        @$el.html @template obj
         if @model.isAuthor window.the_user
             @$el.addClass('author')
         else if @model.mentions window.the_user

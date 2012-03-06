@@ -26,6 +26,7 @@ $(document).ready () ->
     window.ap_view = new ParticipantsView id: 'active_participant_list'
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
+
     if trollEnabled
         window.ding = $('#dplayer')[0]
 
@@ -53,12 +54,13 @@ $(document).ready () ->
 
         if not post.isValid()
             return false
+        $(':input', this).not(':button, :submit, :reset, :hidden').val('')
 
         list_view.addTentatively post
 
         $.ajax
             url: $(this).attr 'action'
-            data: $(this).serialize()
+            data: post.serialize()
             type: 'POST'
             error: (jqxhr, status, error) ->
                 list_view.error(post)
@@ -66,7 +68,6 @@ $(document).ready () ->
                 serverPost = new Post data.post
                 list_view.commit post, serverPost
 
-        $(':input', this).not(':button, :submit, :reset, :hidden').val('')
 
         false
 

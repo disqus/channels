@@ -240,19 +240,18 @@
     };
 
     PostListView.prototype.appendPost = function(post) {
-      var post_view;
+      var post_view, scrolled;
       post_view = new PostView({
         model: post,
         id: post.eid()
       });
-      return this.$el.append(post_view.render().el);
+      scrolled = this.isAtBottom();
+      this.$el.append(post_view.render(post.isNew()).el);
+      if (scrolled) return this.scrollBottom();
     };
 
     PostListView.prototype.addPost = function(post) {
-      var scrolled;
-      scrolled = this.isAtBottom();
-      this.collection.add(post);
-      if (scrolled) return this.scrollBottom();
+      return this.collection.add(post);
     };
 
     PostListView.prototype.scrollBottom = function() {
@@ -295,14 +294,16 @@
     };
 
     PostListView.prototype.commit = function(post, serverPost) {
-      post.set(message, serverPost.get("message"));
+      var scrolled;
+      scrolled = this.isAtBottom();
+      post.set("message", serverPost.get("message"));
+      if (scrolled) this.scrollBottom();
       post.id = serverPost.id;
       return this._clearTimeout(post);
     };
 
     PostListView.prototype.addTentatively = function(post) {
       var _this = this;
-      post.format();
       this.addPost(post);
       return this.timeouts[post.cid] = setTimeout(function() {
         return _this.error(post);
@@ -349,11 +350,14 @@
     };
 
     PostView.prototype.updateMessage = function(post) {
-      return $('#' + this.eid() + ' .post-message').html(this.get("message"));
+      return $('#' + this.model.eid() + ' .post-message').html(this.model.get("message"));
     };
 
-    PostView.prototype.render = function() {
-      this.$el.html(this.template(this.model.toJSON()));
+    PostView.prototype.render = function(format) {
+      var obj;
+      obj = this.model.toJSON();
+      if (format != null) obj.message = this.model.formattedMsg();
+      this.$el.html(this.template(obj));
       if (this.model.isAuthor(window.the_user)) {
         this.$el.addClass('author');
       } else if (this.model.mentions(window.the_user)) {

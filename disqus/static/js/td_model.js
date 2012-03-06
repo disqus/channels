@@ -56,6 +56,7 @@
     Post.prototype.defaults = {
       message: null,
       createdAtISO: (new Date()).toISOString(),
+      createdAtSince: "just now",
       name: null,
       avatar: null
     };
@@ -78,10 +79,8 @@
       return this.get("message").toLowerCase().indexOf(user.get("name").toLowerCase()) >= 0;
     };
 
-    Post.prototype.format = function() {
-      var new_text;
-      new_text = "<p>" + this.get("message").replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br/>") + "</p>";
-      return this.set("message", new_text);
+    Post.prototype.formattedMsg = function() {
+      return "<p>" + this.get("message").replace(/\n\n/g, "</p><p>").replace(/\n/g, "<br/>") + "</p>";
     };
 
     Post.prototype.eid = function() {

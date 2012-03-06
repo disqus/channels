@@ -69,10 +69,11 @@
         avatar: the_user.get('avatar')
       });
       if (!post.isValid()) return false;
+      $(':input', this).not(':button, :submit, :reset, :hidden').val('');
       list_view.addTentatively(post);
       $.ajax({
         url: $(this).attr('action'),
-        data: $(this).serialize(),
+        data: post.serialize(),
         type: 'POST',
         error: function(jqxhr, status, error) {
           return list_view.error(post);
@@ -83,7 +84,6 @@
           return list_view.commit(post, serverPost);
         }
       });
-      $(':input', this).not(':button, :submit, :reset, :hidden').val('');
       return false;
     });
     for (_i = 0, _len = initialPosts.length; _i < _len; _i++) {
