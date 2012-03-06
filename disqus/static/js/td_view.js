@@ -173,7 +173,12 @@
     ThreadView.prototype.template = _.template($('#thread-template').html());
 
     ThreadView.prototype.initialize = function() {
-      return _.bindAll(this);
+      _.bindAll(this);
+      return this.model.on("change:posts", this.updatePosts);
+    };
+
+    ThreadView.prototype.updatePosts = function(thread) {
+      return console.log("TODO: updatePosts");
     };
 
     ThreadView.prototype.render = function() {

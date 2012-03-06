@@ -95,6 +95,10 @@ class ThreadView extends Backbone.View
 
     initialize: ->
         _.bindAll @
+        @model.on "change:posts", @updatePosts
+
+    updatePosts: (thread) ->
+        console.log "TODO: updatePosts"
 
     render: ->
         @$el.html @template @model.toJSON()
