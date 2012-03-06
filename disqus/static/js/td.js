@@ -28,7 +28,7 @@
         source: ap_view.usernameList()
       });
     };
-    ap_view.on("membership change", doTypeahead);
+    ap_view.on("membership", doTypeahead);
     $('.new-reply form').submit(function() {
       var post;
       post = new Post({

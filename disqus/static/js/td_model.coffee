@@ -54,5 +54,5 @@ window.Post = class Post extends Backbone.Model
         msg = @get "message"
         if msg.replace(/\s/g, '').length < 3
             return "Message too short"
-        if msg.split(///\s///g).length - 1 is msg.length
+        if msg.split(/\s/g).length - 1 is msg.length
             return "Will not accept blank message."

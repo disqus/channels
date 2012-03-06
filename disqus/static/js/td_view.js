@@ -18,13 +18,12 @@
       this.collection = new UserList;
       this.collection.on('add', this.appendUser);
       this.collection.on('remove', this.clearUser);
-      this.collection.on('add', this.changed);
-      this.collection.on('remove', this.changed);
+      this.collection.on('add remove', this.changed);
       return this.addUser(window.the_user);
     };
 
     ParticipantsView.prototype.changed = function() {
-      return this.trigger("membership change");
+      return this.trigger("membership");
     };
 
     ParticipantsView.prototype.appendUser = function(user) {

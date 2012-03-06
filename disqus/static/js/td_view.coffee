@@ -8,12 +8,11 @@ window.ParticipantsView = class ParticipantsView extends Backbone.View
         @collection = new UserList
         @collection.on 'add', @appendUser
         @collection.on 'remove', @clearUser
-        @collection.on 'add', @changed
-        @collection.on 'remove', @changed
+        @collection.on 'add remove', @changed
         @addUser window.the_user
 
     changed: ->
-        @trigger "membership change"
+        @trigger "membership"
 
     appendUser: (user) ->
         user_view = new UserView model: user

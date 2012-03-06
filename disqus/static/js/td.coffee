@@ -13,8 +13,9 @@ $(document).ready () ->
 
     doTypeahead = () ->
         $('#message').typeahead source: ap_view.usernameList()
+
     #TODO check that this works.
-    ap_view.on "membership change", doTypeahead
+    ap_view.on "membership", doTypeahead
 
     $('.new-reply form').submit () ->
 
