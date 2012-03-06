@@ -3,7 +3,7 @@
 # -*- encoding:utf-8 -*-
 
 from flaskext.actions import Manager
-from disqus import app
+from disqus.app import app
 
 manager = Manager(app)
 
