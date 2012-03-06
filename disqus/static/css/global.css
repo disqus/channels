@@ -480,3 +480,7 @@ footer .footer-inner {
 .callout a {
   font-weight: bold;
 }
+
+#dplayer {
+  display: none
+}

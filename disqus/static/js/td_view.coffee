@@ -216,8 +216,8 @@ class PostView extends Backbone.View
         if @model.isAuthor window.the_user
             @$el.addClass('author')
         else if @model.mentions window.the_user
-            if player? and player.play?
-                player.play dingfn
+            if ding? and ding.play?
+                ding.play
             @$el.addClass('highlight')
         @
 

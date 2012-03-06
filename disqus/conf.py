@@ -31,3 +31,4 @@ class DefaultConfig(object):
     CSRF_ENABLED = False
     REALTIME_HOST = 'http://localhost:3000'
     USE_MARKDOWN = True
+    DING_ENABLED = True

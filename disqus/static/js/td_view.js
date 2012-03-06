@@ -357,8 +357,8 @@
       if (this.model.isAuthor(window.the_user)) {
         this.$el.addClass('author');
       } else if (this.model.mentions(window.the_user)) {
-        if ((typeof player !== "undefined" && player !== null) && (player.play != null)) {
-          player.play(dingfn);
+        if ((typeof ding !== "undefined" && ding !== null) && (ding.play != null)) {
+          ding.play;
         }
         this.$el.addClass('highlight');
       }

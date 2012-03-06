@@ -157,7 +157,8 @@ def thread_details(thread_id):
         'post_list': post_list,
         'channel_list': channel_list,
         'realtime_host': app.config.get('REALTIME_HOST'),
-        'current_user': current_user
+        'current_user': current_user,
+        'do_troll': app.config.get('DING_ENABLED', False)
     })
 
 
