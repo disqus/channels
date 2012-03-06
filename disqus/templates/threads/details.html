@@ -139,7 +139,7 @@
       {% else %}
         <form method="POST" id="replyform" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
           <fieldset>
-              {{ form.message(rows=2) }}
+              {{ form.message(rows=2, placeholder='Type your comment and press shift + enter to send it') }}
               <button type="submit" class="btn btn-large btn-primary">Post</button>
               <div class="avatar">
                 <img src="{{ current_user.avatar }}">
