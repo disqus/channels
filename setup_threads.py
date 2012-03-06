@@ -1,6 +1,5 @@
 import cPickle as pickle
 import datetime
-import pytz
 import simplejson as json
 import urllib
 from disqus import app, disqusapi
