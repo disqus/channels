@@ -13,6 +13,7 @@ $(document).ready () ->
 
     doTypeahead = () ->
         $('#message').typeahead source: ap_view.usernameList()
+    #TODO check that this works.
     ap_view.on "membership change", doTypeahead
 
     $('.new-reply form').submit () ->
@@ -36,7 +37,6 @@ $(document).ready () ->
             error: (jqxhr, status, error) ->
                 list_view.error(post)
             success: (data, status, jqxhr) ->
-                # TODO: here just update the returned ID
                 serverPost = new Post data.post
                 list_view.commit post, serverPost
 
