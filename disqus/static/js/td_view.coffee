@@ -83,6 +83,10 @@ window.ActiveThreadsView = class ActiveThreadsView extends Backbone.View
     clearthread: (thread) ->
         $('li[data-thread="' + @id + '"]', el).remove()
 
+    usernameList: ->
+        @collection.map (user) ->
+            user.get "name"
+
 
 class ThreadView extends Backbone.View
     tagName: 'li'
