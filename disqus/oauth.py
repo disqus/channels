@@ -12,7 +12,7 @@ import urllib
 import urllib2
 
 from disqusapi import InvalidAccessToken
-from flask import url_for, request, redirect, session
+from flask import url_for, request, redirect, session, render_template
 
 from disqus.app import app, disqusapi
 
@@ -78,6 +78,11 @@ def oauth_authorize():
     }),))
 
 
+@app.route('/oauth/error/')
+def oauth_error():
+    return render_template('/oauth/error.html')
+
+
 @app.route('/oauth/callback/')
 def oauth_callback():
     from disqus.models import User
@@ -96,7 +101,10 @@ def oauth_callback():
         'code': code,
     }))
 
-    resp = urllib2.urlopen(req).read()
+    try:
+        resp = urllib2.urlopen(req).read()
+    except Exception:
+        return redirect('/oauth/error/')
 
     data = simplejson.loads(resp)
 
