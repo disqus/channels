@@ -282,7 +282,7 @@
             var serverPost;
             serverPost = new Post(data.post);
             that.commit(post, serverPost);
-            return $('button', _this).button('done');
+            return $('button', _this).hide();
           }
         });
       });

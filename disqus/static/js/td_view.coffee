@@ -168,7 +168,7 @@ window.PostListView = class PostListView extends Backbone.View
                 success: (data, status, jqxhr) =>
                     serverPost = new Post data.post
                     that.commit post, serverPost
-                    $('button', this).button 'done'
+                    $('button', this).hide()
 
     _clearTimeout: (post) ->
         clearTimeout @timeouts[post.cid]
