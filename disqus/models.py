@@ -168,7 +168,7 @@ class Session:
         num = 0
         thread_ids = []
         for talk in sorted(schedule.itervalues(), key=lambda x: (x['start'], x['room'])):
-            if talk['start'] > start:  # and talk['start'] < end:
+            if talk['end'] > start:  # and talk['start'] < end:
                 thread_ids.append(talk['disqus:thread']['id'])
             if num > limit:
                 return
