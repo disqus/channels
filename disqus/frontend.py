@@ -131,7 +131,7 @@ def thread_details(thread_id):
         'active_thread_list': threads.get_channel_key(threads.get_key()),
     }
 
-    if int(thread['category']) == app.config['TALK_CATEGORY_ID']:
+    if thread['link'] in schedule:
         pycon_session = schedule[thread['link']]
     else:
         pycon_session = False
