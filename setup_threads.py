@@ -2,7 +2,7 @@ import cPickle as pickle
 import datetime
 import simplejson as json
 import urllib
-from disqus import app, disqusapi
+from disqus.app import app, disqusapi
 from disqusapi import Paginator
 
 TALK_CATEGORY_NAME = 'Talk'
