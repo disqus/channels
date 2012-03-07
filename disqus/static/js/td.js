@@ -50,7 +50,7 @@
     ac = new Autocomplete(participants_view.usernameList);
     $('#message').keydown(function(e) {
       var match;
-      if (e.which === 13 && e.shiftKey) {
+      if (e.which === 13 && (e.shiftKey || e.metaKey)) {
         $('.new-reply form').submit();
         return false;
       }
