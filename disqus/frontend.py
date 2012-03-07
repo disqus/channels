@@ -17,7 +17,8 @@ from disqus.app import app, disqusapi, schedule
 from disqus.forms import NewThreadForm, NewPostForm
 from disqus.models import Thread, Post, Session, User
 from disqus.oauth import login_required, api_call
-from disqus.utils import timesince, format_datetime, better_jsonify, convert_pycon_dt
+from disqus.utils import timesince, format_datetime, better_jsonify, convert_pycon_dt, \
+  base62_decode, base62_encode
 from disqus.views import posts, users, threads
 
 logger = logging.getLogger(__name__)
@@ -52,6 +53,7 @@ def as_json_filter(data):
 app.template_filter('timesince')(timesince)
 app.template_filter('format_datetime')(format_datetime)
 app.template_filter('convert_pycon_dt')(convert_pycon_dt)
+app.template_filter('base62_encode')(base62_encode)
 
 
 @app.route('/', methods=['GET'])
@@ -73,7 +75,7 @@ def new_thread():
     if form.validate_on_submit():
         thread = api_call(disqusapi.threads.create, title=form.subject.data, forum=app.config['DISQUS_FORUM'])
         Thread.save(thread)
-        return redirect(url_for('thread_details', thread_id=thread['id']))
+        return redirect(url_for('thread_details', thread_id=base62_encode(thread['id'])))
 
     return render_template('threads/new.html', form=form)
 
@@ -121,6 +123,8 @@ def session_list():
 
 @app.route('/threads/<thread_id>', methods=['GET', 'POST'])
 def thread_details(thread_id):
+    if not thread_id.isdigit():
+        thread_id = base62_decode(thread_id)
     form = NewPostForm(get_form_from_session())
 
     thread = Thread.get(thread_id)

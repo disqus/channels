@@ -3,7 +3,7 @@
     {{ thread.posts }}
   </div>
   <div class="thread-title">
-    <h3><a href="{{ url_for('thread_details', thread_id=thread.id) }}" title="{{ thread.title }}">{{ thread.title }}</a></h3>
+    <h3><a href="{{ url_for('thread_details', thread_id=thread.id|base62_encode) }}" title="{{ thread.title }}">{{ thread.title }}</a></h3>
   </div>
   <div class="thread-info">{{ (thread.session.start|convert_pycon_dt).strftime('%A, %B %d at %I:%M %p') }} in {{ thread.session.room }}</div>
 </li>
