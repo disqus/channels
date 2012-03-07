@@ -72,7 +72,7 @@
       list_view.addTentatively(post);
       $.ajax({
         url: $(this).attr('action'),
-        data: post.serialize(),
+        data: post.toJSON(),
         type: 'POST',
         error: function(jqxhr, status, error) {
           return list_view.error(post);

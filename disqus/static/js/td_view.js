@@ -274,7 +274,7 @@
         return $.ajax({
           url: $('form').attr('action'),
           type: 'POST',
-          data: post.serialize(),
+          data: post.toJSON(),
           error: function(jqxr, status, error) {
             return $('button', _this).button('reset');
           },
