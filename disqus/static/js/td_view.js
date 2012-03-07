@@ -246,7 +246,7 @@
         id: post.eid()
       });
       scrolled = this.isAtBottom();
-      this.$el.append(post_view.render(post.isNew()).el);
+      this.$el.append(post_view.render().el);
       if (scrolled) return this.scrollBottom();
     };
 
@@ -282,7 +282,7 @@
             var serverPost;
             serverPost = new Post(data.post);
             that.commit(post, serverPost);
-            return $('button', _this).button('done');
+            return $('button', _this).hide();
           }
         });
       });
@@ -353,16 +353,16 @@
       return $('#' + this.model.eid() + ' .post-message').html(this.model.get("message"));
     };
 
-    PostView.prototype.render = function(format) {
+    PostView.prototype.render = function() {
       var obj;
       obj = this.model.toJSON();
-      if (format != null) obj.message = this.model.formattedMsg();
+      if (this.model.isNew()) obj.message = this.model.formattedMsg();
       this.$el.html(this.template(obj));
       if (this.model.isAuthor(window.the_user)) {
         this.$el.addClass('author');
       } else if (this.model.mentions(window.the_user)) {
         if ((typeof ding !== "undefined" && ding !== null) && (ding.play != null)) {
-          ding.play;
+          ding.play();
         }
         this.$el.addClass('highlight');
       }

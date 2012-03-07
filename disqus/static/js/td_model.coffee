@@ -21,12 +21,14 @@ window.Post = class Post extends Backbone.Model
     defaults:
         message: null
         # TODO: make this update
-        createdAtISO: (new Date()).toISOString()
+        createdAtISO: null
         createdAtSince: "just now"
         name: null
         avatar: null
 
     initialize: ->
+        if not @get 'createdAtISO'
+            @set 'createdAtISO', (new Date()).toISOString()
         @set 'createdAtSince', Disqus.prettyDate(@get 'createdAtISO' )
 
     serialize: ->

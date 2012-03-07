@@ -47,7 +47,6 @@
     window.my_threads_view = new ActiveThreadsView({
       id: 'my_thread_list'
     });
-    if (trollEnabled) window.ding = $('#dplayer')[0];
     ac = new Autocomplete(participants_view.usernameList);
     $('#message').keydown(function(e) {
       var match;
@@ -106,6 +105,7 @@
       p = new Thread(thread);
       my_threads_view.addThread(p);
     }
+    if (trollEnabled) window.ding = $('#dplayer')[0];
     $('.new-reply textarea').autoResize({
       maxHeight: 82,
       minHeight: 82,

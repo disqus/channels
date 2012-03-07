@@ -27,9 +27,6 @@ $(document).ready () ->
     window.threads_view = new ActiveThreadsView id: 'thread_list'
     window.my_threads_view = new ActiveThreadsView id: 'my_thread_list'
 
-    if trollEnabled
-        window.ding = $('#dplayer')[0]
-
 
     ac = new Autocomplete participants_view.usernameList
 
@@ -86,6 +83,9 @@ $(document).ready () ->
     for thread in initialMyThreads
         p = new Thread thread
         my_threads_view.addThread p
+
+    if trollEnabled
+        window.ding = $('#dplayer')[0]
 
     $('.new-reply textarea').autoResize(
         maxHeight: 82

@@ -141,7 +141,7 @@ window.PostListView = class PostListView extends Backbone.View
             id: post.eid()
 
         scrolled = @isAtBottom()
-        @$el.append post_view.render(post.isNew()).el
+        @$el.append post_view.render().el
         if scrolled
             @scrollBottom()
 
@@ -168,7 +168,7 @@ window.PostListView = class PostListView extends Backbone.View
                 success: (data, status, jqxhr) =>
                     serverPost = new Post data.post
                     that.commit post, serverPost
-                    $('button', this).button 'done'
+                    $('button', this).hide()
 
     _clearTimeout: (post) ->
         clearTimeout @timeouts[post.cid]
@@ -212,16 +212,17 @@ class PostView extends Backbone.View
         $('#' + @model.eid() + ' .post-message')
             .html @model.get("message")
 
-    render: (format) ->
+    render: () ->
         obj = @model.toJSON()
-        if format?
+        if @model.isNew()
             obj.message = @model.formattedMsg()
         @$el.html @template obj
+
         if @model.isAuthor window.the_user
             @$el.addClass('author')
         else if @model.mentions window.the_user
             if ding? and ding.play?
-                ding.play
+                ding.play()
             @$el.addClass('highlight')
         @
 
