@@ -31,7 +31,7 @@ $(document).ready () ->
     ac = new Autocomplete participants_view.usernameList
 
     $('#message').keydown (e) ->
-        if e.which == 13 and e.shiftKey
+        if e.which == 13 and (e.shiftKey or e.metaKey)
             $('.new-reply form').submit()
             return false
 
