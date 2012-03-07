@@ -71,6 +71,17 @@ publisher = init_publisher(app)
 schedule = dict((s['url'], s) for s in pickle.load(open('sessions.pickle')))
 print ' * Schedule loaded'
 
+from embedly import Embedly
+
+
+def get_client(key):
+    if not key:
+        return None
+    return Embedly(key)
+
+embedly = get_client(app.config.get('EMBEDLY_KEY'))
+
+
 from disqus.frontend import *
 from disqus.oauth import *
 
