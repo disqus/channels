@@ -80,6 +80,8 @@ def oauth_authorize():
 
 @app.route('/oauth/callback/')
 def oauth_callback():
+    from disqus.models import User
+
     code = request.args.get('code')
     error = request.args.get('error')
     if error or not code:
@@ -100,6 +102,9 @@ def oauth_callback():
 
     session['auth'] = data
     session.permanent = True
+
+    user = api_call(disqusapi.users.details, user=data['user_id'])
+    User.save(user)
 
     if 'postauth' in session:
         url = session['postauth']['url']
