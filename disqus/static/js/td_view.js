@@ -246,7 +246,7 @@
         id: post.eid()
       });
       scrolled = this.isAtBottom();
-      this.$el.append(post_view.render(post.isNew()).el);
+      this.$el.append(post_view.render().el);
       if (scrolled) return this.scrollBottom();
     };
 
@@ -353,10 +353,10 @@
       return $('#' + this.model.eid() + ' .post-message').html(this.model.get("message"));
     };
 
-    PostView.prototype.render = function(format) {
+    PostView.prototype.render = function() {
       var obj;
       obj = this.model.toJSON();
-      if (format != null) obj.message = this.model.formattedMsg();
+      if (this.model.isNew()) obj.message = this.model.formattedMsg();
       this.$el.html(this.template(obj));
       if (this.model.isAuthor(window.the_user)) {
         this.$el.addClass('author');

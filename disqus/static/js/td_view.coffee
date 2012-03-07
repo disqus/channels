@@ -141,7 +141,7 @@ window.PostListView = class PostListView extends Backbone.View
             id: post.eid()
 
         scrolled = @isAtBottom()
-        @$el.append post_view.render(post.isNew()).el
+        @$el.append post_view.render().el
         if scrolled
             @scrollBottom()
 
@@ -212,11 +212,12 @@ class PostView extends Backbone.View
         $('#' + @model.eid() + ' .post-message')
             .html @model.get("message")
 
-    render: (format) ->
+    render: () ->
         obj = @model.toJSON()
-        if format?
+        if @model.isNew()
             obj.message = @model.formattedMsg()
         @$el.html @template obj
+
         if @model.isAuthor window.the_user
             @$el.addClass('author')
         else if @model.mentions window.the_user
