@@ -163,7 +163,7 @@ class Session:
 
     @classmethod
     def list_upcoming(cls, offset=0, limit=100):
-        start = datetime.utcnow() - timedelta(hours=1)
+        start = datetime.utcnow() - timedelta(minutes=10)
         # end = start + timedelta(minutes=30)
         num = 0
         thread_ids = []

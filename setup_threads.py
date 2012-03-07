@@ -46,7 +46,8 @@ for talk in schedule:
     print ' - Processing session %s' % talk['title']
 
     for key in ('start', 'end', 'last_updated'):
-        talk[key] = datetime.datetime(*map(int, talk[key][0:6]))
+        dt = datetime.datetime(*map(int, talk[key][0:6]))
+        talk[key] = dt + datetime.timedelta(hours=5)
 
     if talk['url'] not in existing_urls:
         args = dict(

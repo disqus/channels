@@ -82,11 +82,11 @@ def timesince(dt):
     return 'just now'
 
 
-eastern = pytz.timezone('Antarctica/Rothera')
+pacific = pytz.timezone('America/Los_Angeles')
 
 
 def convert_pycon_dt(value):
-    return value.replace(tzinfo=pytz.UTC).astimezone(eastern)
+    return value.replace(tzinfo=pytz.UTC).astimezone(pacific)
 
 
 def format_datetime(starts, ends):
@@ -113,6 +113,6 @@ def timeuntil(value):
 
 
 def better_jsonify(json_obj, status=200):
-     response = make_response(json.dumps(json_obj), status)
-     response.headers['content-type'] = 'application/json'
-     return response
+    response = make_response(json.dumps(json_obj), status)
+    response.headers['content-type'] = 'application/json'
+    return response
