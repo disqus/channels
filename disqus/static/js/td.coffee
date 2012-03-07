@@ -57,7 +57,7 @@ $(document).ready () ->
 
         $.ajax
             url: $(this).attr 'action'
-            data: post.serialize()
+            data: post.toJSON()
             type: 'POST'
             error: (jqxhr, status, error) ->
                 list_view.error(post)

@@ -162,7 +162,7 @@ window.PostListView = class PostListView extends Backbone.View
             $.ajax
                 url: $('form').attr 'action'
                 type: 'POST'
-                data: post.serialize()
+                data: post.toJSON()
                 error: (jqxr, status, error) =>
                     $('button', this).button 'reset'
                 success: (data, status, jqxhr) =>
