@@ -1,4 +1,5 @@
 blinker==1.2
+embedly==0.4.2
 Flask==0.8
 Flask-Actions==0.6.5
 Flask-WTF==0.5.2
