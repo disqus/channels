@@ -1,0 +1,175 @@
+{% extends "layout.html" %}
+
+{% block title %}
+  {{ thread.title[:60] }} | {{ super() }}
+{% endblock %}
+
+{% block body_class %} fixed{% endblock %}
+
+{% block head %}
+  <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.autoresize.js') }}"></script>
+  <script type="text/javascript">
+      var threadId = "{{ thread.id }}";
+      var initialPosts = {{ post_list|as_json }};
+      var current_user = {{ current_user|as_json }};
+      var initialThreads = {{ active_thread_list|as_json }};
+      var initialMyThreads = {{ my_thread_list|as_json }};
+      var initialParticipants = {{ participant_list|as_json }};
+      var channels = {{ channel_list|as_json }};
+      var realtime_host = "{{ realtime_host }}";
+      var trollEnabled = "{{ do_troll }}";
+  </script>
+{% endblock %}
+
+{% block footer %}
+<audio id="dplayer" controls preload="auto" autobuffer> 
+  <source src="{{ url_for('static', filename='ding.wav') }}" />
+</audio>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/td_model.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/td_view.js') }}"></script>
+  <script type="text/javascript" src="{{ url_for('static', filename='js/td.js') }}"></script>
+  <script type="text/javascript">
+    (function(){
+      var t=0;
+      $(window).bind('keydown', function(e) {
+        if (e.keyCode == [1,1,3,3,0,2,0,2,29,28][t]+37) {
+          if(t++ != 9)
+            return;
+          t=0;
+          $('img.avatar').each(function() {
+            var hash = $(this).data('hash')
+            this.src='https://unicornify.appspot.com/avatar/' + hash + '?s=64';
+          });
+        } else {
+          t = 0;
+        }
+      });
+    })();
+  </script>
+{% endblock %}
+
+{% block before_main %}
+  <div class="row-fluid">
+    <div class="span9 topic collapsed">
+      <div class="topic-inner">
+        <div class="title">
+          <h2>{{ thread.title }}</h2>
+        </div>
+        {% if pycon_session %}
+          <div class="author">
+            <h4><a href="#"><strong>{{ pycon_session.authors }}</strong></a></h4>
+            <a class="link" href="{{ pycon_session.url }}">pycon.org</a>
+          </div>
+          <div class="date">
+            {{ (pycon_session.start|convert_pycon_dt).strftime('%A, %B %d at %I:%M %p') }}
+            in {{ pycon_session.room }}
+          </div>
+
+          <div class="description">
+            <p>{{ pycon_session.description }}</p>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block main %}
+    <div class="row-fluid">
+      <div class="content span9 offset3">
+
+        <script id="post-template" type="text/template">
+          <img src="<%= avatar %>" data-hash="<%= hash %>" class="post-avatar avatar">
+          <div class="post-meta">
+            <span class="post-author">
+              <%= name %>
+            </span>
+            &middot;
+            <span class="post-datetime pretty-date" title="<%= createdAtISO %>Z">
+              <%= createdAtSince %>
+            </span>
+              <div class="post-resend" style="display: none;">
+                <button class="btn btn-warning" data-loading-text="Resending">Resend</button>
+              </div>
+          </div>
+          <div class="post-message">
+            <%= message %>
+          </div>
+        </script>
+
+        <script id="participant-template" type="text/template">
+            <a href="http://disqus.com/<%= name %>">
+                <img class="avatar" rel="tooltip" data-hash="<%= hash %>" src="<%= avatar %>" title="<%= name %>">
+            </a>
+        </script>
+
+        <script id="thread-template" type="text/template">
+            <div class="thread-count">
+                <%= posts %>
+            </div>
+            <div class="thread-title">
+                <h3><a title="<%= title %>" href="/threads/<%= id %>"><%= title %></a></h3>
+            </div>
+        </script>
+
+        <div class="conversation has-topic">
+          <ul class="post-list">
+          </ul>
+        {#    <p>It seems no one is participating in this conversation yet.</p>#}
+      </div>
+
+      </div>
+      <div class="sidebar span3">
+        <div class="sidebar-inner">
+
+          <div class="page-header">
+            <h4>Participants</h4>
+          </div>
+          <ul class="user-list" id="participant_list"></ul>
+
+          <div class="page-header">
+              <h4>Reading Now</h4>
+          </div>
+          <ul class="user-list" id="active_participant_list"></ul>
+
+          <div class="page-header">
+            <h4>Active Conversations</h4>
+          </div>
+          <ul class="thread-list" id="thread_list"></ul>
+
+          {% if my_thread_list %}
+            <div class="page-header">
+              <h4>Your Conversations</h4>
+            </div>
+            <ul class="thread-list" id="my_thread_list"></ul>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block after_main %}
+<div class="row-fluid">
+  <div class="new-reply span9">
+    <div class="new-reply-inner">
+      {% if not user %}
+        <p>You are not signed in. You can <strong><a href="{{ url_for('oauth_authorize') }}">sign in with Disqus</a></strong>. Need to create an
+          account first? <strong><a href="http://disqus.com/profile/signup/">Register a new account</a></strong> on
+          disqus.com.</p>
+      {% else %}
+        <form method="POST" id="replyform" class="form-stack" action="{{ url_for('new_post', thread_id=thread.id) }}">
+          <fieldset>
+              {{ form.message(rows=2, placeholder='Type your comment and press shift + enter to send it') }}
+              <button type="submit" class="btn btn-large btn-primary">Post</button>
+              <div class="profile-avatar">
+                <img class="avatar" data-hash="{{ current_user.hash }}" src="{{ current_user.avatar }}">
+              </div>
+          </fieldset>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

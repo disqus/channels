@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+
+{% block nav_all_threads_active %} class="active"{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h1>Sessions</h1>
+  </div>
+
+  {% for date, session_list in sessions_by_date %}
+    <h2>{{ date.strftime('%A, %B %d') }}</h2>
+    <ul class="thread-list">
+      {% for thread in session_list %}
+        {% include "includes/session.html" %}
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endblock %}

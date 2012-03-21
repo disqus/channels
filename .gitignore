@@ -1,0 +1,8 @@
+.DS_Store
+*.pyc
+*.egg-info/
+/dist
+/build
+local_settings.py
+schedule.json
+venv

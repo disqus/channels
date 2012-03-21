@@ -1,0 +1,28 @@
+doctype 5
+html(lang="en")
+  head
+    title= "admin"
+    link(rel="stylesheet", href="/css/bootstrap.min.css")
+    link(rel="stylesheet", href="/css/global.css")
+
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js")
+    script(src="/js/bootstrap.js")
+    script(src="/js/underscore-min.js")
+    !=js("global")
+
+    script(type='text/javascript')
+      $(document).ready(function() {
+        initializeAdmin();
+      });
+  body
+    h1 admin
+    #content
+      h2 Broadcast
+      form(id="broadcast")
+        label(for="message") Message
+        textarea(name="message", class="message")
+        div(class="btn-group")
+          button(class="btn btn-danger", id="send-broadcast") Broadcast
+      h2 User List
+      #users
+        ul

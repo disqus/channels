@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+
+{% block nav_new_thread_active %} class="active"{% endblock %}
+
+{% block content %}
+  <div class="page-header">
+    <h2>Start a new conversation</h2>
+  </div>
+
+  <p>What is your conversation about? This will be used as the topic name, and will help others discover your
+    conversation.</p>
+
+  <form method="POST" class="form-stack" action="{{ url_for('new_thread') }}">
+    <fieldset>
+      <div class="control-group{% if form.subject.errors %} error{% endif %}">
+        <div class="controls">
+          {{ form.subject(class="span6", placeholder="e.g. I heard Node.JS is faster than Python") }}
+          {% if form.subject.help_text %}
+            <span class="help-inline">{{ form.subject.help_text }}</span>
+          {% endif %}
+          {% if form.subject.errors %}
+            {% for error in form.subject.errors %}
+              <span class="help-block error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="actions">
+        <input type="submit" class="btn btn-primary" value="Start conversation">
+      </div>
+    </fieldset>
+  </form>
+{% endblock %}

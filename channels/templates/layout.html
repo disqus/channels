@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/underscore-min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/backbone-min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/global.js') }}"></script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script type="text/javascript" src="{{ url_for('static', filename='js/html5.js') }}"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    {% block head %}{% endblock %}
+  </head>
+
+  <body class="{% block body_class %}{% endblock %}">
+
+    <header>
+      <div class="container-fluid">
+        <h1 id="logo"><a href="/">{% block brand %}{{ SITE_NAME }}{% endblock %}</a></h1>
+        <div id="subhead">{% block subheader %}{% endblock %}</div>
+        <div class="nav">
+          {% if user %}
+            {{ user.username }} |
+            <a href="{{ url_for('new_thread') }}">New Conversation</a> |
+            <a href="{{ url_for('logout') }}">Logout</a>
+          {% else %}
+            <a href="{{ url_for('oauth_authorize') }}">Sign In</a> or
+            <a href="http://disqus.com/profile/signup/">Register</a> with DISQUS
+          {% endif %}
+        </div>
+        <a href="http://disqus.com/about" class="powered-by">Powered by <span>DISQUS</span></a>
+      </div>
+    </header>
+
+    <section id="main">
+      <div class="container-fluid">
+        {% block before_main %}
+        {% endblock %}
+        {% block main %}
+          <div class="content">
+            <div class="row-fluid">
+              <div class="span12">
+                {% block content %}{% endblock %}
+              </div>
+            </div>
+          </div>
+        {% endblock %}
+        {% block after_main %}
+        {% endblock %}
+      </div>
+    </section>
+
+    {% block footer %}
+      <footer>
+        <div class="container-fluid">
+          <div class="footer-inner">
+            <p>This website was built by <a href="http://disqus.com/about">DISQUS</a> for the <a href="http://us.pycon.org">PyCon 2012 conference</a>. &copy; 2012 DISQUS</p>
+          </div>
+        </div>
+      </footer>
+    {% endblock %}
+
+    <script type="text/javascript">
+    $('.tip').tooltip();
+    </script>
+  </body>
+</html>

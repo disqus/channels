@@ -1,0 +1,69 @@
+{% extends "layout.html" %}
+
+{% block nav_home_active %} class="active"{% endblock %}
+
+{% block main %}
+<div class="content">
+  <div class="row-fluid">
+    <div class="span12">
+      <div class="callout">
+        <div class="page-header">
+          <h2>What is this?</h2>
+        </div>
+        <p>PyCon with Disqus is a web application built on top of the <a href="http://disqus.com/api/">Disqus Web API</a>. It's
+          a place where you can ask questions and give feedback about PyCon and meet likeminded individuals at the conference.</p>
+        <p>Jump into an existing topic, or <a href="{{ url_for('new_thread') }}">start a new conversation</a></p>
+      </div>
+    </div>
+  </div>
+  {% if user_list %}
+    <div class="row-fluid">
+      <div class="span12">
+        <div class="page-header">
+          <h2>Participants</h2>
+        </div>
+        <ul class="user-list">
+          {% for user in user_list %}
+            <li class="user">
+              <a href="http://disqus.com/{{ user.name }}" class="tip" title="{{ user.name }}" rel="tooltip">
+                <img src="{{ user.avatar }}">
+              </a>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  {% endif %}
+  <div class="row-fluid">
+    <div class="span6">
+      <div class="page-header">
+        <h2>Sessions <small><a href="{{ url_for('session_list') }}">show all &rsaquo;</a></small></h2>
+      </div>
+      {% if not session_list %}
+        <p>There don't seem to be any active sessions.</p>
+      {% else %}
+        <ul class="thread-list">
+          {% for thread in session_list %}
+            {% include "includes/session.html" %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+
+    <div class="span6">
+      <div class="page-header">
+        <h2>Active Conversations <small><a href="{{ url_for('thread_list') }}">show all &rsaquo;</a></small></h2>
+      </div>
+      {% if not thread_list %}
+        <p>There don't seem to be any active conversations.</p>
+      {% else %}
+        <ul class="thread-list">
+          {% for thread in thread_list %}
+            {% include "includes/thread.html" %}
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
