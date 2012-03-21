@@ -6,7 +6,7 @@ channels.models
 :license: Apache License 2.0, see LICENSE for more details.
 """
 from datetime import datetime, timedelta
-from channelsapi import Paginator
+from disqusapi import Paginator
 from flask import session
 
 from channels.app import app, disqusapi, schedule

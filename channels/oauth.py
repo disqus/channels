@@ -11,7 +11,7 @@ import simplejson
 import urllib
 import urllib2
 
-from channelsapi import InvalidAccessToken
+from disqusapi import InvalidAccessToken
 from flask import url_for, request, redirect, session, render_template
 
 from channels.app import app, disqusapi

@@ -3,7 +3,7 @@ import datetime
 import simplejson as json
 import urllib
 from channels.app import app, disqusapi
-from channelsapi import Paginator
+from disqusapi import Paginator
 
 TALK_CATEGORY_NAME = 'Talk'
 talk_category_id = False
