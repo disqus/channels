@@ -253,8 +253,9 @@ footer .footer-inner {
 
 
 .topic {
+  background: #fff;
   z-index: 100;
-  margin: 1px 0 20px;
+  margin: 0 0 20px;
   padding: 10px 20px;
   overflow: hidden;
   position: fixed;
