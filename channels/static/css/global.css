@@ -2,7 +2,7 @@ body {
   background: #f9f9f9;
   color:#222;
   font: normal 93% "Helvetica Neue", Helvetica, Arial, sans-serif;
-  padding-top: 83px;
+  padding-top: 68px;
 }
 
 a {
@@ -31,68 +31,43 @@ header {
   left: 0;
   right: 0;
   top: 0;
-  background: #eae7df;
+  background: #006e91;
 }
 body.fixed header {
   position: fixed;
 }
 
-header #subhead {
-  position: absolute;
-  left: 235px;
-  top: 20px;
-  white-space: nowrap;
-  overflow: hidden;
-}
-header #subhead h2 {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #484746;
-  text-shadow: 0 1px 0 #f9f2e6;
-  overflow: hidden;
-}
-
-header .container,
-header .container-fluid {
-  background: #eae7df;
-  border: 5px solid #006e91;
-  border-width: 8px 0;
-  height: 68px;
-}
-
 header h1#logo {
   margin: 0;
   position: absolute;
-  top: 24px;
+  top: 20px;
   left: 20px;
 }
 header h1#logo a {
+  color: #fff;
   display: block;
   width: 195px;
   height: 24px;
-  background: url('../img/header.png') no-repeat 0 0;
+  line-height: 24px;
   float: left;
   padding-bottom: 12px;
-  color:#fff;
   text-decoration:none;
-  text-indent:-9999px;
 }
 header .nav {
-  background: #eae7df;
   position: absolute;
   right: 20px;
   padding-left: 10px;
-  color: #7caec3;
+  color: #ddd;
   font-size: 77%;
   margin: 7px 0 0 0;
   vertical-align: middle;
-  text-shadow: 0 1px 0 #f9f2e6;
   line-height: 1.4em;
 }
 header .nav a {
   display: inline-block;
 }
 header .nav a, header .nav a:visited {
-  color: #649fae;
+  color: #fff;
   text-decoration: none;
   font-weight: bold;
   text-transform: uppercase;
@@ -105,7 +80,7 @@ header .nav a:hover {
 header .powered-by {
   font-size: 77%;
   text-transform: lowercase;
-  color: #7caec3;
+  color: #ddd;
   vertical-align: bottom;
   line-height: 26px;
   height: 20px;
@@ -119,7 +94,7 @@ header .powered-by span {
   display: inline-block;
   width: 104px;
   height: 20px;
-  background: url('../img/logo_light_sm.png') 0 0 no-repeat;
+  background: url('../img/logo_dark_sm.png') 0 0 no-repeat;
 }
 footer {
   border-top: 1px solid #d5cebc;
@@ -137,7 +112,7 @@ footer .footer-inner {
 }
 .row-fluid .offset3,
 .row-fluid .span9 {
-  margin-left: 241px !important;
+  margin-left: 251px !important;
   width: auto;
   float: none;
 }
@@ -150,10 +125,9 @@ footer .footer-inner {
   position: fixed;
   left: 0;
   bottom: 0;
-  top: 84px;
+  top: 68px;
   z-index: 100;
   overflow: auto;
-  background: #eae7df;
   border-right: 1px solid #d5cebc;
 }
 .sidebar-inner {
@@ -286,7 +260,6 @@ footer .footer-inner {
   position: fixed;
   right: 0;
   left: 0;
-  background: #eae7df;
   border-bottom: 1px solid #d5cebc;
 }
 .topic-inner {
@@ -401,7 +374,6 @@ footer .footer-inner {
   bottom: 0;
   left: 0;
   border-top: 1px solid #d5cebc;
-  background: #eae7df;
   overflow: hidden;
   padding: 10px 0 10px 10px;
 }

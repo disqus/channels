@@ -20,7 +20,7 @@ class DefaultConfig(object):
     PUBLISHER = {
 
     }
-    SITE_NAME = 'PyCon 2012'
+    SITE_NAME = 'Channels'
     SECRET_KEY = None
     DISQUS_PUBLIC = None
     DISQUS_SECRET = None
