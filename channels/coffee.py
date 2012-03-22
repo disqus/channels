@@ -1,9 +1,11 @@
 """
-channels.coffee
-~~~~~~~~~~~~~~~
+flaskext.coffee
+~~~~~~~~~~~~~
 
-:copyright: (c) 2012 DISQUS.
-:license: Apache License 2.0, see LICENSE for more details.
+A CoffeeScript extension for Flask
+
+:copyright: (c) 2011 by Col Wilson.
+:license: MIT
 """
 import os
 import subprocess
