@@ -8,3 +8,10 @@ more complex, and now represents a reasonable demo of how you can build a write-
 
 The site was originally launched on pycon.disqus.com, but is mostly agnostic to its purpose
 other than a few chunks of code that are geared towards "sessions".
+
+Caveats
+-------
+
+The system works as a valid-forever write-through cache. In the current implementation this
+means that if data is changed (or created) outside of the platform, it will never get pushed
+into the cache (unless you empty it).
